@@ -1,0 +1,79 @@
+﻿;------------------------------------------------------------------------------
+; Copyright © 2019 Arm Limited (or its affiliates). All rights reserved.
+; Communication Device Class driver installation file
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Header \ Description
+;------------------------------------------------------------------------------
+[Version]
+Signature   = "$Windows NT$"
+Class       = Ports
+ClassGuid   = {4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider    = %Manufacturer%
+DriverVer   = 07/10/2019,1.0.0.0
+CatalogFile = mcbstm32c-vcom.cat
+
+;------------------------------------------------------------------------------
+; Manufacturer/Models sections
+;------------------------------------------------------------------------------
+[Manufacturer]
+%Manufacturer% = DeviceList, NTx86, NTamd64
+
+;------------------------------------------------------------------------------
+; Decoration for x86 architecture
+;------------------------------------------------------------------------------
+[DeviceList.NTx86]
+%DESCRIPTION% = MCBSTM32CUSB, USB\VID_c251&PID_2405
+%COMPOSITE0%  = MCBSTM32CUSB, USB\VID_c251&PID_2405&MI_00
+%COMPOSITE2%  = MCBSTM32CUSB, USB\VID_c251&PID_2405&MI_02
+
+;------------------------------------------------------------------------------
+; Decoration for x64 architecture
+;------------------------------------------------------------------------------
+[DeviceList.NTamd64]
+%DESCRIPTION% = MCBSTM32CUSB, USB\VID_c251&PID_2405
+%COMPOSITE0%  = MCBSTM32CUSB, USB\VID_c251&PID_2405&MI_00
+%COMPOSITE2%  = MCBSTM32CUSB, USB\VID_c251&PID_2405&MI_02
+
+;------------------------------------------------------------------------------
+; Installation
+;------------------------------------------------------------------------------
+[SourceDisksFiles]
+
+[SourceDisksNames]
+
+[DestinationDirs]
+FakeModemCopyFileSection=12
+DefaultDestDir=12
+[FakeModemCopyFileSection]
+
+[MCBSTM32CUSB]
+include=mdmcpq.inf
+CopyFiles=FakeModemCopyFileSection
+AddReg=MCBSTM32CUSB.AddReg
+
+[MCBSTM32CUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+
+[MCBSTM32CUSB.Services]
+AddService=usbser, 0x00000002, DriverService
+
+[DriverService]
+DisplayName=%DRIVER.SVC%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\usbser.sys
+
+;------------------------------------------------------------------------------
+; String Definitions
+;------------------------------------------------------------------------------
+[Strings]
+Manufacturer = "Arm Limited"
+DRIVER.SVC   = "MCBSTM32C USB VCOM Driver"
+DESCRIPTION  = "MCBSTM32C USB VCOM Port"
+COMPOSITE0   = "MCBSTM32C USB VCOM Port"
+COMPOSITE2   = "MCBSTM32C USB VCOM Port"

@@ -1,0 +1,130 @@
+project:
+  packs:
+    - pack: Keil::STM32F1xx_DFP
+  setups:
+    - setup: Options for Target_1
+      processor:
+        trustzone: non-secure
+      add-path:
+        - Startup
+        - User
+        - Libraries
+        - System
+        - Hardware
+      debug: "on"
+      define:
+        - USE_STDPERIPH_DRIVER
+      misc:
+        - C-CPP:
+            - -fno-rtti
+            - -funsigned-char
+            - -fshort-enums
+            - -fshort-wchar
+            - -ffunction-sections
+            - -Weverything
+            - -Wno-packed
+            - -Wno-reserved-id-macro
+            - -Wno-unused-macros
+            - -Wno-documentation-unknown-command
+            - -Wno-documentation
+            - -Wno-license-management
+            - -Wno-parentheses-equality
+          CPP:
+            - -xc++
+          ASM:
+            - -masm=auto
+          Link:
+            - --map
+            - --load_addr_map_info
+            - --xref
+            - --callgraph
+            - --symbols
+            - --info sizes
+            - --info totals
+            - --info unused
+            - --info veneers
+            - --list
+            - --strict
+            - --summary_stderr
+            - --info summarysizes
+  groups:
+    - group: Libraries
+      files:
+        - file: Libraries/misc.c
+        - file: Libraries/misc.h
+        - file: Libraries/stm32f10x_adc.c
+        - file: Libraries/stm32f10x_adc.h
+        - file: Libraries/stm32f10x_bkp.c
+        - file: Libraries/stm32f10x_bkp.h
+        - file: Libraries/stm32f10x_can.c
+        - file: Libraries/stm32f10x_can.h
+        - file: Libraries/stm32f10x_cec.c
+        - file: Libraries/stm32f10x_cec.h
+        - file: Libraries/stm32f10x_crc.c
+        - file: Libraries/stm32f10x_crc.h
+        - file: Libraries/stm32f10x_dac.c
+        - file: Libraries/stm32f10x_dac.h
+        - file: Libraries/stm32f10x_dbgmcu.c
+        - file: Libraries/stm32f10x_dbgmcu.h
+        - file: Libraries/stm32f10x_dma.c
+        - file: Libraries/stm32f10x_dma.h
+        - file: Libraries/stm32f10x_exti.c
+        - file: Libraries/stm32f10x_exti.h
+        - file: Libraries/stm32f10x_flash.c
+        - file: Libraries/stm32f10x_flash.h
+        - file: Libraries/stm32f10x_fsmc.c
+        - file: Libraries/stm32f10x_fsmc.h
+        - file: Libraries/stm32f10x_gpio.c
+        - file: Libraries/stm32f10x_gpio.h
+        - file: Libraries/stm32f10x_i2c.c
+        - file: Libraries/stm32f10x_i2c.h
+        - file: Libraries/stm32f10x_iwdg.c
+        - file: Libraries/stm32f10x_iwdg.h
+        - file: Libraries/stm32f10x_pwr.c
+        - file: Libraries/stm32f10x_pwr.h
+        - file: Libraries/stm32f10x_rcc.c
+        - file: Libraries/stm32f10x_rcc.h
+        - file: Libraries/stm32f10x_rtc.c
+        - file: Libraries/stm32f10x_rtc.h
+        - file: Libraries/stm32f10x_sdio.c
+        - file: Libraries/stm32f10x_sdio.h
+        - file: Libraries/stm32f10x_spi.c
+        - file: Libraries/stm32f10x_spi.h
+        - file: Libraries/stm32f10x_tim.c
+        - file: Libraries/stm32f10x_tim.h
+        - file: Libraries/stm32f10x_usart.c
+        - file: Libraries/stm32f10x_usart.h
+        - file: Libraries/stm32f10x_wwdg.c
+        - file: Libraries/stm32f10x_wwdg.h
+    - group: Startup
+      files:
+        - file: Startup/cmsis_armclang.h
+        - file: Startup/cmsis_compiler.h
+        - file: Startup/cmsis_version.h
+        - file: Startup/core_cm3.h
+        - file: Startup/startup_stm32f10x_md.s
+        - file: Startup/stm32f10x.h
+        - file: Startup/system_stm32f10x.c
+        - file: Startup/system_stm32f10x.h
+    - group: System
+      files:
+        - file: System/Delay.c
+        - file: System/Delay.h
+        - file: System/Timer.c
+        - file: System/Timer.h
+        - file: System/pid.c
+        - file: System/pid.h
+    - group: User
+      files:
+        - file: User/stm32f10x_conf.h
+        - file: User/stm32f10x_it.c
+        - file: User/stm32f10x_it.h
+        - file: User/main.c
+        - file: User/ControlMotor.c
+        - file: User/ControlMotor.h
+    - group: Hardware
+      files:
+        - file: Hardware/key.c
+        - file: Hardware/key.h
+        - file: Hardware/Motor.c
+        - file: Hardware/Motor.h
