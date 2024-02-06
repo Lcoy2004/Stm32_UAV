@@ -59,7 +59,7 @@ PID_State_gyroy.actual=gyro.Gy;
 PID_State_gyroy.time_delta=dt;
 PID_State_gyroy=pid_iterate(PID_gyroy,PID_State_gyroy);
 Motor_pitch=PID_State_gyroy.output;
-//对绕z轴的yaw进行PID（单纯只有6050其实实现意义不大）,yaw角逆时针为正
+//对绕z轴的yaw进行PID（单纯只有6050其实实现意义不大~）,yaw角逆时针为正
 PID_State_yaw.target=(double)t_yaw;
 PID_State_yaw.actual=(double)angle.yaw;
 PID_State_yaw.time_delta=(double)dt;
