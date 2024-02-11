@@ -10,13 +10,13 @@ extern uint16_t height;
 extern const uint16_t Motor_Vmax;
 extern const uint16_t Motor_Vmin;
 //参数调试区
-const PID_Calibration PID_yaw={0};
-const PID_Calibration PID_pitch={0};
-const PID_Calibration PID_roll={0};
-const PID_Calibration PID_height={0};
-const PID_Calibration PID_gyrox={0};
-const PID_Calibration PID_gyroy={0};
-const PID_Calibration PID_gyroz={0};
+const PID_Calibration PID_yaw={1,1,1};
+const PID_Calibration PID_pitch={1,1,1};
+const PID_Calibration PID_roll={1,1,1};
+const PID_Calibration PID_height={1,1,1};
+const PID_Calibration PID_gyrox={1,1,1};
+const PID_Calibration PID_gyroy={1,1,1};
+const PID_Calibration PID_gyroz={1,1,1};
 //
 //
 static PID_State PID_State_yaw;
