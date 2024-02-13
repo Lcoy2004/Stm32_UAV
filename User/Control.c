@@ -80,9 +80,11 @@ motor1=data_limit(motor1,(float)Motor_Vmax,(float)Motor_Vmin);
 motor2=data_limit(motor2,(float)Motor_Vmax,(float)Motor_Vmin);
 motor3=data_limit(motor3,(float)Motor_Vmax,(float)Motor_Vmin);
 motor4=data_limit(motor4,(float)Motor_Vmax,(float)Motor_Vmin);
-    Motor_SetSpeed1((uint16_t)(motor1));
-	Motor_SetSpeed2((uint16_t)(motor2));
-	Motor_SetSpeed3((uint16_t)(motor3));
-	Motor_SetSpeed4((uint16_t)(motor4));
+
+Motor_SetSpeed1((uint16_t)motor1);  
+Motor_SetSpeed2((uint16_t)motor2);  
+Motor_SetSpeed3((uint16_t)motor3);  
+Motor_SetSpeed4((uint16_t)motor4);
+
    Clock2_Start();
 }
