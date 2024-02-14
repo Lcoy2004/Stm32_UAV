@@ -820,6 +820,16 @@
               <FileType>5</FileType>
               <FilePath>.\Hardware\Serial.h</FilePath>
             </File>
+            <File>
+              <FileName>ESP.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\ESP.c</FilePath>
+            </File>
+            <File>
+              <FileName>ESP.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\ESP.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

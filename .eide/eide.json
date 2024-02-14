@@ -13,6 +13,12 @@
         "name": "Hardware",
         "files": [
           {
+            "path": "Hardware/ESP.c"
+          },
+          {
+            "path": "Hardware/ESP.h"
+          },
+          {
             "path": "Hardware/HCSR04.c"
           },
           {

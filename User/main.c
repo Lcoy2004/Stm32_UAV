@@ -6,11 +6,13 @@
 #include "HCSR04.h"
 #include "Serial.h"
 #include "chronoscope.h"
+#include "ESP.h"
 //先进行一些前期的调试工作
 int main(void)
 {
  //初始化各种硬件驱动	
- //ZTW_Init();//电调及电机初始化
+ ZTW_Init();//电调及电机初始化
+ ESP_Init();//ESP-12f初始化
  MPU6050_Init(); //MPU6050初始化
  HCSR04_Init();//超声波初始化
  Data_start();//消除零偏误差
@@ -21,7 +23,7 @@ while(1)
 {
     //if()
  //(
-    data_filter();//数据滤波+处理得到相关值
+data_filter();//数据滤波+处理得到相关值
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();
