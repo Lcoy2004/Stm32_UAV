@@ -78,6 +78,26 @@ void Motor_SetSpeed4(uint16_t speed)//规定是反转电机2
 {
 	TIM_SetCompare4(TIM3, speed);
 }
+
+uint16_t Motor_GetSpeed1()//规定是正转电机 1
+{
+	
+	return TIM_GetCapture1(TIM3);
+}
+ uint16_t Motor_GetSpeed2()//规定是反转电机1
+{
+
+	return TIM_GetCapture2(TIM3);
+}
+uint16_t Motor_GetSpeed3()//规定是正转电机2
+{
+	return TIM_GetCapture3(TIM3);
+}
+uint16_t Motor_GetSpeed4()//规定是反转电机2
+{
+	return TIM_GetCapture1(TIM3);
+}
+
 void ZTW_Init()//电调及电机——好盈 20A电调初始化
 {
  PWM_Init();//开启电机驱动	

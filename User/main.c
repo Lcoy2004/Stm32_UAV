@@ -21,8 +21,7 @@ int main(void)
  TIM4_Int_Init();
 while(1)
 {
-    //if()
- //(
+
 data_filter();//数据滤波+处理得到相关值
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();
