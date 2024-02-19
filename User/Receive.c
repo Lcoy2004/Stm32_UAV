@@ -7,15 +7,12 @@ extern float t_pitch;
 extern float t_roll;
 extern uint16_t t_height;
 
-uint8_t ReceiveVis(void)
+char ReceiveVis(void)
 {
 	if(ESP_GetRxFlag()==1)
 	{
-		return Vis;//0：急停 1：左 2：后 3：前 4：右 5：上升高度
-		//num=HexNum;
-		//sum=(float)num;
-		//OLED_ShowChar(1,1, Vis);
-		//OLED_ShowHexNum(3,1,sum,3);
+		return Vis;
+		//p：急停 l：左 b：后 f：前 r:右 u：上升
 	}
 }
 
@@ -39,20 +36,21 @@ for(i=0;i<5;i++)
 {
 switch (ReceiveVis())
 {
-case 0:
+case 'p':
 	return 0;
 	break;
-case 1:  t_pitch= ReceiveNum();
+case 'l':  t_pitch= ReceiveNum();
     break;
-case 2:  t_roll= -ReceiveNum();
+case 'b':  t_roll= -ReceiveNum();
     break;
-case 3:  t_roll= ReceiveNum();
+case 'f':  t_roll= ReceiveNum();
     break;
-case 4:  t_pitch= -ReceiveNum();
+case 'r':  t_pitch= -ReceiveNum();
     break;
-case 5: t_height=(uint16_t)ReceiveNum();
+case 'u': t_height=(uint16_t)ReceiveNum();
     break;
 default:
+    return 0;
 	break;
 }
 }
