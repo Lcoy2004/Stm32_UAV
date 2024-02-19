@@ -770,6 +770,16 @@
               <FileType>5</FileType>
               <FilePath>.\User\Control.h</FilePath>
             </File>
+            <File>
+              <FileName>Receive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Receive.c</FilePath>
+            </File>
+            <File>
+              <FileName>Receive.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\Receive.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
