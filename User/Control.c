@@ -37,7 +37,7 @@ static PID_State PID_State_gyrox;
 void Control_Motor(float t_yaw,float t_pitch,float t_roll,uint16_t t_height)
 {
 double dt=0,Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
-dt=Clock2_End()*0.001;
+dt=Clock2_End()*0.001f;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
 PID_State_height.time_delta=(double)dt;
@@ -50,7 +50,8 @@ Motor_height=PID_State_height.output;
 PID_State_roll.target=(double)t_roll;
 PID_State_roll.actual=(double)angle.roll;
 PID_State_roll.time_delta=(double)dt;
-PID_State_roll=pid_iterate(PID_roll,PID_State_roll);//外环PID结束
+PID_State_roll=pid_iterate(PID_roll,PID_State_roll);
+//外环PID结束
 PID_State_gyrox.target=PID_State_roll.output;//内环PID
 PID_State_gyrox.actual=gyro.Gx;
 PID_State_gyrox.time_delta=dt;

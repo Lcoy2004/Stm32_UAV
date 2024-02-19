@@ -7,6 +7,8 @@
 #include "Serial.h"
 #include "chronoscope.h"
 #include "ESP.h"
+#include "Control.h"
+#include "Receive.h"
 //先进行一些前期的调试工作
 int main(void)
 {
@@ -21,7 +23,6 @@ int main(void)
  TIM4_Int_Init();
 while(1)
 {
-
 data_filter();//数据滤波+处理得到相关值
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();
@@ -30,6 +31,12 @@ data_filter();//数据滤波+处理得到相关值
  //Data_Gyroy_SerialTest();
  //Data_Gyroz_SerialTest();
  //Data_height_SerialTest();
- //)
+ switch (ReceiveNum_Gettarget())
+{
+case 0: Control_stop();
+    break;
+case 1: Control_fly();
+    break;
+}
 }
 }

@@ -117,8 +117,8 @@ uint8_t ESP_GetRxFlag(void)
 {
 	if(ESP_RxFlag==1)
 	{
-		return 1;
 		ESP_RxFlag=0;
+		return 1;
 	}
 	else 
 		return ESP_RxFlag;
