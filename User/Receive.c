@@ -1,9 +1,7 @@
 #include "stm32f10x.h" 
 #include "ESP.h"
-
-
 int num;
-		float sum;
+float sum;
 
 uint8_t ReceiveVis(void)
 {
