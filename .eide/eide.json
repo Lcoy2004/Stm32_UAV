@@ -289,6 +289,12 @@
             "path": "User/main.c"
           },
           {
+            "path": "User/Receive.c"
+          },
+          {
+            "path": "User/Receive.h"
+          },
+          {
             "path": "User/stm32f10x_conf.h"
           },
           {

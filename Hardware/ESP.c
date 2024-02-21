@@ -117,8 +117,8 @@ uint8_t ESP_GetRxFlag(void)
 {
 	if(ESP_RxFlag==1)
 	{
-		return 1;
 		ESP_RxFlag=0;
+		return 1;
 	}
 	else 
 		return ESP_RxFlag;
@@ -133,7 +133,11 @@ void USART2_IRQHandler(void)
 		if(RxState==0)
 		{
 			HexNum=0;
-			if(RxData==0x31)
+			if(RxData==0x30)
+			{
+				Vis='p';
+			}
+			else if(RxData==0x31)
 			{
 				Vis='L';
 			}
@@ -182,4 +186,3 @@ void USART2_IRQHandler(void)
 		}
 	}
 }
-

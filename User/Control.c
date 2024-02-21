@@ -7,12 +7,19 @@
 extern  T_gyro gyro;
 extern T_angle angle;
 extern uint16_t height;
+//预期目标
+float t_yaw;
+float t_pitch;
+float t_roll;
+uint16_t t_height;
+
 extern const uint16_t Motor_Vmax;
 extern const uint16_t Motor_Vmin;
+//
 //参数调试区
-const PID_Calibration PID_yaw={1,1,1};
-const PID_Calibration PID_pitch={1,1,1};
-const PID_Calibration PID_roll={1,1,1};
+const PID_Calibration PID_yaw={0,0,0};
+const PID_Calibration PID_pitch={0,0,0};
+const PID_Calibration PID_roll={0,0,0};
 const PID_Calibration PID_height={1,1,1};
 const PID_Calibration PID_gyrox={1,1,1};
 const PID_Calibration PID_gyroy={1,1,1};
@@ -30,7 +37,7 @@ static PID_State PID_State_gyrox;
 void Control_Motor(float t_yaw,float t_pitch,float t_roll,uint16_t t_height)
 {
 double dt=0,Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
-dt=Clock2_End()*0.001;
+dt=Clock2_End()*0.001f;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
 PID_State_height.time_delta=(double)dt;
@@ -43,7 +50,8 @@ Motor_height=PID_State_height.output;
 PID_State_roll.target=(double)t_roll;
 PID_State_roll.actual=(double)angle.roll;
 PID_State_roll.time_delta=(double)dt;
-PID_State_roll=pid_iterate(PID_roll,PID_State_roll);//外环PID结束
+PID_State_roll=pid_iterate(PID_roll,PID_State_roll);
+//外环PID结束
 PID_State_gyrox.target=PID_State_roll.output;//内环PID
 PID_State_gyrox.actual=gyro.Gx;
 PID_State_gyrox.time_delta=dt;
@@ -87,4 +95,54 @@ Motor_SetSpeed3((uint16_t)motor3);
 Motor_SetSpeed4((uint16_t)motor4);
 
    Clock2_Start();
+}
+void Control_stop()//紧急停桨
+{
+Motor_SetSpeed1(Motor_Vmin);  
+Motor_SetSpeed2(Motor_Vmin);  
+Motor_SetSpeed3(Motor_Vmin);  
+Motor_SetSpeed4(Motor_Vmin);
+
+while(1);
+
+}
+void Control_fly()
+{
+if(t_height<30&&height<20)//预期高度过低不起飞
+{
+Motor_SetSpeed1(Motor_Vmin);  
+Motor_SetSpeed2(Motor_Vmin);  
+Motor_SetSpeed3(Motor_Vmin);  
+Motor_SetSpeed4(Motor_Vmin);
+}else//飞行
+{
+   if(t_height<10&&height<35)//降落
+   {
+      uint16_t motor1=Motor_GetSpeed1();
+      uint16_t motor2=Motor_GetSpeed2();
+      uint16_t motor3=Motor_GetSpeed3();
+      uint16_t motor4=Motor_GetSpeed4();
+       const uint16_t i =5;
+      while(motor1+motor2+motor3+motor4>2200)
+      {
+         
+         Motor_SetSpeed1(motor1-i);  
+         Motor_SetSpeed2(motor2-i);  
+         Motor_SetSpeed3(motor3-i);  
+         Motor_SetSpeed4(motor4-i);
+         motor1=Motor_GetSpeed1();
+         motor2=Motor_GetSpeed2();
+         motor3=Motor_GetSpeed3();
+         motor4=Motor_GetSpeed4();
+      }
+      Motor_SetSpeed1(Motor_Vmin);  
+      Motor_SetSpeed2(Motor_Vmin);  
+      Motor_SetSpeed3(Motor_Vmin);  
+       Motor_SetSpeed4(Motor_Vmin);
+   }
+else
+{
+   Control_Motor(t_yaw,t_pitch,t_roll,t_height);
+}
+}
 }
