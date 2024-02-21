@@ -12,7 +12,7 @@ char ReceiveVis(void)
 	if(ESP_GetRxFlag()==1)
 	{
 		return Vis;
-		//p£º¼±Í£ l£º×ó b£ººó f£ºÇ° r:ÓÒ u£ºÉÏÉý
+		//p???¡À?? l??¡Á¨® b???¨® f???¡ã r:?? u??????
 	}
 }
 
@@ -39,15 +39,15 @@ switch (ReceiveVis())
 case 'p':
 	return 0;
 	break;
-case 'l':  t_pitch= ReceiveNum();
+case 'L':  t_pitch= ReceiveNum();
     break;
-case 'b':  t_roll= -ReceiveNum();
+case 'B':  t_roll= -ReceiveNum();
     break;
-case 'f':  t_roll= ReceiveNum();
+case 'F':  t_roll= ReceiveNum();
     break;
-case 'r':  t_pitch= -ReceiveNum();
+case 'R':  t_pitch= -ReceiveNum();
     break;
-case 'u': t_height=(uint16_t)ReceiveNum();
+case 'U': t_height=(uint16_t)ReceiveNum();
     break;
 default:
     return 0;

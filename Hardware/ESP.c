@@ -133,7 +133,11 @@ void USART2_IRQHandler(void)
 		if(RxState==0)
 		{
 			HexNum=0;
-			if(RxData==0x31)
+			if(RxData==0x30)
+			{
+				Vis='p';
+			}
+			else if(RxData==0x31)
 			{
 				Vis='L';
 			}
@@ -182,4 +186,3 @@ void USART2_IRQHandler(void)
 		}
 	}
 }
-
