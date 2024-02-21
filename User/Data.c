@@ -5,6 +5,7 @@
 #include "Serial.h"
 #include "myMath.h"
 #include "chronoscope.h"
+#include "Delay.h"
 #define MPU6050_ACCimu      0.0048f//换算加速度，单位m/s2
  T_Acc P_Acc;//存储加速度值测量值
  T_gyro gyro;//存储滤波后角速度值
@@ -53,15 +54,17 @@ void data_filter()
   MPU6050_gyro MG;
 //获取高度
 P_height=HCSR04_GetValue();
+
 MPU6050_GetData(&MA.Ax, &MA.Ay, &MA.Az, &MG.Gx, &MG.Gy,  &MG.Gz);
-dt=Clock1_End()*0.001f;
 //角度换算
-Data_Calibrate(&MA,&MG,&height);//消除误差
+//Data_Calibrate(&MA,&MG,&height);//消除误差
 Acc_to_imu(MA.Ax,MA.Ay,MA.Az);
 Gyro_to_imu2(MG.Gx,MG.Gy,MG.Gz);
 //获得姿态角
+dt=Clock1_End()*0.001f;
 imu_Getangle(MG,MA,&P_angle,dt);//输出的角度是角度制
 Clock1_Start();
+//Serial_Printf("{dt: %.3f \n}",dt);
 //姿态角进行kalman
  kalman_filter(&K_P_angle,P_angle.pitch);
 angle.pitch = K_P_angle.output;
@@ -101,6 +104,7 @@ az+=Az[i];
 gx+=Gx[i];
 gy+=Gy[i];
 gz+=Gz[i];
+Delay_ms(5);
 } 
 R_Gx=(int16_t)(gx/25);R_Gy=(int16_t)(gy/25);R_Gz=(int16_t)(gz/25);
 R_Ax=(int16_t)(ax/25);R_Ay=(int16_t)(ay/25);R_Az=(int16_t)(az/25);
