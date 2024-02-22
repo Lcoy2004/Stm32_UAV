@@ -2,7 +2,6 @@
 #include "imu.h"
 #include "pid.h"
 #include "Motor.h"
-#include "chronoscope.h"
 #include "myMath.h"
 extern  T_gyro gyro;
 extern T_angle angle;
@@ -37,7 +36,7 @@ static PID_State PID_State_gyrox;
 void Control_Motor(float t_yaw,float t_pitch,float t_roll,uint16_t t_height)
 {
 double dt=0,Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
-dt=Clock2_End()*0.001f;
+dt=0.001f;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
 PID_State_height.time_delta=(double)dt;
@@ -94,7 +93,6 @@ Motor_SetSpeed2((uint16_t)motor2);
 Motor_SetSpeed3((uint16_t)motor3);  
 Motor_SetSpeed4((uint16_t)motor4);
 
-   Clock2_Start();
 }
 void Control_stop()//紧急停桨
 {

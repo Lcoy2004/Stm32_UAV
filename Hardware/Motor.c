@@ -1,7 +1,6 @@
 #include "stm32f10x.h"                  // Device header
 #include "Motor.h"
 #include "Delay.h"
-#include "chronoscope.h"
 const uint16_t Motor_Vmax =1000;  //Vax: 设置电机转速为最大的值
 const uint16_t Motor_Vmin =500;  //Vmin:设置电机转速为0时的值
 

@@ -9,7 +9,8 @@
 #define Echo_Pin 		GPIO_Pin_1
 #define Echo_RCC		RCC_APB2Periph_GPIOA
 
-void Timer_Init();
-
+void Timer2_Init();
+void Timer1_Init();
+void Timer4_Init();
 #endif
 

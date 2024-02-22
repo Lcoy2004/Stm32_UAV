@@ -28,15 +28,15 @@ void HCSR04_Init()
 void HCSR04_Start()
 {
 	GPIO_SetBits(Trig_Port, Trig_Pin);
-	Delay_us(45);
+	Delay_us(10);
 	GPIO_ResetBits(Trig_Port, Trig_Pin);
-	Timer_Init();
+	Timer2_Init();
 }
 
 uint16_t HCSR04_GetValue()
 {
 	HCSR04_Start();
-	Delay_ms(100);
+	Delay_us(500);
 	return ((Time * 0.0001) * 34000) / 2;
 //	return Time;
 }
