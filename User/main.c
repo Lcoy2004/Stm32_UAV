@@ -14,14 +14,8 @@ int main(void)
 {
  //初始化各种硬件驱动	
  MPU6050_Init(); //MPU6050初始化
-<<<<<<< HEAD
  //ZTW_Init();//电调及电机初始化
  ESP_Init();//ESP-12f初始化
-=======
- ZTW_Init();//电调及电机初始化
- ESP_Init();//ESP-12f初始化
- 
->>>>>>> 7488641d9f51e74d504d3cb4db6f0c2ca066bc71
  HCSR04_Init();//超声波初始化
  //Data_start();//消除零偏误差
  Serial_Init();   //串口初始化（调试用）
@@ -31,13 +25,8 @@ int main(void)
  //Timer4_Init();
 while(1)
 {
-<<<<<<< HEAD
 data_filter();//数据滤波得到相关值
 //Data_pitch_SerialTest();
-=======
-data_filter();//数据滤波+处理得到相关值
-Data_pitch_SerialTest();
->>>>>>> 7488641d9f51e74d504d3cb4db6f0c2ca066bc71
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();
  //Data_Gyrox_SerialTest();
