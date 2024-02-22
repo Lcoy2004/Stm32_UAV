@@ -13,6 +13,8 @@ void Data_Gyrox_SerialTest();
 void Data_Gyroy_SerialTest();
 void Data_Gyroz_SerialTest();
 void Data_height_SerialTest();
+ void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az);//加速度换算
+ void Gyro_to_imu2(int16_t Gx,int16_t Gy,int16_t Gz);//换算角度;
 ///void Gyro_to_imu2(int16_t Gx,int16_t Gy,int16_t Gz);//角速度换算弧度
 //void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az);//MPU6050加速度换算
 

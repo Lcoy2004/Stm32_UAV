@@ -232,12 +232,6 @@
         "name": "System",
         "files": [
           {
-            "path": "System/chronoscope.c"
-          },
-          {
-            "path": "System/chronoscope.h"
-          },
-          {
             "path": "System/Delay.c"
           },
           {
