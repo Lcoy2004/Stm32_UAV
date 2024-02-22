@@ -22,14 +22,13 @@ int main(void)
  Timer2_Init();
  Timer1_Init();
  Timer4_Init();
- //Timer4_Init();
 while(1)
 {
 data_filter();//数据滤波得到相关值
-Data_pitch_SerialTest();
+//Data_pitch_SerialTest();
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();
- //Data_Gyrox_SerialTest();
+ Data_Gyrox_SerialTest();
  //Data_Gyroy_SerialTest();
  //Data_Gyroz_SerialTest();
  //Data_height_SerialTest();
