@@ -21,7 +21,7 @@ int main(void)
  Serial_Init();   //串口初始化（调试用）
  Timer2_Init();
  Timer1_Init();
- Timer2_Init();
+ Timer4_Init();
  //Timer4_Init();
 while(1)
 {
