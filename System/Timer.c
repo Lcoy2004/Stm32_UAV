@@ -80,7 +80,7 @@ RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	TIM_TimeBaseInitStructure.TIM_Period = 7200 - 1;
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 1000 - 1;
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
-	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseInitStructure);
+	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseInitStructure);
 	//10ms
 	TIM_ClearFlag(TIM4, TIM_FLAG_Update);
 	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
