@@ -40,6 +40,12 @@
             "path": "Hardware/MPU6050.h"
           },
           {
+            "path": "Hardware/MyI2C.c"
+          },
+          {
+            "path": "Hardware/MyI2C.h"
+          },
+          {
             "path": "Hardware/Serial.c"
           },
           {
@@ -357,7 +363,7 @@
       "uploadConfig": {
         "bin": "",
         "target": "stm32f1x",
-        "interface": "stlink",
+        "interface": "cmsis-dap-v1",
         "baseAddr": "0x08000000"
       },
       "uploadConfigMap": {

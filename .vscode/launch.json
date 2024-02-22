@@ -21,7 +21,7 @@
             "executable": "build\\Target 1\\Project.elf",
             "runToEntryPoint": "main",
             "configFiles": [
-                "interface/stlink.cfg",
+                "interface/cmsis-dap-v1.cfg",
                 "target/stm32f1x.cfg"
             ]
         }
