@@ -26,7 +26,7 @@ int main(void)
 while(1)
 {
 data_filter();//数据滤波得到相关值
-//Data_pitch_SerialTest();
+Data_pitch_SerialTest();
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();
  //Data_Gyrox_SerialTest();
