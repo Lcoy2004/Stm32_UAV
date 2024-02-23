@@ -4,7 +4,7 @@ solution:
   compiler: AC6
   target-types:
     - type: Target_1
-      device: STM32F103C6
+      device: STM32F103C8
       optimize: none
   projects:
     - project: Project.cproject.yaml
