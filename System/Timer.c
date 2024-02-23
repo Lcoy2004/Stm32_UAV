@@ -3,14 +3,12 @@
 #include "MPU6050.h"
 #include "imu.h"
 #include "Data.h"
-#include "HCSR04.h"
+#include "BMP280.h"
 #include "Serial.h"
-extern uint16_t Time;
 extern T_angle P_angle;//存储角度测量值
 extern uint16_t P_height;//存储测量高度值
 void Timer2_Init()
 {
-	Time = 0;
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//选择APB1总线下的定时器Timer2
 	
 	TIM_InternalClockConfig(TIM2);		//TIM2使用内部时钟
@@ -31,7 +29,7 @@ void Timer2_Init()
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;		//中断通道选择
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		//优先级，同上
 	
 	NVIC_Init(&NVIC_InitStructure);
@@ -62,7 +60,7 @@ RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_Init(&NVIC_InitStructure);
 	//5ms
 	TIM_Cmd(TIM1, ENABLE);
@@ -90,8 +88,8 @@ RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_Init(&NVIC_InitStructure);
 	
 	TIM_Cmd(TIM4, ENABLE);
@@ -106,7 +104,7 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 		 MPU6050_Acc MA;
         MPU6050_gyro MG;
         //获取高度
-         P_height=HCSR04_GetValue();
+         P_height=(uint16_t)(BMP280_Get_Pressure());
      MPU6050_GetData(&MA.Ax, &MA.Ay, &MA.Az, &MG.Gx, &MG.Gy,  &MG.Gz);
      //角度换算
      //Data_Calibrate(&MA,&MG,&height);//消除误差
@@ -123,19 +121,13 @@ void TIM2_IRQHandler()		//定时器2的中断函数，不懂直接套用
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
 
-		if (GPIO_ReadInputDataBit(Echo_Port, Echo_Pin) == 1)
-		{
-			Time ++;
-			//Serial_Printf("tim2\n");
-		}
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);		//清空标志位
 	}
 }
 void TIM4_IRQHandler(void)//定时执行姿态解算
 {
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
 	{
-		Serial_Printf("tim4\n");
+		//Serial_Printf("tim4\n");
 	TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}
 }

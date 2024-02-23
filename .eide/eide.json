@@ -13,16 +13,16 @@
         "name": "Hardware",
         "files": [
           {
+            "path": "Hardware/BMP280.c"
+          },
+          {
+            "path": "Hardware/BMP280.h"
+          },
+          {
             "path": "Hardware/ESP.c"
           },
           {
             "path": "Hardware/ESP.h"
-          },
-          {
-            "path": "Hardware/HCSR04.c"
-          },
-          {
-            "path": "Hardware/HCSR04.h"
           },
           {
             "path": "Hardware/Motor.c"
