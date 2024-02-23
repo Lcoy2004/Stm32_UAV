@@ -60,9 +60,18 @@ void imu_Getangle(MPU6050_gyro gyro,MPU6050_Acc Acc,T_angle *angle,float dt)
 	NumQ.q1 *= NormQuat;
 	NumQ.q2 *= NormQuat;
 	NumQ.q3 *= NormQuat;	
-
-	// 四元数转欧拉角
-        angle->yaw = atan2f(2 * NumQ.q1 *NumQ.q2 + 2 * NumQ.q0 * NumQ.q3, 1 - 2 * NumQ.q2 *NumQ.q2 - 2 * NumQ.q3 * NumQ.q3) * RtA;  //yaw
-		angle->pitch = asin(2 * NumQ.q0 *NumQ.q2 - 2 * NumQ.q1 * NumQ.q3) * RtA ;		//算出来角度还要乘以RtA？感觉挺怪				
+// 四元数转欧拉角
+	{ 
+		#ifdef	YAW_GYRO
+		angle->yaw = atan2f(2 * NumQ.q1 *NumQ.q2 + 2 * NumQ.q0 * NumQ.q3, 1 - 2 * NumQ.q2 *NumQ.q2 - 2 * NumQ.q3 * NumQ.q3) * RtA;   //yaw
+		#else
+			float yaw_G = gyro.Gz * Gyro_G;
+			if((yaw_G > 1.0f) || (yaw_G < -5.0f)) //不让yaw静止时漂移
+			{
+				angle->yaw  += yaw_G * dt;			
+			}
+		#endif
+		angle->pitch  =  asin(2 * NumQ.q0 *NumQ.q2 - 2 * NumQ.q1 * NumQ.q3) * RtA;						
 		angle->roll	= atan2(2 * NumQ.q2 *NumQ.q3 + 2 * NumQ.q0 * NumQ.q1, 1 - 2 * NumQ.q1 *NumQ.q1 - 2 * NumQ.q2 * NumQ.q2) * RtA;	//PITCH 			
+	}			
 	}
