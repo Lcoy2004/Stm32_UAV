@@ -811,16 +811,6 @@
               <FilePath>.\Hardware\MPU6050_Reg.h</FilePath>
             </File>
             <File>
-              <FileName>HCSR04.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\HCSR04.c</FilePath>
-            </File>
-            <File>
-              <FileName>HCSR04.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\HCSR04.h</FilePath>
-            </File>
-            <File>
               <FileName>Serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\Serial.c</FilePath>
@@ -849,6 +839,26 @@
               <FileName>MyI2C.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\MyI2C.h</FilePath>
+            </File>
+            <File>
+              <FileName>BMP280.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\BMP280.c</FilePath>
+            </File>
+            <File>
+              <FileName>BMP280.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\BMP280.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyI2C_BMP.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MyI2C_BMP.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyI2C_BMP.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MyI2C_BMP.h</FilePath>
             </File>
           </Files>
         </Group>
