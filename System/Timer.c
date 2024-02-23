@@ -104,10 +104,10 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 		 MPU6050_Acc MA;
         MPU6050_gyro MG;
         //获取高度
-         P_height=(uint16_t)(BMP280_Get_Pressure());
+    P_height=BMP280_calculate_altitude();
      MPU6050_GetData(&MA.Ax, &MA.Ay, &MA.Az, &MG.Gx, &MG.Gy,  &MG.Gz);
      //角度换算
-     //Data_Calibrate(&MA,&MG,&height);//消除误差
+     Data_Calibrate(&MA,&MG,&P_height);//消除误差
     Acc_to_imu(MA.Ax,MA.Ay,MA.Az);
     Gyro_to_imu2(MG.Gx,MG.Gy,MG.Gz);
     imu_Getangle(MG,MA,&P_angle,0.005f);

@@ -1,4 +1,4 @@
-
+#include "BMP280.h"
 #include "MPU6050.h"
 #include "imu.h"
 #include "Kalman.h"
@@ -18,18 +18,20 @@ K_Filter K_P_angle={0,0.05f,0.2f,0.1f,0,0};//pitch需要调参
  K_Filter K_Y_angle={0,0.05f,0.25f,0.1f,0,0};//yaw需要调参
  K_Filter K_R_angle={0,0.05f,0.2f,0.08f,0,0};//roll需要调参
 K_Filter K_height={0,0.1f,0.25f,0.07f,0,0};//需要调参
-/*消除零偏误差
+//消除零偏误差
 int16_t R_Gx,R_Gy,R_Gz,R_Ax,R_Ay,R_Az;//零偏误差，温度不同也会变化
-uint16_t R_h;
+float R_h;//得到当前海拔高度
 
 void Data_start()
 {
 int16_t Ax[25],Ay[25],Az[25],Gx[25],Gy[25],Gz[25];
 int8_t i=0;
 int16_t ax,ay,az,gx,gy,gz;
+float h;
 for(i=0;i<25;i++)
 {
 MPU6050_GetData(&Ax[i],&Ay[i],&Az[i],&Gx[i],&Gy[i],&Gz[i]);
+h+=BMP280_calculate_altitude();
 ax+=Ax[i];
 ay+=Ay[i];
 az+=Az[i];
@@ -40,9 +42,10 @@ Delay_ms(5);
 } 
 R_Gx=(int16_t)(gx/25);R_Gy=(int16_t)(gy/25);R_Gz=(int16_t)(gz/25);
 R_Ax=(int16_t)(ax/25);R_Ay=(int16_t)(ay/25);R_Az=(int16_t)(az/25);
+R_h=h/25.0f;
 }
 
-void Data_Calibrate(MPU6050_Acc *MA,MPU6050_gyro *MG,uint16_t *height)
+void Data_Calibrate(MPU6050_Acc *MA,MPU6050_gyro *MG,float *height)
 {
 MA->Ax-=R_Ax;
 MA->Ay-=R_Ay;
@@ -51,7 +54,7 @@ MG->Gx-=R_Gx;
 MG->Gy-=R_Gy;
 MG->Gz-=R_Gz;
 *height-=R_h;
-}*/
+}
  void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az)//加速度换算
  {
   P_Acc.Ax=(float)Ax*MPU6050_ACCimu;

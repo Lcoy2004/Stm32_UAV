@@ -1,7 +1,7 @@
 #include "stm32f10x.h"                  // Device header
 #include "MyI2C_BMP.h"
 #include "BMP280.h"
-
+#include <math.h>
 BMP280 bmp280_inst;
 BMP280* bmp280 = &bmp280_inst;		//这个全局结构体变量用来保存存在芯片内ROM补偿参数
 
@@ -232,7 +232,14 @@ double BMP280_Get_Pressure(void)
 	pressure = bmp280_compensate_P_double(Bit32);
 	return pressure;
 }
-
+//计算海拔高度,单位为m
+ float  BMP280_calculate_altitude(void)
+{  
+	double pressure=BMP280_Get_Pressure();
+    float pressure_sea_level = 101325; // 标准海平面大气压力  
+    float altitude =(44330 * (1 - pow((pressure / pressure_sea_level), 1 / 5.255)));  
+    return altitude;  
+}
 //温度值-℃
 double BMP280_Get_Temperature(void)
 {

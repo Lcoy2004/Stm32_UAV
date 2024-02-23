@@ -153,7 +153,8 @@ u8  BMP280_GetStatus(u8 status_flag);
 //大气压值-Pa
 double BMP280_Get_Pressure(void);
 double BMP280_Get_Temperature(void);
-
+//计算海拔高度,单位为m
+ float BMP280_calculate_altitude();
 
 /*******************************下面是用来计算补偿值相关**********************************/
 typedef			long signed int				BMP280_S32_t;	//有符号 64位！
