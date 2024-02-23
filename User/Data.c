@@ -19,7 +19,7 @@ K_Filter K_P_angle={0,0.05f,0.2f,0.1f,0,0};//pitch需要调参
  K_Filter K_R_angle={0,0.05f,0.2f,0.08f,0,0};//roll需要调参
 K_Filter K_height={0,0.1f,0.25f,0.07f,0,0};//需要调参
 //消除零偏误差
-int16_t R_Gx,R_Gy,R_Gz,R_Ax,R_Ay,R_Az;//零偏误差，温度不同也会变化
+/*int16_t R_Gx,R_Gy,R_Gz,R_Ax,R_Ay,R_Az;//零偏误差，温度不同也会变化
 float R_h;//得到当前海拔高度
 
 void Data_start()
@@ -54,7 +54,7 @@ MG->Gx-=R_Gx;
 MG->Gy-=R_Gy;
 MG->Gz-=R_Gz;
 *height-=R_h;
-}
+}*/
  void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az)//加速度换算
  {
   P_Acc.Ax=(float)Ax*MPU6050_ACCimu;
