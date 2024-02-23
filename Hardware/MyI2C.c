@@ -23,7 +23,7 @@ uint8_t MyI2C_R_SDA(void)
 
 void MyI2C_Init(void)
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 	//MPU6050
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -33,14 +33,6 @@ void MyI2C_Init(void)
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	GPIO_SetBits(GPIOB, GPIO_Pin_10 | GPIO_Pin_11);
-//bmp280
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	
-	GPIO_SetBits(GPIOA, GPIO_Pin_0 | GPIO_Pin_1);
-	//BMP280 SCL接PA0， SDA接PA1
 }
 
 void MyI2C_Start(void)

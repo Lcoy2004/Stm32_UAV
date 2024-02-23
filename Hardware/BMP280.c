@@ -1,5 +1,5 @@
 #include "stm32f10x.h"                  // Device header
-#include "MYI2C.h"
+#include "MyI2C_BMP.h"
 #include "BMP280.h"
 
 BMP280 bmp280_inst;
@@ -7,7 +7,7 @@ BMP280* bmp280 = &bmp280_inst;		//Õâ¸öÈ«¾Ö½á¹¹Ìå±äÁ¿ÓÃÀ´±£´æ´æÔÚĞ¾Æ¬ÄÚROM²¹³¥²ÎÊ
 
 void Bmp_Init(void)
 {
-	MyI2C_Init();//ÔÚ6050ÄÇÀïÒÑ¾­³õÊ¼»¯
+	MyI2C_BMP_Init();
 	u8 Lsb,Msb;
 	
 	/********************½ÓÏÂÀ´¶Á³ö½ÃÕı²ÎÊı*********************/
@@ -108,31 +108,31 @@ u8  BMP280_GetStatus(u8 status_flag)
 static uint8_t BMP280_Read_Byte(u8 reg)
 {
 	uint8_t rec_data;
-	MyI2C_Start();
-	MyI2C_SendByte(BMP280_ADDRESS<<1|0);
-	MyI2C_ReceiveAck();
-	MyI2C_SendByte(reg);
-	MyI2C_ReceiveAck();
+	MyI2C_BMP_Start();
+	MyI2C_BMP_SendByte(BMP280_ADDRESS<<1|0);
+	MyI2C_BMP_ReceiveAck();
+	MyI2C_BMP_SendByte(reg);
+	MyI2C_BMP_ReceiveAck();
 	
-	MyI2C_Start();
-	MyI2C_SendByte(BMP280_ADDRESS<<1|1);
-	MyI2C_ReceiveAck();
-	rec_data = MyI2C_ReceiveByte();	//²»Ó¦´ğ
-	MyI2C_Stop();
+	MyI2C_BMP_Start();
+	MyI2C_BMP_SendByte(BMP280_ADDRESS<<1|1);
+	MyI2C_BMP_ReceiveAck();
+	rec_data = MyI2C_BMP_ReceiveByte();	//²»Ó¦´ğ
+	MyI2C_BMP_Stop();
 	return rec_data;
 }
 
  void BMP280_Write_Byte(u8 reg,u8 data)
 {
-	MyI2C_Start();
-	MyI2C_SendByte(BMP280_ADDRESS<<1);
-	MyI2C_ReceiveAck();
-	MyI2C_SendByte(reg);
-	MyI2C_ReceiveAck();
+	MyI2C_BMP_Start();
+	MyI2C_BMP_SendByte(BMP280_ADDRESS<<1);
+	MyI2C_BMP_ReceiveAck();
+	MyI2C_BMP_SendByte(reg);
+	MyI2C_BMP_ReceiveAck();
 	
-	MyI2C_SendByte(data);
-	MyI2C_ReceiveAck();
-	MyI2C_Stop();
+	MyI2C_BMP_SendByte(data);
+	MyI2C_BMP_ReceiveAck();
+	MyI2C_BMP_Stop();
 }
 uint8_t BMP280_ReadID(void)
 {

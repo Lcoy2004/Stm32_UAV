@@ -40,6 +40,12 @@
             "path": "Hardware/MPU6050.h"
           },
           {
+            "path": "Hardware/MyI2C_BMP.c"
+          },
+          {
+            "path": "Hardware/MyI2C_BMP.h"
+          },
+          {
             "path": "Hardware/MyI2C.c"
           },
           {
