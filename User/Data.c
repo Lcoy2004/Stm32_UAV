@@ -128,3 +128,8 @@ void Data_height_SerialTest()
 Serial_Printf("{Kheight: %d  %d\n}",P_height,height);
 
 }
+void Data_angle_SerialTest()
+{
+Serial_Printf(" %f , %f,%f \n",angle.pitch,angle.roll,angle.yaw);
+
+}

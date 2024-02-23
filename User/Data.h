@@ -17,7 +17,7 @@ void Data_height_SerialTest();
  void Gyro_to_imu2(int16_t Gx,int16_t Gy,int16_t Gz);//换算角度;
 ///void Gyro_to_imu2(int16_t Gx,int16_t Gy,int16_t Gz);//角速度换算弧度
 //void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az);//MPU6050加速度换算
-
+void Data_angle_SerialTest();
  
 extern T_Acc P_Acc;//存储加速度值测量值
 extern T_gyro gyro;//存储滤波后角速度值
