@@ -47,7 +47,7 @@ case 'F':  t_roll= ReceiveNum();
     break;
 case 'R':  t_pitch= -ReceiveNum();
     break;
-case 'U': t_height=(uint16_t)ReceiveNum();
+case 'U': t_height=ReceiveNum();
     break;
 default:
     return 0;
