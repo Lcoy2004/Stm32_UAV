@@ -1,5 +1,4 @@
 #include "stm32f10x.h"                  // Device header
-#include "Timer.h"
 #include "MPU6050.h"
 #include "imu.h"
 #include "Data.h"
