@@ -10,7 +10,7 @@ extern uint16_t height;
 float t_yaw;
 float t_pitch;
 float t_roll;
-uint16_t t_height;
+float t_height;
 
 extern const uint16_t Motor_Vmax;
 extern const uint16_t Motor_Vmin;
@@ -33,7 +33,7 @@ static PID_State PID_State_gyroz;
 static PID_State PID_State_gyroy;
 static PID_State PID_State_gyrox;
 //@para:传入的分别是目标数据target
-void Control_Motor(float t_yaw,float t_pitch,float t_roll,uint16_t t_height)
+void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height)
 {
 double dt=0,Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 dt=0.001f;
@@ -96,12 +96,13 @@ Motor_SetSpeed4((uint16_t)motor4);
 }
 void Control_stop()//紧急停桨
 {
+TIM_Cmd(TIM2, DISABLE);//关闭pid
 Motor_SetSpeed1(Motor_Vmin);  
 Motor_SetSpeed2(Motor_Vmin);  
 Motor_SetSpeed3(Motor_Vmin);  
 Motor_SetSpeed4(Motor_Vmin);
 
-while(1);
+while(1);//进入死循环
 
 }
 void Control_fly()
@@ -116,6 +117,7 @@ Motor_SetSpeed4(Motor_Vmin);
 {
    if(t_height<10&&height<35)//降落
    {
+      TIM_Cmd(TIM2, DISABLE);//关闭pid
       uint16_t motor1=Motor_GetSpeed1();
       uint16_t motor2=Motor_GetSpeed2();
       uint16_t motor3=Motor_GetSpeed3();
@@ -138,9 +140,9 @@ Motor_SetSpeed4(Motor_Vmin);
       Motor_SetSpeed3(Motor_Vmin);  
        Motor_SetSpeed4(Motor_Vmin);
    }
-else
+else//开启飞行
 {
-   Control_Motor(t_yaw,t_pitch,t_roll,t_height);
+  TIM_Cmd(TIM2, ENABLE);
 }
 }
 }

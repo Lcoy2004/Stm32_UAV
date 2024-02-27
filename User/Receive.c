@@ -5,7 +5,7 @@ float sum;
 extern float t_yaw;
 extern float t_pitch;
 extern float t_roll;
-extern uint16_t t_height;
+extern float t_height;
 
 char ReceiveVis(void)
 {

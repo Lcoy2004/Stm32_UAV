@@ -5,8 +5,13 @@
 #include "Data.h"
 #include "BMP280.h"
 #include "Serial.h"
+#include "Control.h"
 extern T_angle P_angle;//存储角度测量值
 extern uint16_t P_height;//存储测量高度值
+extern float t_yaw;
+extern float t_pitch;
+extern float t_roll;
+extern float t_height; 
 void Timer2_Init()
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//选择APB1总线下的定时器Timer2
@@ -16,8 +21,8 @@ void Timer2_Init()
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;		//计数模式，此处为向上计数
-	TIM_TimeBaseInitStructure.TIM_Period = 7199;		//ARR 1 = 0.0001S
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 0;		//PSC
+	TIM_TimeBaseInitStructure.TIM_Period = 72-1;		//ARR 1 = 0.0001S
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 10000-1;		//PSC
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;		//高级计时器特有，重复计数
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
 	
@@ -34,7 +39,7 @@ void Timer2_Init()
 	
 	NVIC_Init(&NVIC_InitStructure);
 	
-	TIM_Cmd(TIM2, ENABLE);		//打开定时器
+	//TIM_Cmd(TIM2, ENABLE);		//打开定时器
 }
 void Timer1_Init()
 {
@@ -116,11 +121,12 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 	}
 }
 
-void TIM2_IRQHandler()		//定时器2的中断函数，不懂直接套用
+void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
-
+	Control_Motor(t_yaw,t_pitch,t_roll,t_height);
+   TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
 }
 void TIM4_IRQHandler(void)//定时执行姿态解算
