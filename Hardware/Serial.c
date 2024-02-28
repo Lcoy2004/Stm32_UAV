@@ -56,27 +56,82 @@ void Serial_Printf(char *format, ...)
 	Serial_SendString(String);
 }
 
-uint8_t Serial_GetRxFlag(void)
-{
-	if (Serial_RxFlag == 1)
-	{
-		Serial_RxFlag = 0;
-		return 1;
-	}
-	return 0;
-}
-
 uint8_t Serial_GetRxData(void)
 {
 	return Serial_RxData;
 }
 
+
+uint8_t Serial_GetRxFlag(void)
+{
+	if(Serial_RxFlag==1)
+	{
+		return 1;
+		Serial_RxFlag=0;
+	}
+	else 
+		return Serial_RxFlag;
+}
+
 void USART1_IRQHandler(void)
 {
+	static int RxState=0;
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
 	{
-		Serial_RxData = USART_ReceiveData(USART1);
-		Serial_RxFlag = 1;
-		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+		int RxData=USART_ReceiveData(USART1);
+		if(RxState==0)
+		{
+			HexNum=0;
+			if(RxData==0x30)
+			{
+				Vis='p';
+			}
+			else if(RxData==0x31)
+			{
+				Vis='L';
+			}
+			else if(RxData==0x32)
+			{
+				Vis='B';
+			}
+			else if(RxData==0x33)
+			{
+				Vis='F';
+			}
+			else if(RxData==0x34)
+			{
+				Vis='R';
+			}
+			else if(RxData==0x35)
+			{
+				Vis='U';
+			}
+			else
+			{
+				Vis='S';
+			}
+			RxState++;
+		}
+		else if(RxState==1)
+		{
+			if(Vis!='U')
+			{
+				HexNum=RxData;
+				RxState--;
+				Serial_RxFlag=1;
+			}
+			else
+			{
+				HexNum+=RxData*100;
+				RxState++;
+				Serial_RxFlag=0;
+			}
+		}
+		else if(RxState==2)
+		{
+			HexNum+=RxData;
+			Serial_RxFlag=1;
+			RxState=0;
+		}
 	}
 }
