@@ -128,7 +128,7 @@ void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
 }
-void TIM4_IRQHandler(void)//定时执行姿态解算
+void TIM4_IRQHandler(void)//
 {
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
 	{
