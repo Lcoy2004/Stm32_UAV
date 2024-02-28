@@ -44,7 +44,54 @@ void Serial_Init(void)
 	USART_Cmd(USART1, ENABLE);
 }
 
+void Serial_SendByte(uint8_t Byte)
+{
+	USART_SendData(USART1, Byte);
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+}
 
+void Serial_SendArray(uint8_t *Array, uint16_t Length)
+{
+	uint16_t i;
+	for (i = 0; i < Length; i ++)
+	{
+		Serial_SendByte(Array[i]);
+	}
+}
+
+void Serial_SendString(char *String)
+{
+	uint8_t i;
+	for (i = 0; String[i] != '\0'; i ++)
+	{
+		Serial_SendByte(String[i]);
+	}
+}
+
+uint32_t Serial_Pow(uint32_t X, uint32_t Y)
+{
+	uint32_t Result = 1;
+	while (Y --)
+	{
+		Result *= X;
+	}
+	return Result;
+}
+
+void Serial_SendNumber(uint32_t Number, uint8_t Length)
+{
+	uint8_t i;
+	for (i = 0; i < Length; i ++)
+	{
+		Serial_SendByte(Number / Serial_Pow(10, Length - i - 1) % 10 + '0');
+	}
+}
+
+int fputc(int ch, FILE *f)
+{
+	Serial_SendByte(ch);
+	return ch;
+}
 
 void Serial_Printf(char *format, ...)
 {
@@ -56,82 +103,28 @@ void Serial_Printf(char *format, ...)
 	Serial_SendString(String);
 }
 
+uint8_t Serial_GetRxFlag(void)
+{
+	if (Serial_RxFlag == 1)
+	{
+		Serial_RxFlag = 0;
+		return 1;
+	}
+	return 0;
+}
+
 uint8_t Serial_GetRxData(void)
 {
 	return Serial_RxData;
 }
 
-
-uint8_t Serial_GetRxFlag(void)
-{
-	if(Serial_RxFlag==1)
-	{
-		return 1;
-		Serial_RxFlag=0;
-	}
-	else 
-		return Serial_RxFlag;
-}
-
 void USART1_IRQHandler(void)
 {
-	static int RxState=0;
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
 	{
-		int RxData=USART_ReceiveData(USART1);
-		if(RxState==0)
-		{
-			HexNum=0;
-			if(RxData==0x30)
-			{
-				Vis='p';
-			}
-			else if(RxData==0x31)
-			{
-				Vis='L';
-			}
-			else if(RxData==0x32)
-			{
-				Vis='B';
-			}
-			else if(RxData==0x33)
-			{
-				Vis='F';
-			}
-			else if(RxData==0x34)
-			{
-				Vis='R';
-			}
-			else if(RxData==0x35)
-			{
-				Vis='U';
-			}
-			else
-			{
-				Vis='S';
-			}
-			RxState++;
-		}
-		else if(RxState==1)
-		{
-			if(Vis!='U')
-			{
-				HexNum=RxData;
-				RxState--;
-				Serial_RxFlag=1;
-			}
-			else
-			{
-				HexNum+=RxData*100;
-				RxState++;
-				Serial_RxFlag=0;
-			}
-		}
-		else if(RxState==2)
-		{
-			HexNum+=RxData;
-			Serial_RxFlag=1;
-			RxState=0;
-		}
+		Serial_RxData = USART_ReceiveData(USART1);
+		Serial_RxFlag = 1;
+		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 	}
 }
+
