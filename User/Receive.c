@@ -12,7 +12,7 @@ char ReceiveVis(void)
 	if(ESP_GetRxFlag()==1)
 	{
 		return Vis;
-		//p???¡À?? l??¡Á¨® b???¨® f???¡ã r:?? u??????
+		//pï¼šåœ  F:å‰ B:å Lï¼šå·¦ R:å³ Uï¼šä¸Šå‡
 	}
 }
 
@@ -23,8 +23,6 @@ float ReceiveNum(void)
 		
 		num=HexNum;
 		sum=(float)num;
-		//OLED_ShowChar(1,1, Vis);
-		//OLED_ShowHexNum(3,1,sum,3);
 		return sum;
 	}
 }
@@ -49,9 +47,6 @@ case 'R':  t_pitch= -ReceiveNum();
     break;
 case 'U': t_height=ReceiveNum();
     break;
-default:
-    return 0;
-	break;
 }
 }
 return 1;
