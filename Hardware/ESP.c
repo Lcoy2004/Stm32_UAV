@@ -11,21 +11,21 @@ char Vis;
 void ESP_Init(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);//串口设置
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);//
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);//串口设置
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//
 	
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);//串口设置
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//
 	
 	USART_InitTypeDef USART_InitStructure;
-	USART_InitStructure.USART_BaudRate = 115200;//波特率设置
+	USART_InitStructure.USART_BaudRate = 115200;//
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -47,64 +47,6 @@ void ESP_Init(void)
 	USART_Cmd(USART2, ENABLE);
 }
 
-void ESP_SendByte(uint8_t Byte)
-{
-	USART_SendData(USART2, Byte);
-	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-}
-
-void ESP_SendArray(uint8_t *Array, uint16_t Length)
-{
-	uint16_t i;
-	for (i = 0; i < Length; i ++)
-	{
-		ESP_SendByte(Array[i]);
-	}
-}
-
-void ESP_SendString(char *String)
-{
-	uint8_t i;
-	for (i = 0; String[i] != '\0'; i ++)
-	{
-		ESP_SendByte(String[i]);
-	}
-}
-
-uint32_t ESP_Pow(uint32_t X, uint32_t Y)
-{
-	uint32_t Result = 1;
-	while (Y --)
-	{
-		Result *= X;
-	}
-	return Result;
-}
-
-void ESP_SendNumber(uint32_t Number, uint8_t Length)
-{
-	uint8_t i;
-	for (i = 0; i < Length; i ++)
-	{
-		ESP_SendByte(Number / ESP_Pow(10, Length - i - 1) % 10 + '0');
-	}
-}
-
-int ESP_fputc(int ch, FILE *f)
-{
-	ESP_SendByte(ch);
-	return ch;
-}
-
-void ESP_Printf(char *format, ...)
-{
-	char String[100];
-	va_list arg;
-	va_start(arg, format);
-	vsprintf(String, format, arg);
-	va_end(arg);
-	ESP_SendString(String);
-}
 
 
 uint8_t ESP_GetRxData(void)
