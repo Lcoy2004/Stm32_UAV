@@ -20,7 +20,6 @@ float ReceiveNum(void)
 {
 	if(ESP_GetRxFlag()==1)
 	{
-		
 		num=HexNum;
 		sum=(float)num;
 		return sum;
