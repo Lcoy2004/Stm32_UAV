@@ -33,10 +33,10 @@ static PID_State PID_State_gyroz;
 static PID_State PID_State_gyroy;
 static PID_State PID_State_gyrox;
 //@para:传入的分别是目标数据target
-void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height)
+void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height,float dt)
 {
-double dt=0,Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
-dt=0.001f;
+double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
+
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
 PID_State_height.time_delta=(double)dt;
