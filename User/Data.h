@@ -4,7 +4,8 @@
 #include "imu.h"
 #include "stm32f10x.h"
 void data_filter(void);//数据整合
-void Data_start();//初始校准，消除零偏误差
+//void Data_start();//初始校准，消除零偏误差
+void Data_Height_Calibrate();//计算初始海拔高度
 void Data_Calibrate(MPU6050_Acc *MA,MPU6050_gyro *MG,float *height);//初始校准，消除零偏误差
 //串口测试用
 void Data_pitch_SerialTest();

@@ -11,6 +11,7 @@ extern float t_yaw;
 extern float t_pitch;
 extern float t_roll;
 extern float t_height; 
+extern float Rh;
 void Timer2_Init()
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//选择APB1总线下的定时器Timer2
@@ -108,7 +109,7 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 		 MPU6050_Acc MA;
         MPU6050_gyro MG;
         //获取高度
-    P_height=BMP280_calculate_altitude();
+    P_height=BMP280_calculate_altitude()-Rh;
      MPU6050_GetData(&MA.Ax, &MA.Ay, &MA.Az, &MG.Gx, &MG.Gy,  &MG.Gz);
      //角度换算
      //Data_Calibrate(&MA,&MG,&P_height);//消除误差

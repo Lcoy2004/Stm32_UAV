@@ -5,6 +5,7 @@
 #include "Serial.h"
 #include "myMath.h"
 #include "Delay.h"
+#include "BMP280.h"
 #define MPU6050_ACCimu      0.0048f//换算加速度，单位m/s2
  T_Acc P_Acc;//存储加速度值测量值
  T_gyro gyro;//存储滤波后角速度值
@@ -18,6 +19,18 @@ K_Filter K_P_angle={0,0.05f,0.2f,0.1f,0,0};//pitch需要调参
  K_Filter K_Y_angle={0,0.05f,0.25f,0.1f,0,0};//yaw需要调参
  K_Filter K_R_angle={0,0.05f,0.2f,0.08f,0,0};//roll需要调参
 K_Filter K_height={0,0.1f,0.25f,0.07f,0,0};//需要调参
+float Rh;//初始海拔高度
+void Data_Height_Calibrate()
+{
+ float RH;
+ int8_t i=0;
+ for(i=0;i<100;i++)
+ {
+ RH+=BMP280_calculate_altitude();
+Delay_ms(1);
+ }
+Rh=RH/100;
+}
 //消除零偏误差
 /*int16_t R_Gx,R_Gy,R_Gz,R_Ax,R_Ay,R_Az;//零偏误差，温度不同也会变化
 float R_h;//得到当前海拔高度

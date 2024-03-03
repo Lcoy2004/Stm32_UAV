@@ -99,13 +99,13 @@ uint16_t Motor_GetSpeed4()//规定是反转电机2
 
 void ZTW_Init()//电调及电机——好盈 20A电调初始化
 {
- PWM_Init();//开启电机驱动	
+     PWM_Init();//开启电机驱动	
 	Delay_ms(20);
    Motor_SetSpeed1(Motor_Vmax);
 	Motor_SetSpeed2(Motor_Vmax);
 	Motor_SetSpeed3(Motor_Vmax);
 	Motor_SetSpeed4(Motor_Vmax);
-		Delay_s(1);	
+		Delay_s(3);	
 	Motor_SetSpeed1(Motor_Vmin);
 	Motor_SetSpeed2(Motor_Vmin);
 	Motor_SetSpeed3(Motor_Vmin);

@@ -16,7 +16,8 @@ int main(void)
  MPU6050_Init(); //MPU6050初始化
  ESP_Init();//ESP-12f初始化
  Bmp_Init();//气压计初始化
- //Data_start();//消除零偏误差
+// Data_start();//消除零偏误差
+ Data_Height_Calibrate();//得到初始高度
  Serial_Init();   //串口初始化（调试用）
  Timer1_Init();
  Timer4_Init();
