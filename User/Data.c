@@ -136,3 +136,23 @@ void Data_angle_SerialTest()
 Serial_Printf(" %f , %f,%f \n",angle.pitch,angle.roll,angle.yaw);
 
 }
+void Data_t_height_SerialTest()
+{
+extern float t_height;
+Serial_Printf(" %.2f \n",t_height);
+}
+void Data_t_pitch_SerialTest()
+{
+extern float t_pitch;
+Serial_Printf(" %.2f \n",t_pitch);
+}
+void Data_t_roll_SerialTest()
+{
+extern float t_roll;
+Serial_Printf(" %.2f \n",t_roll);
+}
+void Data_t_yaw_SerialTest()
+{
+extern float t_yaw;
+Serial_Printf(" %.2f \n",t_yaw);
+}

@@ -32,12 +32,12 @@ Data_angle_SerialTest();
  //Data_Gyroy_SerialTest();
  //Data_Gyroz_SerialTest();
  //Data_height_SerialTest();
- switch (ReceiveNum_Gettarget())
+// switch (ReceiveNum_Gettarget())
 {
-case 0: Control_stop();
-   break;
-case 1: Control_fly();
-    break;
+//case 0: Control_stop();
+   //break;
+//case 1: Control_fly();
+    //break;
 }
 }
 }
