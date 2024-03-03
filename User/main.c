@@ -20,7 +20,8 @@ int main(void)
  Serial_Init();   //串口初始化（调试用）
  Timer1_Init();
  Timer4_Init();
- //ZTW_Init();//电调及电机初始化
+ ZTW_Init();//电调及电机初始化
+ TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
 while(1)
 {
 data_filter();//数据滤波得到相关值
