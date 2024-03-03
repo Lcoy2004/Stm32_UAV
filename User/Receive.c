@@ -16,38 +16,38 @@ char ReceiveVis(void)
 	}
 }
 
-float ReceiveNum(void)
+uint8_t ReceiveNum(void)
 {
 	if(ESP_GetRxFlag()==1)
 	{
 		num=HexNum;
 		sum=(float)num;
-		return sum;
+		return HexNum;
 	}
 }
 
 uint8_t ReceiveNum_Gettarget(void)
 {
-	int8_t i;
-for(i=0;i<5;i++)
-{
+	//int8_t i;
+//for(i=0;i<5;i++)
+//{
 switch (ReceiveVis())
 {
 case 'p':
 	return 0;
-	break;
+	//break;
 case 'L':  t_pitch= -ReceiveNum();
-    break;
+    //break;
 case 'B':  t_roll= -ReceiveNum();
-    break;
+    //break;
 case 'F':  t_roll= ReceiveNum();
-    break;
+    //break;
 case 'R':  t_pitch= ReceiveNum();
-    break;
+    //break;
 case 'U': t_height=ReceiveNum();
-    break;
+    //break;
 }
-}
+//}
 return 1;
 
 }
