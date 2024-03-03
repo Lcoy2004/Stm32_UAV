@@ -9,8 +9,8 @@
  T_Acc P_Acc;//存储加速度值测量值
  T_gyro gyro;//存储滤波后角速度值
  T_angle angle;//存储滤波后姿态角值
- uint16_t height;//存储滤波后高度值
- uint16_t P_height;//存储测量高度值
+ float height;//存储滤波后高度值
+ float P_height;//存储测量高度值
  T_gyro P_gyro;//存储角速度测量值
  T_angle P_angle;//存储角度测量值
 //R,Q,Q表示对模型的信任程度，R表示对量测的信任程度
@@ -128,7 +128,7 @@ Serial_Printf("{Kgyroz: %.2f  %.2f \n}",P_gyro.Gz,gyro.Gz);
 }
 void Data_height_SerialTest()
 {
-Serial_Printf("{Kheight: %d  %d\n}",P_height,height);
+Serial_Printf(" %.2f , %.2f\n",P_height,height);
 
 }
 void Data_angle_SerialTest()

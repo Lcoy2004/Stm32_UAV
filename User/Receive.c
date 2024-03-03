@@ -36,13 +36,13 @@ switch (ReceiveVis())
 case 'p':
 	return 0;
 	break;
-case 'L':  t_pitch= ReceiveNum();
+case 'L':  t_pitch= -ReceiveNum();
     break;
 case 'B':  t_roll= -ReceiveNum();
     break;
 case 'F':  t_roll= ReceiveNum();
     break;
-case 'R':  t_pitch= -ReceiveNum();
+case 'R':  t_pitch= ReceiveNum();
     break;
 case 'U': t_height=ReceiveNum();
     break;

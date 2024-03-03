@@ -20,12 +20,14 @@ int main(void)
  Serial_Init();   //串口初始化（调试用）
  Timer1_Init();
  Timer4_Init();
- ZTW_Init();//电调及电机初始化
- TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
+ //ZTW_Init();//电调及电机初始化
+ //TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
 while(1)
 {
+    ReceiveNum_Gettarget();
 data_filter();//数据滤波得到相关值
-Data_angle_SerialTest();
+Data_t_pitch_SerialTest();
+//Data_angle_SerialTest();
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();
@@ -34,11 +36,11 @@ Data_angle_SerialTest();
  //Data_Gyroz_SerialTest();
  //Data_height_SerialTest();
 // switch (ReceiveNum_Gettarget())
-{
+//{
 //case 0: Control_stop();
    //break;
 //case 1: Control_fly();
     //break;
-}
+//}
 }
 }

@@ -29,8 +29,8 @@ void Data_angle_SerialTest();
 extern T_Acc P_Acc;//存储加速度值测量值
 extern T_gyro gyro;//存储滤波后角速度值
 extern T_angle angle;//存储滤波后姿态角值
-extern uint16_t height;//存储滤波后高度值
-extern uint16_t P_height;//存储测量高度值
+extern float height;//存储滤波后高度值
+extern float P_height;//存储测量高度值
 extern T_gyro P_gyro;//存储角速度测量值
 extern T_angle P_angle;//存储角度测量值
 
