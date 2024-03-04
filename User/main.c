@@ -19,6 +19,7 @@ int main(void)
 // Data_start();//消除零偏误差
  Data_Height_Calibrate();//得到初始高度
  Serial_Init();   //串口初始化（调试用）
+ Timer2_Init();
  Timer1_Init();
  Timer4_Init();
  //ZTW_Init();//电调及电机初始化
