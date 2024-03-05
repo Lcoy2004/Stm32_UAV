@@ -17,7 +17,7 @@
             "request": "launch",
             "name": "openocd",
             "servertype": "openocd",
-            "executable": "build\\Target 1\\Project.elf",
+            "executable": "build\\Target 1\\UAV.elf",
             "runToEntryPoint": "main",
             "configFiles": [
                 "interface/cmsis-dap-v1.cfg",
