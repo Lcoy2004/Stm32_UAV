@@ -13,6 +13,7 @@
 int main(void)
 {
  //初始化各种硬件驱动	
+ ZTW_Init();//电调及电机初始化，最好放在前面
  MPU6050_Init(); //MPU6050初始化
  ESP_Init();//ESP-12f初始化
  Bmp_Init();//气压计初始化
@@ -22,11 +23,11 @@ int main(void)
  Timer2_Init();
  Timer1_Init();
  Timer4_Init();
- //ZTW_Init();//电调及电机初始化
+ 
  //TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
 while(1)
 {
-    ReceiveNum_Gettarget();
+ReceiveNum_Gettarget();
 data_filter();//数据滤波得到相关值
 Data_t_pitch_SerialTest();
 //Data_angle_SerialTest();

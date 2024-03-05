@@ -19,10 +19,10 @@ extern const uint16_t Motor_Vmin;
 const PID_Calibration PID_yaw={0,0,0};
 const PID_Calibration PID_pitch={0,0,0};
 const PID_Calibration PID_roll={0,0,0};
-const PID_Calibration PID_height={1,1,1};
-const PID_Calibration PID_gyrox={1,1,1};
-const PID_Calibration PID_gyroy={1,1,1};
-const PID_Calibration PID_gyroz={1,1,1};
+const PID_Calibration PID_height={7.5,0,0};
+const PID_Calibration PID_gyrox={6,0,0};
+const PID_Calibration PID_gyroy={7,0,0};
+const PID_Calibration PID_gyroz={5,0,0};
 //
 //
 static PID_State PID_State_yaw;

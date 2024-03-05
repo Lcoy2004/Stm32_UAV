@@ -2,15 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "cwd": "${workspaceRoot}",
-            "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "./bin/executable.elf",
+            "name": "Debug with ST-Link",
             "request": "launch",
-            "name": "jlink",
-            "servertype": "jlink",
-            "interface": "swd",
-            "executable": "build\\Target 1\\Project.elf",
+            "type": "cortex-debug",
             "runToEntryPoint": "main",
-            "device": "null"
+            "showDevDebugOutput": "none",
+            "servertype": "stlink"
         },
         {
             "cwd": "${workspaceRoot}",
