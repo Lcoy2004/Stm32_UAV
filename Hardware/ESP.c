@@ -65,6 +65,15 @@ uint8_t ESP_GetRxFlag(void)
 	else 
 		return ESP_RxFlag;
 }
+int Pow(int x,int y)
+{
+	while(y--)
+	{
+		x*=x;
+	}
+	x/=x;
+	return x;
+}
 
 void USART2_IRQHandler(void)
 {
@@ -72,36 +81,33 @@ void USART2_IRQHandler(void)
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
 	{
 		int RxData=USART_ReceiveData(USART2);
+		//HexNum=RxData;
 		if(RxState==0)
 		{
 			HexNum=0;
-			if(RxData==0x30)
+			if(RxData==0)
 			{
 				Vis='p';
 			}
-			else if(RxData==0x31)
+			else if(RxData==1)
 			{
 				Vis='L';
 			}
-			else if(RxData==0x32)
+			else if(RxData==2)
 			{
 				Vis='B';
 			}
-			else if(RxData==0x33)
+			else if(RxData==3)
 			{
 				Vis='F';
 			}
-			else if(RxData==0x34)
+			else if(RxData==4)
 			{
 				Vis='R';
 			}
-			else if(RxData==0x35)
+			else if(RxData==5)
 			{
 				Vis='U';
-			}
-			else
-			{
-				Vis='S';
 			}
 			RxState++;
 		}
@@ -110,7 +116,7 @@ void USART2_IRQHandler(void)
 			if(Vis!='U')
 			{
 				HexNum=RxData;
-				RxState--;
+				RxState++;
 				ESP_RxFlag=1;
 			}
 			else
@@ -126,5 +132,6 @@ void USART2_IRQHandler(void)
 			ESP_RxFlag=1;
 			RxState=0;
 		}
+		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
 	}
 }
