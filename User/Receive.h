@@ -6,5 +6,5 @@ extern float sum;
 
 char ReceiveVis(void);
 uint8_t ReceiveNum(void);
-uint8_t ReceiveNum_Gettarget(void);
+void ReceiveNum_Gettarget(void);
 #endif

@@ -5,6 +5,7 @@
 #include "BMP280.h"
 #include "Serial.h"
 #include "Control.h"
+#include "Receive.h"
 extern T_angle P_angle;//存储角度测量值
 extern float P_height;//存储测量高度值
 extern float t_yaw;
@@ -116,7 +117,9 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
     Acc_to_imu(MA.Ax,MA.Ay,MA.Az);
     Gyro_to_imu2(MG.Gx,MG.Gy,MG.Gz);
     imu_Getangle(MG,MA,&P_angle,0.005f);
+	ReceiveNum_Gettarget();
 	//Serial_Printf("tim1\n");
+	ReceiveNum_Gettarget();
 	TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
 }
@@ -125,6 +128,7 @@ void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
+			
 	Control_Motor(t_yaw,t_pitch,t_roll,t_height,0.01f);
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
@@ -133,6 +137,7 @@ void TIM4_IRQHandler(void)//
 {
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
 	{
+			ReceiveNum_Gettarget();
 		//Serial_Printf("tim4\n");
 	TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 	}

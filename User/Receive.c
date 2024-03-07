@@ -1,5 +1,6 @@
 #include "stm32f10x.h" 
 #include "ESP.h"
+#include "Serial.h"
 int num;
 float sum;
 extern float t_yaw;
@@ -16,38 +17,43 @@ char ReceiveVis(void)
 	}
 }
 
-uint8_t ReceiveNum(void)
+float ReceiveNum(void)
 {
 	if(ESP_GetRxFlag()==1)
 	{
-		num=HexNum;
-		sum=(float)num;
-		return HexNum;
+		return (float)HexNum;
 	}
 }
 
-uint8_t ReceiveNum_Gettarget(void)
+void ReceiveNum_Gettarget(void)
 {
-	//int8_t i;
-//for(i=0;i<5;i++)
-//{
-switch (ReceiveVis())
-{
-case 'p':
-	return 0;
-	//break;
-case 'L':  t_pitch= -ReceiveNum();
-    //break;
+	
+	if(ESP_GetRxFlag()==1)
+	{
+		if (ReceiveVis()=='p')
+		{
+			
+		}
+		else if(ReceiveVis()=='F')
+			t_roll= ReceiveNum();
+		else if(ReceiveVis()=='B')
+			t_roll= -ReceiveNum();
+		else if(ReceiveVis()=='L')
+			t_pitch= -ReceiveNum();
+		else if(ReceiveVis()=='R')
+			t_pitch= ReceiveNum();
+		else if(ReceiveVis()=='U')
+			t_height= ReceiveNum();
+	}
+//return 1;
+/*case 'L':  t_pitch= -ReceiveNum();
+    /[表情];
 case 'B':  t_roll= -ReceiveNum();
-    //break;
+    /[表情];
 case 'F':  t_roll= ReceiveNum();
-    //break;
+    /[表情];
 case 'R':  t_pitch= ReceiveNum();
-    //break;
-case 'U': t_height=ReceiveNum();
-    //break;
-}
-//}
-return 1;
+    /[表情];
+case 'U': t_height=ReceiveNum();*/
 
 }

@@ -5,6 +5,7 @@
 
 extern int HexNum;
 extern char Vis;
+extern uint8_t ESP_RxFlag;
 
 void ESP_Init(void);
 
