@@ -117,9 +117,7 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
     Acc_to_imu(MA.Ax,MA.Ay,MA.Az);
     Gyro_to_imu2(MG.Gx,MG.Gy,MG.Gz);
     imu_Getangle(MG,MA,&P_angle,0.005f);
-	ReceiveNum_Gettarget();
-	//Serial_Printf("tim1\n");
-	ReceiveNum_Gettarget();
+	Serial_Printf("tim1\n");
 	TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
 }
