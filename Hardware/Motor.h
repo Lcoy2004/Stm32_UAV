@@ -13,4 +13,6 @@ void ZTW_Init();//电调及电机——好盈 20A电调初始化
  //这里使用了tim3，占用端口GPIOB0，1；GPIOA6，7；用于输出pwm
  //相应正转和反转电机已设置好
  //@par:speed:大小值请看电调初始化的参数！
+extern const uint16_t Motor_Vmax;
+extern const uint16_t Motor_Vmin;
 #endif

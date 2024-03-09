@@ -1,12 +1,11 @@
 #include "stm32f10x.h" 
+#include "Receive.h"
 #include "ESP.h"
 #include "Serial.h"
+#include "Control.h"
 int num;
 float sum;
-extern float t_yaw;
-extern float t_pitch;
-extern float t_roll;
-extern float t_height;
+
 
 char ReceiveVis(void)
 {

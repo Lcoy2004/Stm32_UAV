@@ -1,20 +1,17 @@
 #include "stm32f10x.h"  
 #include "imu.h"
+#include "Data.h"
 #include "pid.h"
 #include "Motor.h"
 #include "myMath.h"
-extern  T_gyro gyro;
-extern T_angle angle;
-extern uint16_t height;
+#include "Control.h"
+
 //预期目标
 float t_yaw;
 float t_pitch;
 float t_roll;
 float t_height;
 
-extern const uint16_t Motor_Vmax;
-extern const uint16_t Motor_Vmin;
-//
 //参数调试区
 const PID_Calibration PID_yaw={0,0,0};
 const PID_Calibration PID_pitch={0,0,0};
@@ -23,8 +20,7 @@ const PID_Calibration PID_height={7.5,0,0};
 const PID_Calibration PID_gyrox={6,0,0};
 const PID_Calibration PID_gyroy={7,0,0};
 const PID_Calibration PID_gyroz={5,0,0};
-//
-//
+
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
 static PID_State PID_State_roll;

@@ -1,5 +1,5 @@
-#ifndef  __IMU_H__
-#define __IMU_H__
+#ifndef  __IMU_H
+#define __IMU_H
 #include "stm32f10x.h"
 typedef  volatile struct 
 {

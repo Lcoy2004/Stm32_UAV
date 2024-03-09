@@ -6,13 +6,6 @@
 #include "Serial.h"
 #include "Control.h"
 #include "Receive.h"
-extern T_angle P_angle;//存储角度测量值
-extern float P_height;//存储测量高度值
-extern float t_yaw;
-extern float t_pitch;
-extern float t_roll;
-extern float t_height; 
-extern float Rh;
 void Timer2_Init()
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//选择APB1总线下的定时器Timer2
