@@ -115,7 +115,7 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 	}
 }
 
-void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
+void TIM2_IRQHandler()		//定时器2的中断函数,5ms进行pid
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
