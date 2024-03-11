@@ -8,6 +8,7 @@ uint8_t ESP_RxFlag;
 int HexNum;
 char Vis;
 
+
 void ESP_Init(void)
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
@@ -64,6 +65,15 @@ uint8_t ESP_GetRxFlag(void)
 	}
 	else 
 		return ESP_RxFlag;
+}
+int Pow(int x,int y)
+{
+	while(y--)
+	{
+		x*=x;
+	}
+	x/=x;
+	return x;
 }
 
 void USART2_IRQHandler(void)
