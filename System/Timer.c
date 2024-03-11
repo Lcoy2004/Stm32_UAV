@@ -6,7 +6,7 @@
 #include "Serial.h"
 #include "Control.h"
 #include "Receive.h"
-void Timer2_Init()
+void Timer2_Init()//pid,5ms更新
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//选择APB1总线下的定时器Timer2
 	
@@ -16,10 +16,10 @@ void Timer2_Init()
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;		//计数模式，此处为向上计数
 	TIM_TimeBaseInitStructure.TIM_Period = 72-1;		//ARR 1 = 0.0001S
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 10000-1;		//PSC
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 5000-1;		//PSC
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;		//高级计时器特有，重复计数
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
-	
+	//5ms
 	TIM_ClearFlag(TIM2, TIM_FLAG_Update);
 	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);		//使能中断
 	
@@ -29,7 +29,7 @@ void Timer2_Init()
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;		//中断通道选择
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		//优先级，同上
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;		//优先级，同上
 	
 	NVIC_Init(&NVIC_InitStructure);
 	
@@ -46,7 +46,7 @@ RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInitStructure.TIM_Period = 72 - 1;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 5000 - 1;
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 10000 - 1;
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseInitStructure);
 	
@@ -58,10 +58,10 @@ RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_Init(&NVIC_InitStructure);
-	//5ms
+	//10ms
 	TIM_Cmd(TIM1, ENABLE);
 	
 }
@@ -109,7 +109,7 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
      //Data_Calibrate(&MA,&MG,&P_height);//消除误差
     Acc_to_imu(MA.Ax,MA.Ay,MA.Az);
     Gyro_to_imu2(MG.Gx,MG.Gy,MG.Gz);
-    imu_Getangle(MG,MA,&P_angle,0.005f);
+    imu_Getangle(MG,MA,&P_angle,0.01f);
 	Serial_Printf("tim1\n");
 	TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
@@ -120,7 +120,7 @@ void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
 			
-	Control_Motor(t_yaw,t_pitch,t_roll,t_height,0.01f);
+	Control_Motor(t_yaw,t_pitch,t_roll,t_height,0.005f);
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
 }

@@ -1,7 +1,7 @@
 #include "stm32f10x.h"                  // Device header
 #include <stdio.h>
 #include <stdarg.h>
-
+#include "Receive.h"
 uint8_t ESP_RxData;
 uint8_t ESP_RxFlag;
 
@@ -40,7 +40,7 @@ void ESP_Init(void)
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_Init(&NVIC_InitStructure);
 	
@@ -100,6 +100,10 @@ void USART2_IRQHandler(void)
 			{
 				Vis='U';
 			}
+			else if(RxData==6)
+			{
+				Vis='S';
+			}
 			RxState++;
 		}
 		else if(RxState==1)
@@ -123,6 +127,7 @@ void USART2_IRQHandler(void)
 			ESP_RxFlag=1;
 			RxState=0;
 		}
+		TEMP=HexNum;
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
 	}
 }

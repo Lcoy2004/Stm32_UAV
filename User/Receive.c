@@ -1,11 +1,13 @@
 #include "stm32f10x.h" 
-#include "Receive.h"
 #include "ESP.h"
 #include "Serial.h"
-#include "Control.h"
 int num;
 float sum;
-
+extern float t_yaw;
+extern float t_pitch;
+extern float t_roll;
+extern float t_height;
+int TEMP;
 
 char ReceiveVis(void)
 {
@@ -16,43 +18,40 @@ char ReceiveVis(void)
 	}
 }
 
-float ReceiveNum(void)
+uint8_t ReceiveNum(void)
 {
 	if(ESP_GetRxFlag()==1)
 	{
-		return (float)HexNum;
+		num=HexNum;
+		sum=(float)num;
+		return HexNum;
 	}
 }
 
 void ReceiveNum_Gettarget(void)
 {
-	
-	if(ESP_GetRxFlag()==1)
+	if(ESP_RxFlag==1)
 	{
-		if (ReceiveVis()=='p')
+		//Serial_Printf("%d ", TEMP);
+
+	//int8_t i;
+	//for(i=0;i<5;i++)
+	switch (ReceiveVis())
 		{
-			
+		case 'p':break;
+		case 'L':  t_pitch= -(float)num;break;
+			//Serial_Printf("%d ", -TEMP);break;
+		case 'B':  t_roll= -(float)TEMP;break;
+			//Serial_Printf("%d ",- TEMP);break;
+		case 'F':  t_roll= (float)TEMP;break;
+		case 'R':  t_pitch= (float)num;break;
+			//Serial_Printf("%d ", TEMP);break;
+		case 'U': t_height=(float)TEMP;break;
+			//Serial_Printf("%d ", TEMP);break;
+		case 'S':Serial_Printf("%d \n", TEMP);break;
 		}
-		else if(ReceiveVis()=='F')
-			t_roll= ReceiveNum();
-		else if(ReceiveVis()=='B')
-			t_roll= -ReceiveNum();
-		else if(ReceiveVis()=='L')
-			t_pitch= -ReceiveNum();
-		else if(ReceiveVis()=='R')
-			t_pitch= ReceiveNum();
-		else if(ReceiveVis()=='U')
-			t_height= ReceiveNum();
 	}
+//
 //return 1;
-/*case 'L':  t_pitch= -ReceiveNum();
-    /[表情];
-case 'B':  t_roll= -ReceiveNum();
-    /[表情];
-case 'F':  t_roll= ReceiveNum();
-    /[表情];
-case 'R':  t_pitch= ReceiveNum();
-    /[表情];
-case 'U': t_height=ReceiveNum();*/
 
 }
