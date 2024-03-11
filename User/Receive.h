@@ -3,6 +3,7 @@
 
 extern int num;
 extern float sum;
+extern int TEMP;
 
 char ReceiveVis(void);
 float ReceiveNum(void);
