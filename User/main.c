@@ -24,14 +24,16 @@ int main(void)
  Timer1_Init();
  //Timer4_Init();
  
- //TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
+ TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
 while(1)
 {
 //ReceiveNum_Gettarget();
 data_filter();//数据滤波得到相关值
-//Data_t_pitch_SerialTest();
+ReceiveNum_Gettarget();
+//Control_Pid_SerialTest();
+Data_t_pitch_SerialTest();
 //Data_t_height_SerialTest();
-Data_angle_SerialTest();
+//Data_angle_SerialTest();
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();
  //Data_yaw_SerialTest();

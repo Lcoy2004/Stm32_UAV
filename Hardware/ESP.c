@@ -137,7 +137,8 @@ void USART2_IRQHandler(void)
 			ESP_RxFlag=1;
 			RxState=0;
 		}
-		TEMP=HexNum;
+		//TEMP=HexNum;
+		
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
 	}
 }

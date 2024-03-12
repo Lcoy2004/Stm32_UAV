@@ -5,7 +5,7 @@
 #include "Motor.h"
 #include "myMath.h"
 #include "Control.h"
-
+#include "Serial.h"
 //预期目标
 float t_yaw;
 float t_pitch;
@@ -13,13 +13,13 @@ float t_roll;
 float t_height;
 
 //参数调试区
-const PID_Calibration PID_yaw={0,0,0};
-const PID_Calibration PID_pitch={0,0,0};
-const PID_Calibration PID_roll={0,0,0};
-const PID_Calibration PID_height={7.5,0,0};
+const PID_Calibration PID_yaw={0.5,0,0};
+const PID_Calibration PID_pitch={0.5,0,0};
+const PID_Calibration PID_roll={0.5,0,0};
+const PID_Calibration PID_height={8.0,0,0};
 const PID_Calibration PID_gyrox={6,0,0};
-const PID_Calibration PID_gyroy={7,0,0};
-const PID_Calibration PID_gyroz={5,0,0};
+const PID_Calibration PID_gyroy={6,0,0};
+const PID_Calibration PID_gyroz={6,0,0};
 
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
@@ -31,8 +31,10 @@ static PID_State PID_State_gyrox;
 //@para:传入的分别是目标数据target
 void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height,float dt)
 {
-double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 
+   t_height=110.0f;
+   height=80.0f;
+double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
 PID_State_height.time_delta=(double)dt;
@@ -141,4 +143,8 @@ else//开启飞行
   TIM_Cmd(TIM2, ENABLE);
 }
 }
+}
+void Control_Pid_SerialTest()
+{
+ Serial_Printf(" %d , %d,%d,%d \n",Motor_GetSpeed1(),Motor_GetSpeed2(),Motor_GetSpeed3(),Motor_GetSpeed4());  
 }

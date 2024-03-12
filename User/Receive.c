@@ -39,16 +39,16 @@ void ReceiveNum_Gettarget(void)
 	switch (ReceiveVis())
 		{
 		case 'p':break;
-		case 'L':  t_pitch= -(float)num;break;
+		case 'L':  t_pitch= -(float)HexNum;break;
 			//Serial_Printf("%d ", -TEMP);break;
-		case 'B':  t_roll= -(float)TEMP;break;
+		case 'B':  t_roll= -(float)HexNum;break;
 			//Serial_Printf("%d ",- TEMP);break;
-		case 'F':  t_roll= (float)TEMP;break;
-		case 'R':  t_pitch= (float)num;break;
+		case 'F':  t_roll= (float)HexNum;break;
+		case 'R':  t_pitch= (float)HexNum;break;
 			//Serial_Printf("%d ", TEMP);break;
-		case 'U': t_height=(float)TEMP;break;
+		case 'U': t_height=(float)HexNum;break;
 			//Serial_Printf("%d ", TEMP);break;
-		case 'S':Serial_Printf("%d \n", TEMP);break;
+		case 'S': t_pitch= (float)HexNum;t_roll= (float)HexNum;break;
 		}
 	}
 //
