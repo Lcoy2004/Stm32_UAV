@@ -1,8 +1,18 @@
-#ifndef  __DATA_H__
-#define __DATA_H__
+#ifndef  __DATA_H
+#define __DATA_H
 #include "Kalman.h"
 #include "imu.h"
 #include "stm32f10x.h"
+
+extern T_Acc P_Acc;//存储加速度值测量值
+extern T_gyro gyro;//存储滤波后角速度值
+extern T_angle angle;//存储滤波后姿态角值
+extern float height;//存储滤波后高度值
+extern float P_height;//存储测量高度值
+extern T_gyro P_gyro;//存储角速度测量值
+extern T_angle P_angle;//存储角度测量值
+extern float Rh;//初始海拔高度
+
 void data_filter(void);//数据整合
 //void Data_start();//初始校准，消除零偏误差
 void Data_Height_Calibrate();//计算初始海拔高度
@@ -27,17 +37,5 @@ void Data_t_yaw_SerialTest();
 //void Acc_to_imu(int16_t Ax,int16_t Ay,int16_t Az);//MPU6050加速度换算
 void Data_angle_SerialTest();
  
-extern T_Acc P_Acc;//存储加速度值测量值
-extern T_gyro gyro;//存储滤波后角速度值
-extern T_angle angle;//存储滤波后姿态角值
-extern float height;//存储滤波后高度值
-extern float P_height;//存储测量高度值
-extern T_gyro P_gyro;//存储角速度测量值
-extern T_angle P_angle;//存储角度测量值
-
-
-
-
-
 
 #endif

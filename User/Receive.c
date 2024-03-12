@@ -1,11 +1,13 @@
 #include "stm32f10x.h" 
 #include "ESP.h"
+#include "Serial.h"
 int num;
 float sum;
 extern float t_yaw;
 extern float t_pitch;
 extern float t_roll;
 extern float t_height;
+int TEMP;
 
 char ReceiveVis(void)
 {
@@ -26,28 +28,30 @@ uint8_t ReceiveNum(void)
 	}
 }
 
-uint8_t ReceiveNum_Gettarget(void)
+void ReceiveNum_Gettarget(void)
 {
+	if(ESP_RxFlag==1)
+	{
+		//Serial_Printf("%d ", TEMP);
+
 	//int8_t i;
-//for(i=0;i<5;i++)
-//{
-switch (ReceiveVis())
-{
-case 'p':
-	return 0;
-	//break;
-case 'L':  t_pitch= -ReceiveNum();
-    //break;
-case 'B':  t_roll= -ReceiveNum();
-    //break;
-case 'F':  t_roll= ReceiveNum();
-    //break;
-case 'R':  t_pitch= ReceiveNum();
-    //break;
-case 'U': t_height=ReceiveNum();
-    //break;
-}
-//}
-return 1;
+	//for(i=0;i<5;i++)
+	switch (ReceiveVis())
+		{
+		case 'p':break;
+		case 'L':  t_pitch= -(float)HexNum;break;
+			//Serial_Printf("%d ", -TEMP);break;
+		case 'B':  t_roll= -(float)HexNum;break;
+			//Serial_Printf("%d ",- TEMP);break;
+		case 'F':  t_roll= (float)HexNum;break;
+		case 'R':  t_pitch= (float)HexNum;break;
+			//Serial_Printf("%d ", TEMP);break;
+		case 'U': t_height=(float)HexNum;break;
+			//Serial_Printf("%d ", TEMP);break;
+		case 'S': t_pitch= (float)HexNum;t_roll= (float)HexNum;break;
+		}
+	}
+//
+//return 1;
 
 }

@@ -3,8 +3,9 @@
 
 extern int num;
 extern float sum;
+extern int TEMP;
 
 char ReceiveVis(void);
-uint8_t ReceiveNum(void);
-uint8_t ReceiveNum_Gettarget(void);
+float ReceiveNum(void);
+void ReceiveNum_Gettarget(void);
 #endif

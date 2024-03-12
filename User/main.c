@@ -22,14 +22,17 @@ int main(void)
  Serial_Init();   //串口初始化（调试用）
  Timer2_Init();
  Timer1_Init();
- Timer4_Init();
+ //Timer4_Init();
  
- //TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
+ TIM_Cmd(TIM2, ENABLE);//开启pid,调参完后请注释掉
 while(1)
 {
-ReceiveNum_Gettarget();
+//ReceiveNum_Gettarget();
 data_filter();//数据滤波得到相关值
+ReceiveNum_Gettarget();
+//Control_Pid_SerialTest();
 Data_t_pitch_SerialTest();
+//Data_t_height_SerialTest();
 //Data_angle_SerialTest();
 //Data_pitch_SerialTest();
  //Data_row_SerialTest();

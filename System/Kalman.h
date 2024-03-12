@@ -1,5 +1,5 @@
-#ifndef  __Kalman_H__
-#define __Kalman_H__
+#ifndef  __Kalman_H
+#define __Kalman_H
 #include "stm32f10x.h"
 typedef struct 
 {
