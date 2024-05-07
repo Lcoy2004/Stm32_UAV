@@ -1,3 +1,13 @@
+/*
+ * @Author: Lcoy 1498127009@qq.com
+ * @Date: 2024-02-21 14:31:30
+ * @LastEditors: Lcoy 1498127009@qq.com
+ * @LastEditTime: 2024-03-19 15:49:10
+ * @FilePath: \UAV\User\Control.c
+ * @Description: 
+ * Hi~
+ * Copyright (c) 2024 by Lcoy, All Rights Reserved. 
+ */
 #include "stm32f10x.h"  
 #include "imu.h"
 #include "Data.h"
@@ -6,6 +16,7 @@
 #include "myMath.h"
 #include "Control.h"
 #include "Serial.h"
+
 //预期目标
 float t_yaw;
 float t_pitch;
@@ -13,13 +24,14 @@ float t_roll;
 float t_height;
 
 //参数调试区
-const PID_Calibration PID_yaw={0.5,0,0};
-const PID_Calibration PID_pitch={0.5,0,0};
-const PID_Calibration PID_roll={0.5,0,0};
-const PID_Calibration PID_height={8.0,0,0};
-const PID_Calibration PID_gyrox={6,0,0};
-const PID_Calibration PID_gyroy={6,0,0};
-const PID_Calibration PID_gyroz={6,0,0};
+//绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
+const PID_Calibration PID_yaw={0,0,0};
+const PID_Calibration PID_pitch={4.92,0.05,0.01}; //{4.92,0.05,0.01}
+const PID_Calibration PID_roll={3.95,0.17,0.03};//{3.95,0.17,0.03
+ const PID_Calibration PID_height={6.5,0,0};
+ const PID_Calibration PID_gyrox={1.27,0.37,0.10};// {1.27,0.37,0.10}
+ const PID_Calibration PID_gyroy={0.95,0.32,0.13};// {0.95,0.15,0.13}
+ const PID_Calibration PID_gyroz={0,0,0}; //{3.9,0.02,0.01}
 
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
@@ -29,11 +41,20 @@ static PID_State PID_State_gyroz;
 static PID_State PID_State_gyroy;
 static PID_State PID_State_gyrox;
 //@para:传入的分别是目标数据target
+/**
+ * @description: 进行电机pid控制
+ * @param {float} t_yaw
+ * @param {float} t_pitch
+ * @param {float} t_roll
+ * @param {float} t_height
+ * @param {float} dt
+ * @return {*}
+ */
 void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height,float dt)
 {
 
    t_height=110.0f;
-   height=80.0f;
+   //height=80.0f;
 double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
@@ -56,7 +77,7 @@ PID_State_gyrox=pid_iterate(PID_gyrox,PID_State_gyrox);
 Motor_roll=PID_State_gyrox.output;
 //对绕y轴的pitch角进行PID
 PID_State_pitch.target=(double)t_pitch;
-PID_State_pitch.actual=(double)angle.roll;
+PID_State_pitch.actual=(double)angle.pitch;
 PID_State_pitch.time_delta=(double)dt;
 PID_State_pitch=pid_iterate(PID_pitch,PID_State_pitch);//外环PID结束
 PID_State_gyroy.target=PID_State_pitch.output;//内环PID
@@ -70,16 +91,16 @@ PID_State_yaw.actual=(double)angle.yaw;
 PID_State_yaw.time_delta=(double)dt;
 PID_State_yaw=pid_iterate(PID_yaw,PID_State_yaw);//外环PID结束
 PID_State_gyroz.target=PID_State_yaw.output;//内环PID
-PID_State_gyroz.actual=gyro.Gy;
+PID_State_gyroz.actual=gyro.Gz;
 PID_State_gyroz.time_delta=dt;
 PID_State_gyroz=pid_iterate(PID_gyroz,PID_State_gyroz);
 Motor_yaw=PID_State_gyroz.output;
 
 float motor1,motor2,motor3,motor4;
-motor1=(float)(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
-motor2=(float)(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height-Motor_yaw);
-motor3=(float)(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
-motor4=(float)(Motor_Vmin+Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
+motor1=(float)(Motor_Vmin+Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
+motor2=(float)(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
+motor3=(float)(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height-Motor_yaw);
+motor4=(float)(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
 //防止超出
 motor1=data_limit(motor1,(float)Motor_Vmax,(float)Motor_Vmin);
 motor2=data_limit(motor2,(float)Motor_Vmax,(float)Motor_Vmin);

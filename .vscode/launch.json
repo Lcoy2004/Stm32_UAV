@@ -20,7 +20,7 @@
             "executable": "build\\Target 1\\UAV.elf",
             "runToEntryPoint": "main",
             "configFiles": [
-                "interface/cmsis-dap-v1.cfg",
+                
                 "target/stm32f1x.cfg"
             ],
             "svdFile": ".pack/Keil/STM32F1xx_DFP.2.4.1/SVD/STM32F103xx.svd"

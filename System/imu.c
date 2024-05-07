@@ -66,7 +66,7 @@ void imu_Getangle(MPU6050_gyro gyro,MPU6050_Acc Acc,T_angle *angle,float dt)
 		angle->yaw = atan2f(2 * NumQ.q1 *NumQ.q2 + 2 * NumQ.q0 * NumQ.q3, 1 - 2 * NumQ.q2 *NumQ.q2 - 2 * NumQ.q3 * NumQ.q3) * RtA;   //yaw
 		#else
 			float yaw_G = gyro.Gz * Gyro_G;
-			if((yaw_G > 1.0f) || (yaw_G < -5.0f)) //不让yaw静止时漂移
+			if((yaw_G > 5.0f) || (yaw_G < -5.0f)) //不让yaw静止时漂移
 			{
 				angle->yaw  += yaw_G * dt;			
 			}

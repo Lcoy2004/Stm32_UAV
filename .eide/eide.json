@@ -315,7 +315,7 @@
     ]
   },
   "outDir": "build",
-  "deviceName": "STM32F103C8",
+  "deviceName": "STM32F103C6",
   "packDir": ".pack/Keil/STM32F1xx_DFP.2.4.1",
   "miscInfo": {
     "uid": "91d3e4c15b6c18397a88f1050e26568d"
@@ -363,7 +363,7 @@
       "uploadConfig": {
         "bin": "",
         "target": "stm32f1x",
-        "interface": "cmsis-dap-v1",
+        "interface": "stlink-v2",
         "baseAddr": "0x08000000"
       },
       "uploadConfigMap": {
@@ -395,7 +395,7 @@
         "sourceDirList": [],
         "defineList": [
           "USE_STDPERIPH_DRIVER",
-          "STM32F10X_MD"
+          "STM32F10X_LD"
         ]
       }
     }
