@@ -104,12 +104,3 @@ void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid+高度
 	Control_Motor(t_yaw,t_pitch,t_roll,t_height,0.01f);
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
-void TIM4_IRQHandler(void)//
-{
-	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
-	{
-			ReceiveNum_Gettarget();
-		//Serial_Printf("tim4\n");
-	TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
-	}
-}
