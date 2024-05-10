@@ -73,8 +73,6 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 	{
 		 MPU6050_Acc MA;
         MPU6050_gyro MG;
-        //获取高度
-    P_height=(BMP280_calculate_altitude()-Rh)*100.0f;
      MPU6050_GetData(&MA.Ax, &MA.Ay, &MA.Az, &MG.Gx, &MG.Gy,  &MG.Gz);
      //角度换算
      //Data_Calibrate(&MA,&MG,&P_height);//消除误差
@@ -86,15 +84,26 @@ void TIM1_UP_IRQHandler(void)//定时执行姿态解算
 	}
 }
 
-void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid
+void TIM2_IRQHandler()		//定时器2的中断函数,10ms进行pid+高度
 {
-	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
-	{
-			
+	 static int16_t h_flag;
+	 static float height_origin;//初始海拔高度
+	 if(h_flag<50)
+	 {
+		h_flag++;
+	 } else if (h_flag==50)
+	 {
+		height_origin=BMP280_calculate_altitude();
+		h_flag++;
+	 }else
+	 {
+	P_height=BMP280_calculate_altitude()-height_origin;
+	 }
+	//获取高度
+	
 	Control_Motor(t_yaw,t_pitch,t_roll,t_height,0.01f);
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	}
-}
 void TIM4_IRQHandler(void)//
 {
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)

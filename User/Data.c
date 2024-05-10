@@ -12,25 +12,15 @@
  T_angle angle;//存储滤波后姿态角值
  float height;//存储滤波后高度值
  float P_height;//存储测量高度值
+
  T_gyro P_gyro;//存储角速度测量值
  T_angle P_angle;//存储角度测量值
+ 
 //R,Q,Q表示对模型的信任程度，R表示对量测的信任程度
 K_Filter K_P_angle={0,0.05f,0.2f,0.1f,0,0};//pitch需要调参
  K_Filter K_Y_angle={0,0.05f,0.25f,0.1f,0,0};//yaw需要调参
  K_Filter K_R_angle={0,0.05f,0.2f,0.08f,0,0};//roll需要调参
-K_Filter K_height={0,0.1f,0.25f,0.07f,0,0};//需要调参
-float Rh;//初始海拔高度
-void Data_Height_Calibrate()
-{
- float RH;
- int8_t i=0;
- for(i=0;i<100;i++)
- {
- RH+=BMP280_calculate_altitude();
-Delay_ms(1);
- }
-Rh=RH/100;
-}
+K_Filter K_height={0,10.0f,12.0f,0.01f,0,0};//需要调参
 //消除零偏误差
 /*int16_t R_Gx,R_Gy,R_Gz,R_Ax,R_Ay,R_Az;//零偏误差，温度不同也会变化
 float R_h;//得到当前海拔高度

@@ -238,6 +238,7 @@ double BMP280_Get_Pressure(void)
 	double pressure=BMP280_Get_Pressure();
     const float pressure_sea_level = 101325.0f; // 标准海平面大气压力  
     float altitude =(44330.0f * (1.0f - pow((pressure / pressure_sea_level), 1.0f / 5.255)));  
+	altitude*=100.0f;
     return altitude;  
 }
 //温度值-℃
