@@ -25,13 +25,13 @@ float t_height;
 
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
-const PID_Calibration PID_yaw={0,0,0};
-const PID_Calibration PID_pitch={4.92,0.05,0.01}; //{4.92,0.05,0.01}
-const PID_Calibration PID_roll={3.95,0.17,0.03};//{3.95,0.17,0.03
+const PID_Calibration PID_yaw={0,0,0};//{0.8,0.02,0.05};
+const PID_Calibration PID_pitch={3.12,0.1,0.02}; //{2.35,0.05,0.02}
+const PID_Calibration PID_roll={0,0,0};//{2.51,0.04,0.01   3.95,0.17,0.03
  const PID_Calibration PID_height={6.5,0,0};
- const PID_Calibration PID_gyrox={1.27,0.37,0.10};// {1.27,0.37,0.10}
- const PID_Calibration PID_gyroy={0.95,0.32,0.13};// {0.95,0.15,0.13}
- const PID_Calibration PID_gyroz={0,0,0}; //{3.9,0.02,0.01}
+ const PID_Calibration PID_gyrox={0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
+ const PID_Calibration PID_gyroy={0.95,0.32,0.13};// {1.15,0.05,0.17}
+ const PID_Calibration PID_gyroz={0,0,0};//{1.10,0.1,0.13}; 
 
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
@@ -54,7 +54,7 @@ void Control_Motor(float t_yaw,float t_pitch,float t_roll,float t_height,float d
 {
 
    t_height=110.0f;
-   //height=80.0f;
+   height=80.0f;
 double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //串级PID，姿态角为外环，角速度为内环,高度就一层PID
 PID_State_height.target=(double)t_height;
@@ -97,10 +97,10 @@ PID_State_gyroz=pid_iterate(PID_gyroz,PID_State_gyroz);
 Motor_yaw=PID_State_gyroz.output;
 
 float motor1,motor2,motor3,motor4;
-motor1=(float)(Motor_Vmin+Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
-motor2=(float)(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
-motor3=(float)(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height-Motor_yaw);
-motor4=(float)(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
+motor1=(float)(Motor_Vmin+Motor_roll+Motor_pitch+Motor_height-Motor_yaw);
+motor2=(float)(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
+motor3=(float)(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
+motor4=(float)(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
 //防止超出
 motor1=data_limit(motor1,(float)Motor_Vmax,(float)Motor_Vmin);
 motor2=data_limit(motor2,(float)Motor_Vmax,(float)Motor_Vmin);

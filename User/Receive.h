@@ -7,5 +7,5 @@ extern int TEMP;
 
 char ReceiveVis(void);
 float ReceiveNum(void);
-void ReceiveNum_Gettarget(void);
+int8_t ReceiveNum_Gettarget(void);
 #endif

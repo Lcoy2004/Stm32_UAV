@@ -27,7 +27,7 @@ while(1)
 {
 data_filter();//数据滤波得到相关值
 ReceiveNum_Gettarget();
-//Control_Pid_SerialTest();
+Control_Pid_SerialTest();
 //Data_t_pitch_SerialTest();
 //Data_t_height_SerialTest();
 //Data_angle_SerialTest();
@@ -37,7 +37,7 @@ ReceiveNum_Gettarget();
  //Data_Gyrox_SerialTest();
  //Data_Gyroy_SerialTest();
  //Data_Gyroz_SerialTest();
- Data_height_SerialTest();
+ //Data_height_SerialTest();
 // switch (ReceiveNum_Gettarget())
 //{
 //case 0: Control_stop();

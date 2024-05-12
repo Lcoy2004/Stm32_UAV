@@ -28,7 +28,7 @@ uint8_t ReceiveNum(void)
 	}
 }
 
-void ReceiveNum_Gettarget(void)
+int8_t ReceiveNum_Gettarget(void)
 {
 	if(ESP_RxFlag==1)
 	{
@@ -38,7 +38,7 @@ void ReceiveNum_Gettarget(void)
 	//for(i=0;i<5;i++)
 	switch (ReceiveVis())
 		{
-		case 'p':break;
+		case 'p':return 0;break;
 		case 'L':  t_pitch= -(float)HexNum;break;
 			//Serial_Printf("%d ", -TEMP);break;
 		case 'B':  t_roll= -(float)HexNum;break;
@@ -52,6 +52,6 @@ void ReceiveNum_Gettarget(void)
 		}
 	}
 //
-//return 1;
+return 1;
 
 }
