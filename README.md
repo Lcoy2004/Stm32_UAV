@@ -4,8 +4,8 @@
 使用Stm32独立写的飞控程序。这一次是升级版~（building）
 
 #### 相关mcu,imu和相关处理器
-1.WT9011G4K
-2.Stm32H750VET6
+1. WT9011G4K
+2.  Stm32H750VET6
 #### 参与贡献
 
 1.  Fork 本仓库
