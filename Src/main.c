@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+ #include"Data.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,7 +69,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+   Data_wit_Init();
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/

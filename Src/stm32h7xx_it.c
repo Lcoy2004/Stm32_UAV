@@ -22,6 +22,7 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "wit_c_sdk.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,7 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -197,6 +198,29 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32h7xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_RXNE) != RESET)  
+    {  
+        // 读取接收到的数据  
+        uint8_t ucTemp = HAL_UART_Receive(&huart1, &ucTemp, 1, HAL_MAX_DELAY);  
+        if(ucTemp != HAL_TIMEOUT) // 检查接收是否成功  
+        {  
+            WitSerialDataIn(ucTemp);
+            __HAL_UART_CLEAR_FLAG(&huart1, UART_FLAG_RXNE);
+        }  
+        }
+  /* USER CODE END USART1_IRQn 1 */
+}
 
 /* USER CODE BEGIN 1 */
 
