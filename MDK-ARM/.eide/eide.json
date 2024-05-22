@@ -34,10 +34,16 @@
                 "path": "../Src/Data.c"
               },
               {
+                "path": "../Src/dma.c"
+              },
+              {
                 "path": "../Src/gpio.c"
               },
               {
                 "path": "../Src/i2c.c"
+              },
+              {
+                "path": "../Src/Kalman.c"
               },
               {
                 "path": "../Src/main.c"
@@ -291,6 +297,23 @@
           "proType": 1,
           "speed": 8000,
           "otherCmds": ""
+        },
+        "STLink": {
+          "bin": "",
+          "proType": "SWD",
+          "resetMode": "default",
+          "runAfterProgram": true,
+          "speed": 4000,
+          "address": "0x8000000",
+          "elFile": "None",
+          "optionBytes": ".eide/uav.st.option.bytes.ini",
+          "otherCmds": ""
+        },
+        "OpenOCD": {
+          "bin": "",
+          "target": "stm32h7x",
+          "interface": "stlink",
+          "baseAddr": "0x08000000"
         }
       },
       "custom_dep": {

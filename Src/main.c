@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -93,13 +94,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
   MX_TIM6_Init();
   MX_UART4_Init();
+  MX_I2C1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  extern unsigned char ucTemp;
+  HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -56,6 +56,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
+extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
@@ -200,32 +203,58 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 stream0 global interrupt.
+  */
+void DMA1_Stream0_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream0_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream0_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream1 global interrupt.
+  */
+void DMA1_Stream1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt.
   */
-void USART1_IRQHandler(void)  
-{  
-  /* USER CODE BEGIN USART1_IRQn 0 */  
-  // 在这里可以添加自己的代码，如果需要在HAL_UART_IRQHandler之前执行  
-  /* USER CODE END USART1_IRQn 0 */  
-    
-  HAL_UART_IRQHandler(&huart1); // 调用HAL库的中断处理函数  
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
   
-  /* USER CODE BEGIN USART1_IRQn 1 */  
-  if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_RXNE) != RESET)  
-  {  
-      // 读取接收到的数据  
-      uint8_t ucTemp;  
-      HAL_StatusTypeDef status = HAL_UART_Receive(&huart1, &ucTemp, 1, HAL_MAX_DELAY);  
-      if(status == HAL_OK)  
-      {  
-          // 数据接收成功，处理接收到的数据  
-          WitSerialDataIn(ucTemp);  
-      }  
-      // 通常情况下，HAL_UART_Receive在成功接收后会清除UART_FLAG_RXNE标志  
-      // 但为了明确，也可以显式清除它  
-      __HAL_UART_CLEAR_FLAG(&huart1, UART_FLAG_RXNE);  
-  }  
-  /* USER CODE END USART1_IRQn 1 */  
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles UART4 global interrupt.
+  */
+void UART4_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART4_IRQn 0 */
+
+  /* USER CODE END UART4_IRQn 0 */
+  HAL_UART_IRQHandler(&huart4);
+  /* USER CODE BEGIN UART4_IRQn 1 */
+
+  /* USER CODE END UART4_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

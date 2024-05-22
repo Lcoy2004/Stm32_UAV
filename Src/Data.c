@@ -17,6 +17,7 @@ static void Delayms(uint16_t ucMs);
 int8_t Data_wit_Init()
 {
 WitInit(WIT_PROTOCOL_NORMAL, 0x50);
+WitSetUartBaud(WIT_BAUD_921600);
 WitSerialWriteRegister(SensorUartSend);
 WitRegisterCallBack(SensorDataUpdata);
 WitDelayMsRegister(Delayms);
@@ -60,7 +61,7 @@ int8_t Data_wit_Getimu()
 
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
 {
-    HAL_UART_Transmit_IT(&huart1,p_data,uiSize);
+    HAL_UART_Transmit_DMA(&huart1,p_data,uiSize);
 }
 
 static void Delayms(uint16_t ucMs)
