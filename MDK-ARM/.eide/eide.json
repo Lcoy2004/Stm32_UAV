@@ -274,17 +274,12 @@
         },
         "options": "null"
       },
-      "uploader": "STLink",
+      "uploader": "OpenOCD",
       "uploadConfig": {
         "bin": "",
-        "proType": "SWD",
-        "resetMode": "default",
-        "runAfterProgram": true,
-        "speed": 4000,
-        "address": "0x8000000",
-        "elFile": "None",
-        "optionBytes": ".eide/uav.st.option.bytes.ini",
-        "otherCmds": ""
+        "target": "stm32h7x",
+        "interface": "stlink",
+        "baseAddr": "0x08000000"
       },
       "uploadConfigMap": {
         "JLink": {

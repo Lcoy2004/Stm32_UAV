@@ -70,7 +70,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-   Data_wit_Init();
+   
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -82,7 +82,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  Data_wit_Init();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -112,6 +112,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    Data_wit_Getimu();
   }
   /* USER CODE END 3 */
 }
