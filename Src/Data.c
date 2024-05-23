@@ -18,7 +18,7 @@ int8_t Data_wit_Init()
 {
 WitInit(WIT_PROTOCOL_NORMAL, 0x50);
 WitSetUartBaud(WIT_BAUD_115200);
-WitSetOutputRate(RRATE_200HZ);
+WitSetOutputRate(RRATE_200HZ);	
 WitDelayMsRegister(Delayms);	
 WitSerialWriteRegister(SensorUartSend);
 WitRegisterCallBack(SensorDataUpdata);
