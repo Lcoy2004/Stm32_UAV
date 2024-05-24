@@ -14,6 +14,10 @@ static PID_Calibration PID_height;
 static PID_Calibration PID_gyrox;
 static PID_Calibration PID_gyroy;
 static PID_Calibration PID_gyroz;
+static PID_Calibration PID_ratex;
+static PID_Calibration PID_ratey;
+static PID_Calibration PID_coordx;
+static PID_Calibration PID_coordy;
 
 extern double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 
