@@ -13,15 +13,18 @@ static void Delayms(uint16_t ucMs);
  T_Acc Acc;
  T_gyro Gyro;
  T_angle Angle;
+ T_coor  Coor;//光流积分加角度补偿得到的值
+ T_rate  Rate;//光流得到的值
+ double height;//高度值
 
 int8_t Data_wit_Init()
 {
 WitInit(WIT_PROTOCOL_NORMAL, 0x50);
-WitSetUartBaud(WIT_BAUD_115200);
-WitSetOutputRate(RRATE_200HZ);	
 WitDelayMsRegister(Delayms);	
 WitSerialWriteRegister(SensorUartSend);
 WitRegisterCallBack(SensorDataUpdata);
+WitSetUartBaud(WIT_BAUD_115200);
+WitSetOutputRate(RRATE_200HZ);	
 return UAVNormal;
 }
 

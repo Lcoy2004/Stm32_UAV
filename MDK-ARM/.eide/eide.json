@@ -31,6 +31,9 @@
             "name": "User",
             "files": [
               {
+                "path": "../Src/Control.c"
+              },
+              {
                 "path": "../Src/Data.c"
               },
               {
@@ -47,6 +50,9 @@
               },
               {
                 "path": "../Src/main.c"
+              },
+              {
+                "path": "../Src/Motor.c"
               },
               {
                 "path": "../Src/pid.c"

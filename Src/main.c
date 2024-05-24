@@ -100,9 +100,11 @@ int main(void)
   MX_UART4_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   extern unsigned char ucTemp;
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
+  HAL_TIM_Base_Start_IT(&htim6);//开启接收传感器数据
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,7 +114,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    Data_wit_Getimu();
+    
   }
   /* USER CODE END 3 */
 }

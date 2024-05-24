@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "stm32h7xx_hal.h"
 #define ACC_UPDATE		0x01
 #define GYRO_UPDATE		0x02
 #define ANGLE_UPDATE	0x04
@@ -37,13 +37,19 @@ typedef struct
 {
 double vx;
 double vy;
+}T_rate;
+typedef struct 
+{
+double x;
+double y;
 }T_coor;
 /*定义数据变量*/
 extern T_Acc Acc;
 extern T_gyro Gyro;
 extern T_angle Angle;
-extern T_coor  flow;//光流传感
-
+extern T_coor  Coor;//光流积分加角度补偿得到的值
+extern T_rate  Rate;//光流得到的值
+extern double height;//高度值
 /*外部调用函数*/
 int8_t Data_wit_Init();
 int8_t Data_wit_Getimu();
