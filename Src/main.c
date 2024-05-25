@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
  #include"Data.h"
+ #include "Motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,7 +76,6 @@ int main(void)
 
   /* MPU Configuration--------------------------------------------------------*/
   MPU_Config();
-
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -102,6 +102,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
+   Motor_init();//电机与电调初始化
+
   extern unsigned char ucTemp;
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   HAL_TIM_Base_Start_IT(&htim6);//开启接收传感器数据

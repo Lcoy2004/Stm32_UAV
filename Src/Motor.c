@@ -1,6 +1,8 @@
 #include "Motor.h"
 #include "Control.h"
 #include "main.h"
+#include "stm32h7xx_hal_tim.h"
+#include "tim.h"
 double data_limit(double data, double toplimit, double lowerlimit);
 
 
@@ -17,7 +19,10 @@ motor2=data_limit(motor2,Motor_Vmax,Motor_Vmin);
 motor3=data_limit(motor3,Motor_Vmax,Motor_Vmin);
 motor4=data_limit(motor4,Motor_Vmax,Motor_Vmin);
 /*下面motor输出*/
-    
+Motor_setspeed1((uint16_t)motor1);
+Motor_setspeed2((uint16_t)motor2);
+Motor_setspeed3((uint16_t)motor3);
+Motor_setspeed4((uint16_t)motor4);
 
 /*Motor End*/
 return UAVNormal;
@@ -26,11 +31,44 @@ return UAVNormal;
 
 int8_t Motor_init(void)
 {
-
+HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
+HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3); 
+HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4); 
+Motor_setspeed1(Motor_Vmax);
+Motor_setspeed2(Motor_Vmax);
+Motor_setspeed3(Motor_Vmax);
+Motor_setspeed4(Motor_Vmax);
+HAL_Delay(3000);
+Motor_setspeed1(Motor_Vmin);
+Motor_setspeed2(Motor_Vmin);
+Motor_setspeed3(Motor_Vmin);
+Motor_setspeed4(Motor_Vmin);
+HAL_Delay(1000);
+Motor_setspeed1(Motor_Vmin);
+Motor_setspeed2(Motor_Vmin);
+Motor_setspeed3(Motor_Vmin);
+Motor_setspeed4(Motor_Vmin);
 return UAVNormal;
-
 }
 
+void Motor_setspeed1(uint16_t speed)
+{
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, speed);
+}
+
+void Motor_setspeed2(uint16_t speed)
+{
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, speed);
+}
+void Motor_setspeed3(uint16_t speed)
+{
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, speed);
+}
+void Motor_setspeed4(uint16_t speed)
+{
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, speed);
+}
 
 
  double data_limit(double data, double toplimit, double lowerlimit)
