@@ -36,7 +36,6 @@ static PID_State PID_State_coordy;
 
  int8_t Control_attitude_update(double t_yaw,double dt)
  {
-double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //串级姿态PID实现思路
 //目标姿态角->外环姿态角PID->目标角速度->内环角速度PID->目标PWM
 //对绕x轴的roll角进行PID
