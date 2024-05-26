@@ -515,6 +515,16 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32h7xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>flow_decode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\flow_decode.c</FilePath>
+            </File>
+            <File>
+              <FileName>check.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\check.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

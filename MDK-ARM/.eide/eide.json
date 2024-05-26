@@ -31,6 +31,9 @@
             "name": "User",
             "files": [
               {
+                "path": "../Src/check.c"
+              },
+              {
                 "path": "../Src/Control.c"
               },
               {
@@ -38,6 +41,9 @@
               },
               {
                 "path": "../Src/dma.c"
+              },
+              {
+                "path": "../Src/flow_decode.c"
               },
               {
                 "path": "../Src/gpio.c"

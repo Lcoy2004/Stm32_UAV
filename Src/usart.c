@@ -23,6 +23,7 @@
 /* USER CODE BEGIN 0 */
 #include "wit_c_sdk.h"
 unsigned char ucTemp;
+unsigned char ch;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart4;
@@ -334,7 +335,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 if(huart->Instance == USART1)
 {
   WitSerialDataIn(ucTemp);
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1,&ucTemp,1);
+  HAL_UART_Receive_DMA(&huart1,&ucTemp,1);
+}else if(huart->Instance == UART4)
+{
+HAL_UART_Receive_DMA(&huart4, &ch, 1);
+
 }
 
 }
@@ -345,6 +350,11 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	{
 		__HAL_UART_CLEAR_OREFLAG(huart);
 		HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//USART1使用DMA传输
-	}
+	} else if(huart->Instance	==	UART4)
+  {
+    __HAL_UART_CLEAR_OREFLAG(huart);
+		HAL_UART_Receive_DMA(&huart4, &ch, 1);
+
+  }
 }
 /* USER CODE END 1 */
