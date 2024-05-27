@@ -6,16 +6,16 @@ extern "C" {
 #endif
 typedef struct 
 {
- float New_Pk;//初始值可以为0
- float Last_Pk;//初始值不能为0
-float R;//超参数，自己调
-float Q;//超参数，自己调
-float Kg;
-float output;
+ double New_Pk;//初始值可以为0
+  double Last_Pk;//初始值不能为0
+ double R;//超参数，自己调
+ double Q;//超参数，自己调
+ double Kg;
+ double output;
 
 }K_Filter;
 
-void kalman_filter(K_Filter *kfc,float measure);
+void kalman_filter(K_Filter *kfc, double measure);
 
 #ifdef __cplusplus
 }

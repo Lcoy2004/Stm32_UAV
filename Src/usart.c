@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "wit_c_sdk.h"
+#include "flow_decode.h"
 unsigned char ucTemp;
 unsigned char ch;
 /* USER CODE END 0 */
@@ -338,7 +339,8 @@ if(huart->Instance == USART1)
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);
 }else if(huart->Instance == UART4)
 {
-HAL_UART_Receive_DMA(&huart4, &ch, 1);
+  up_parse_char(ch);
+  HAL_UART_Receive_DMA(&huart4, &ch, 1);
 
 }
 

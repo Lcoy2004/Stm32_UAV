@@ -2,7 +2,7 @@
 
 //@para：measure：传感器测量值
 //@para：kfc:传入指针（纪念星期四！）
-void kalman_filter(K_Filter *kfc,float measure)
+void kalman_filter(K_Filter *kfc, double measure)
 {
 //协方差更新
 kfc->New_Pk=kfc->Last_Pk+kfc->Q;
