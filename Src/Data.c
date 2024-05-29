@@ -1,3 +1,13 @@
+/**
+ * @file Data.c
+ * @author Lcoy (lcoy2004@qq.com)
+ * @brief 获取数据及简单处理
+ * @version 1.0
+ * @date 2024-05-27
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "wit_c_sdk.h"
 #include "main.h"
 #include "Reg.h"
@@ -5,21 +15,26 @@
 #include "Data.h"
 #include "usart.h"
 #include "flow_decode.h"
-#include "Kalman.h"
+#include "fusion.h"
 static volatile char s_cDataUpdate = 0, s_cCmd = 0xff;
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize);
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
 static void Delayms(uint16_t ucMs);
-//R,Q,Q表示对模型的信任程度，R表示对量测的信任程度
-static K_Filter K_height={0,10.0f,12.0f,0.01f,0,0};//需要调参
+
 /*传感器数据*/
- T_Acc Acc;
- T_gyro Gyro;
- T_angle Angle;
- T_coor  Coor;//光流积分加角度补偿得到的值
- T_rate  Rate;//光流得到的值
- double height;//高度值
- static uint16_t flow_height;//激光测距得到的光流值
+ T_Acc imu_Acc;
+ T_gyro imu_Gyro;
+ T_angle imu_Angle;
+ T_coor  flow_Coor;//光流积分得到的值
+ T_rate  flow_Rate;//光流得到的速度值
+ double flow_height;//光流高度值
+ static uint16_t flow1_height;//激光测距得到的光流值
+ 
+  /**
+   * @brief witmiu数据获取初始化
+   * 
+   * @return int8_t 
+   */
 int8_t Data_wit_Init()
 {
 WitInit(WIT_PROTOCOL_NORMAL, 0x50);
@@ -31,6 +46,7 @@ WitSetOutputRate(RRATE_200HZ);
 return UAVNormal;
 }
 
+ 
 int8_t Data_wit_Getimu()
 {
     float fAcc[3], fGyro[3], fAngle[3];
@@ -58,13 +74,15 @@ int8_t Data_wit_Getimu()
 			{
 				s_cDataUpdate &= ~MAG_UPDATE;
 			}
-           Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1]; Acc.Az=(double)fAcc[2];
-			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
-			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
+           imu_Acc.Ax=(double)fAcc[0]; imu_Acc.Ay=(double)fAcc[1]; imu_Acc.Az=(double)fAcc[2];
+			imu_Gyro.Gx=(double)fGyro[0];imu_Gyro.Gy=(double)fGyro[1];imu_Gyro.Gz=(double)fGyro[2];
+			imu_Angle.roll=(double)fAngle[0];imu_Angle.pitch=(double)fAngle[1];imu_Angle.yaw=(double)fAngle[2];
 			return UAVNormal;
 		}
+
 int8_t Data_upixels_flowget(double dt)
-{
+{           
+	        double flow_gyrox,flow_gyroy;
 	        int16_t flow_x_integral = 0;
 	        int16_t flow_y_integral = 0;
 	        uint16_t ground_distance = 0;
@@ -72,41 +90,27 @@ int8_t Data_upixels_flowget(double dt)
 		    uint8_t tof_confidence = 0;
 			   flow_x_integral = up_data.flow_x_integral;
 			   flow_y_integral = up_data.flow_y_integral;
-			  flow_height = up_data.ground_distance;
+			ground_distance = up_data.ground_distance;
 			valid = up_data.valid;
 			tof_confidence = up_data.tof_confidence;
-           height=ground_distance*10.0;//mm->cm
-
-           
+			if(valid==245)
+           {
+		   flow1_height=ground_distance*10.0;//mm->cm
+		   flow_gyroy=(double)flow_x_integral/10000*57.296/dt;//度/s，绕y轴的光流角速度
+		   flow_gyrox=(double)flow_y_integral/10000*57.296/dt;//度/s，绕x轴的光流角速度
+           flow_Coor.x+=(double)flow_x_integral/10000*(height*100);//累加位移cm
+		   flow_Coor.y+=(double)flow_y_integral/10000*(height*100);//累加位移cm
+           flow_Rate.vx=(double)flow_x_integral/10000*(height*100)/dt;//cm/s
+		   flow_Rate.vy=(double)flow_y_integral/10000*(height*100)/dt;//cm/s
+		   
 			return UAVNormal;
+		   }else if(valid==0)
+		   {
+			return UAVError;
+		   }
+
 				
 }
-
-//输入参数：激光测距，气压计高度，置信度，选择使用算法：1：融合；2：纯激光；3：纯气压计
-int8_t Data_Height_fusion(uint16_t flow_height,double baro_height,uint8_t confidence,uint8_t flag)//输入单位均是mm
-{
-	double temp_height;
-    if(flag==1)
-   {
-	double confi=(double)confidence/100;
-    temp_height=(10.0*(double)flow_height)*confi+(10*baro_height)*(1-confi);
-    kalman_filter(&K_height,temp_height);
-   height=K_height.output;
-   }else if(flag==2)
-   {
-   temp_height=(10.0*(double)flow_height);
-
-   }else if(flag==3)
-   {
-	 temp_height=10*baro_height;
-   }else
-   {
-	return UAVError;
-   }
-kalman_filter(&K_height,temp_height);
-return UAVNormal;
-}
-
 
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
 {

@@ -16,6 +16,7 @@
 "uav\stm32h7xx_hal_msp.o"
 "uav\flow_decode.o"
 "uav\check.o"
+"uav\fusion.o"
 "uav\stm32h7xx_hal_cortex.o"
 "uav\stm32h7xx_hal_rcc.o"
 "uav\stm32h7xx_hal_rcc_ex.o"
