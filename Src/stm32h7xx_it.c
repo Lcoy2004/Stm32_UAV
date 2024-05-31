@@ -325,20 +325,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
      if(htim==&htim6)
     {
         static int8_t i;
-        if(i<5)
+        if(i<4)
         {
           Data_wit_Getimu();//5ms更新imu
           i++;
         } else 
         {
           Data_wit_Getimu();//5ms更新imu
-          //这里更新光流数据50hz
+           Data_upixels_flowget(0.02,0.005);//这里更新光流数据50hz,20ms
           i=0;
         }
+       Data_Height_fusion(1);
      }else if (htim==&htim7)
      {
          static int8_t k;
-         if(k<11)
+         if(k<8)
         {
           Control_attitude_update(0,0.007);//7ms更新姿t态位置环,t_yaw暂且是0
           k++;

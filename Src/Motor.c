@@ -3,7 +3,7 @@
 #include "main.h"
 #include "stm32h7xx_hal_tim.h"
 #include "tim.h"
-double data_limit(double data, double toplimit, double lowerlimit);
+double data_limit1(double data, double toplimit, double lowerlimit);
 
 
 int8_t Motor_update(double Motor_roll,double Motor_pitch,double Motor_height,double Motor_yaw )
@@ -14,10 +14,10 @@ motor2=(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
 motor3=(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
 motor4=(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
 //防止超出
-motor1=data_limit(motor1,Motor_Vmax,Motor_Vmin);
-motor2=data_limit(motor2,Motor_Vmax,Motor_Vmin);
-motor3=data_limit(motor3,Motor_Vmax,Motor_Vmin);
-motor4=data_limit(motor4,Motor_Vmax,Motor_Vmin);
+motor1=data_limit1(motor1,Motor_Vmax,Motor_Vmin);
+motor2=data_limit1(motor2,Motor_Vmax,Motor_Vmin);
+motor3=data_limit1(motor3,Motor_Vmax,Motor_Vmin);
+motor4=data_limit1(motor4,Motor_Vmax,Motor_Vmin);
 /*下面motor输出*/
 Motor_setspeed1((uint16_t)motor1);
 Motor_setspeed2((uint16_t)motor2);
@@ -71,7 +71,7 @@ __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, speed);
 }
 
 
- double data_limit(double data, double toplimit, double lowerlimit)
+ double data_limit1(double data, double toplimit, double lowerlimit)
 {
   if(data > toplimit)  data = toplimit;
   else if(data < lowerlimit) data = lowerlimit;

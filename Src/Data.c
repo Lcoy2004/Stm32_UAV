@@ -15,21 +15,39 @@
 #include "Data.h"
 #include "usart.h"
 #include "flow_decode.h"
-#include "fusion.h"
+#include "Kalman.h"
 static volatile char s_cDataUpdate = 0, s_cCmd = 0xff;
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize);
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
 static void Delayms(uint16_t ucMs);
+#define LPF_1_(hz,t,in,out) ((out) += ( 1 / ( 1 + 1 / ( (hz) *3.14f *(t) ) ) ) *( (in) - (out) ))	//一阶低通滤波
+/*hz：滤波器的截止频率（Hz）。
+t：时间步长（秒）。这通常是两次连续采样之间的时间差。
+in：输入值，即当前时刻的采样值。
+out：输出值，即经过滤波器处理后的值。*/
+//R,Q,Q表示对模型的信任程度，R表示对量测的信任程度
+static K_Filter K_height={0,10.0f,12.0f,0.01f,0,0};//需要调参
+static K_Filter K_Ratex={0,10.0f,12.0f,0.01f,0,0};//需要调参
+static K_Filter K_Ratey={0,10.0f,12.0f,0.01f,0,0};//需要调参
+double data_limit(double data, double toplimit, double lowerlimit);
+
+
+/*以下是融合处理后的数，可以直接放入pid*/
+ T_Acc Acc;
+  T_gyro Gyro;
+  T_angle Angle;
+  T_coor  Coor;//位移
+  T_rate  Rate;//速度
+  double height;//高度值
 
 /*传感器数据*/
- T_Acc imu_Acc;
- T_gyro imu_Gyro;
- T_angle imu_Angle;
  T_coor  flow_Coor;//光流积分得到的值
  T_rate  flow_Rate;//光流得到的速度值
  double flow_height;//光流高度值
  static uint16_t flow1_height;//激光测距得到的光流值
- 
+
+ uint8_t tof_confidence;
+ double baro_height;//气压计输出高度
   /**
    * @brief witmiu数据获取初始化
    * 
@@ -74,20 +92,18 @@ int8_t Data_wit_Getimu()
 			{
 				s_cDataUpdate &= ~MAG_UPDATE;
 			}
-           imu_Acc.Ax=(double)fAcc[0]; imu_Acc.Ay=(double)fAcc[1]; imu_Acc.Az=(double)fAcc[2];
-			imu_Gyro.Gx=(double)fGyro[0];imu_Gyro.Gy=(double)fGyro[1];imu_Gyro.Gz=(double)fGyro[2];
-			imu_Angle.roll=(double)fAngle[0];imu_Angle.pitch=(double)fAngle[1];imu_Angle.yaw=(double)fAngle[2];
+           Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];
+			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
+			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
 			return UAVNormal;
 		}
-
-int8_t Data_upixels_flowget(double dt)
+//dt:光流采样；dT：imu采样
+int8_t Data_upixels_flowget(double dt,double dT)
 {           
-	        double flow_gyrox,flow_gyroy;
 	        int16_t flow_x_integral = 0;
 	        int16_t flow_y_integral = 0;
 	        uint16_t ground_distance = 0;
 			uint8_t valid = 0;
-		    uint8_t tof_confidence = 0;
 			   flow_x_integral = up_data.flow_x_integral;
 			   flow_y_integral = up_data.flow_y_integral;
 			ground_distance = up_data.ground_distance;
@@ -95,21 +111,60 @@ int8_t Data_upixels_flowget(double dt)
 			tof_confidence = up_data.tof_confidence;
 			if(valid==245)
            {
+			double flow_gyrox,flow_gyroy;
+		   flow_gyroy=(double)flow_x_integral/10000/dt;//rad/s，绕y轴的光流角速度
+		   flow_gyrox=(double)flow_y_integral/10000/dt;//rad/s，绕x轴的光流角速度
 		   flow1_height=ground_distance*10.0;//mm->cm
-		   flow_gyroy=(double)flow_x_integral/10000*57.296/dt;//度/s，绕y轴的光流角速度
-		   flow_gyrox=(double)flow_y_integral/10000*57.296/dt;//度/s，绕x轴的光流角速度
            flow_Coor.x+=(double)flow_x_integral/10000*(height*100);//累加位移cm
 		   flow_Coor.y+=(double)flow_y_integral/10000*(height*100);//累加位移cm
            flow_Rate.vx=(double)flow_x_integral/10000*(height*100)/dt;//cm/s
 		   flow_Rate.vy=(double)flow_y_integral/10000*(height*100)/dt;//cm/s
-		   
+      double gyrox_imufilter,gyroy_imufilter,filter_gyrox,filter_gyroy;
+          LPF_1_(3.0,dT,Gyro.Gx,gyrox_imufilter);     //gyro low pass filter (delay) for fitting flow data()
+        LPF_1_(3.0,dT,Gyro.Gy,gyroy_imufilter);
+
+   filter_gyrox=(flow_gyrox-(data_limit(gyrox_imufilter,1.0,-1.0)/57.3))/dt;
+   filter_gyroy=(flow_gyroy-(data_limit(gyroy_imufilter,1.0,-1.0)/57.3))/dt;
+   Rate.vx=-(filter_gyroy)*height;//cm/s
+   Rate.vy=(filter_gyrox)*height;//cm/s
+
+           kalman_filter(&K_Ratex,Rate.vx);
+          Rate.vx=K_Ratex.output;
+         kalman_filter(&K_Ratey,Rate.vy);
+          Rate.vy=K_Ratey.output;
+     Coor.x+=Rate.vx*dt;
+          Coor.y+=Rate.vy*dt;	   
 			return UAVNormal;
 		   }else if(valid==0)
 		   {
 			return UAVError;
 		   }
+}
+//输入参数：置信度;选择使用算法：1：融合；2：纯激光；3：纯气压计
+int8_t Data_Height_fusion(uint8_t flag)
+//输入单位均是mm，输出是cm
+{
+	double temp_height;
+    if(flag==1)
+   {
+	double confi=(double)tof_confidence/100;
+    temp_height=(10.0*(double)flow_height)*confi+(10*baro_height)*(1-confi);
+    kalman_filter(&K_height,temp_height);
+   height=K_height.output;
+   }else if(flag==2)
+   {
+   temp_height=(10.0*(double)flow_height);
 
-				
+   }else if(flag==3)
+   {
+	 temp_height=10*baro_height;
+   }else
+   {
+	return UAVError;
+   }
+kalman_filter(&K_height,temp_height);
+height=K_height.output;
+return UAVNormal;
 }
 
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize)
@@ -155,4 +210,10 @@ static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
         }
 		uiReg++;
     }
+}
+double data_limit(double data, double toplimit, double lowerlimit)
+{
+  if(data > toplimit)  data = toplimit;
+  else if(data < lowerlimit) data = lowerlimit;
+    return data;
 }

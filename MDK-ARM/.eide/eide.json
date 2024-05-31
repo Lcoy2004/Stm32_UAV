@@ -46,9 +46,6 @@
                 "path": "../Src/flow_decode.c"
               },
               {
-                "path": "../Src/fusion.c"
-              },
-              {
                 "path": "../Src/gpio.c"
               },
               {

@@ -44,16 +44,18 @@ double x;
 double y;
 }T_coor;
 /*定义数据变量*/
-extern T_Acc imu_Acc;
-extern T_gyro imu_Gyro;
-extern T_angle imu_Angle;
-extern T_coor  flow_Coor;//光流积分加角度补偿得到的值
-extern T_rate  flow_Rate;//光流得到的值
-extern double flow_height;//高度值
+/*以下是融合处理后的数，可以直接放入pid*/
+extern T_Acc Acc;
+ extern T_gyro Gyro;
+ extern T_angle Angle;
+ extern T_coor  Coor;//位移
+ extern T_rate  Rate;//速度
+ extern double height;//高度值
 /*外部调用函数*/
 int8_t Data_wit_Init();
 int8_t Data_wit_Getimu();
-int8_t Data_upixels_flowget(double dt);
+int8_t Data_upixels_flowget(double dt,double dT);
+int8_t Data_Height_fusion(uint8_t flag);
 #ifdef __cplusplus
 }
 #endif
