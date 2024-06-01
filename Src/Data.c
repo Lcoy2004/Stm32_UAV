@@ -44,10 +44,14 @@ double data_limit(double data, double toplimit, double lowerlimit);
  T_coor  flow_Coor;//光流积分得到的值
  T_rate  flow_Rate;//光流得到的速度值
  double flow_height;//光流高度值
- static uint16_t flow1_height;//激光测距得到的光流值
 
- uint8_t tof_confidence;
- double baro_height;//气压计输出高度
+  double baro_height;//气压计输出高度
+
+ int16_t flow_x_integral = 0;
+ int16_t flow_y_integral = 0;
+ uint16_t ground_distance = 0;
+ uint8_t valid = 0;
+ uint8_t tof_confidence = 0;
   /**
    * @brief witmiu数据获取初始化
    * 
@@ -100,25 +104,14 @@ int8_t Data_wit_Getimu()
 //dt:光流采样；dT：imu采样
 int8_t Data_upixels_flowget(double dt,double dT)
 {           
-	        int16_t flow_x_integral = 0;
-	        int16_t flow_y_integral = 0;
-	        uint16_t ground_distance = 0;
-			uint8_t valid = 0;
-			   flow_x_integral = up_data.flow_x_integral;
-			   flow_y_integral = up_data.flow_y_integral;
-			ground_distance = up_data.ground_distance;
-			valid = up_data.valid;
-			tof_confidence = up_data.tof_confidence;
-			if(valid==245)
-           {
 			double flow_gyrox,flow_gyroy;
 		   flow_gyroy=(double)flow_x_integral/10000/dt;//rad/s，绕y轴的光流角速度
 		   flow_gyrox=(double)flow_y_integral/10000/dt;//rad/s，绕x轴的光流角速度
-		   flow1_height=ground_distance*10.0;//mm->cm
-           flow_Coor.x+=(double)flow_x_integral/10000*(height*100);//累加位移cm
-		   flow_Coor.y+=(double)flow_y_integral/10000*(height*100);//累加位移cm
-           flow_Rate.vx=(double)flow_x_integral/10000*(height*100)/dt;//cm/s
-		   flow_Rate.vy=(double)flow_y_integral/10000*(height*100)/dt;//cm/s
+		   flow_height=ground_distance;//mm
+           flow_Coor.x+=((double)flow_x_integral/10000)*(height);//累加位移cm
+		   flow_Coor.y+=(double)flow_y_integral/10000*(height);//累加位移cm
+           flow_Rate.vx=(double)flow_x_integral/10000*(height)/dt;//cm/s
+		   flow_Rate.vy=(double)flow_y_integral/10000*(height)/dt;//cm/s
       double gyrox_imufilter,gyroy_imufilter,filter_gyrox,filter_gyroy;
           LPF_1_(3.0,dT,Gyro.Gx,gyrox_imufilter);     //gyro low pass filter (delay) for fitting flow data()
         LPF_1_(3.0,dT,Gyro.Gy,gyroy_imufilter);
@@ -133,12 +126,15 @@ int8_t Data_upixels_flowget(double dt,double dT)
          kalman_filter(&K_Ratey,Rate.vy);
           Rate.vy=K_Ratey.output;
      Coor.x+=Rate.vx*dt;
-          Coor.y+=Rate.vy*dt;	   
-			return UAVNormal;
-		   }else if(valid==0)
-		   {
-			return UAVError;
-		   }
+          Coor.y+=Rate.vy*dt;	
+    if(valid==245)		  
+	{
+		return UAVNormal;
+	}
+	else
+	{
+		return UAVError;
+	}
 }
 //输入参数：置信度;选择使用算法：1：融合；2：纯激光；3：纯气压计
 int8_t Data_Height_fusion(uint8_t flag)
@@ -148,16 +144,16 @@ int8_t Data_Height_fusion(uint8_t flag)
     if(flag==1)
    {
 	double confi=(double)tof_confidence/100;
-    temp_height=(10.0*(double)flow_height)*confi+(10*baro_height)*(1-confi);
+    temp_height=((double)flow_height/10)*confi+(baro_height/10)*(1-confi);
     kalman_filter(&K_height,temp_height);
    height=K_height.output;
    }else if(flag==2)
    {
-   temp_height=(10.0*(double)flow_height);
+   temp_height=(double)flow_height/10;
 
    }else if(flag==3)
    {
-	 temp_height=10*baro_height;
+	 temp_height=baro_height/10;
    }else
    {
 	return UAVError;

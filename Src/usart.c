@@ -23,6 +23,7 @@
 /* USER CODE BEGIN 0 */
 #include "wit_c_sdk.h"
 #include "flow_decode.h"
+#include "Data.h"
 unsigned char ucTemp;
 unsigned char ch;
 /* USER CODE END 0 */
@@ -195,7 +196,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmatx,hdma_uart4_tx);
 
     /* UART4 interrupt Init */
-    HAL_NVIC_SetPriority(UART4_IRQn, 1, 1);
+    HAL_NVIC_SetPriority(UART4_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(UART4_IRQn);
   /* USER CODE BEGIN UART4_MspInit 1 */
 
@@ -258,7 +259,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart1_tx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_usart1_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart1_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_usart1_tx.Init.Mode = DMA_CIRCULAR;
+    hdma_usart1_tx.Init.Mode = DMA_NORMAL;
     hdma_usart1_tx.Init.Priority = DMA_PRIORITY_MEDIUM;
     hdma_usart1_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart1_tx) != HAL_OK)
@@ -269,7 +270,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart1_tx);
 
     /* USART1 interrupt Init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 1, 0);
+    HAL_NVIC_SetPriority(USART1_IRQn, 1, 1);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
@@ -339,7 +340,15 @@ if(huart->Instance == USART1)
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);
 }else if(huart->Instance == UART4)
 {
-  up_parse_char(ch);
+    static int ret;
+  	ret = up_parse_char(ch);
+				if(!ret){
+					flow_x_integral = up_data.flow_x_integral;
+					flow_y_integral = up_data.flow_y_integral;
+					ground_distance = up_data.ground_distance;
+					valid = up_data.valid;
+					tof_confidence = up_data.tof_confidence;
+        }
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
 
 }
@@ -355,7 +364,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	} else if(huart->Instance	==	UART4)
   {
     __HAL_UART_CLEAR_OREFLAG(huart);
-		HAL_UART_Receive_DMA(&huart4, &ch, 1);
+	HAL_UART_Receive_DMA(&huart4, &ch, 1);
 
   }
 }

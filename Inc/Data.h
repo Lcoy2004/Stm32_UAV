@@ -56,6 +56,13 @@ int8_t Data_wit_Init();
 int8_t Data_wit_Getimu();
 int8_t Data_upixels_flowget(double dt,double dT);
 int8_t Data_Height_fusion(uint8_t flag);
+
+
+extern int16_t flow_x_integral ;
+extern int16_t flow_y_integral ;
+extern uint16_t ground_distance ;
+extern uint8_t valid ;
+extern uint8_t tof_confidence ;
 #ifdef __cplusplus
 }
 #endif

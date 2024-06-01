@@ -335,7 +335,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
            Data_upixels_flowget(0.02,0.005);//这里更新光流数据50hz,20ms
           i=0;
         }
-       Data_Height_fusion(1);
+       Data_Height_fusion(2);
      }else if (htim==&htim7)
      {
          static int8_t k;
@@ -347,7 +347,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         {
           Control_attitude_update(0,0.007);//7ms更新姿t态位置环,t_yaw暂且是0
           Control_height_update(0,0.056);
-          Control_coordinate_update(0,0,0.056);//56ms更新光流及高度
+          Control_coordinate_update(0,0,0.056);//56ms更新光流及高度pid
           k=0;
         }
      }
