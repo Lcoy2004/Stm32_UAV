@@ -99,9 +99,10 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM6_Init();
   MX_UART4_Init();
-  MX_I2C1_Init();
   MX_USART1_UART_Init();
   MX_TIM7_Init();
+  MX_USART2_UART_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   extern unsigned char ucTemp;
   extern unsigned char ch;
