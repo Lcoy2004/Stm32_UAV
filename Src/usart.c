@@ -23,7 +23,7 @@
 /* USER CODE BEGIN 0 */
 #include "wit_c_sdk.h"
 #include "flow_decode.h"
-#include "Data.h"
+#include "CalculateFlow.h"
 #include <stdio.h>
 unsigned char ucTemp;
 unsigned char ch;
@@ -353,7 +353,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
     /* USART2 interrupt Init */
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART2_IRQn, 3, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
@@ -476,9 +476,9 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 
   /**
   * 函数功能: 重定向c库函数printf到DEBUG_USARTx
-  * 输入参数: �??
-  * �?? �?? �??: �??
-  * �??    明：�??
+  * 输入参数: �???
+  * �??? �??? �???: �???
+  * �???    明：�???
   */
 int fputc(int ch, FILE *f)
 {
@@ -488,9 +488,9 @@ int fputc(int ch, FILE *f)
  
 /**
   * 函数功能: 重定向c库函数getchar,scanf到DEBUG_USARTx
-  * 输入参数: �??
-  * �?? �?? �??: �??
-  * �??    明：�??
+  * 输入参数: �???
+  * �??? �??? �???: �???
+  * �???    明：�???
   */
 int fgetc(FILE *f)
 {

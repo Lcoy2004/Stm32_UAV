@@ -7,9 +7,7 @@
  *
  * See LICENSE for licensing details.
  */
-
 #include "pid.h"
-
 
 PID_State pid_iterate(PID_Calibration calibration, PID_State state) {
      // 计算期望值和实际值之间的差值 (the error)

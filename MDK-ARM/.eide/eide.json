@@ -34,6 +34,9 @@
                 "path": "../Src/BMP280.c"
               },
               {
+                "path": "../Src/CalculateFlow.c"
+              },
+              {
                 "path": "../Src/check.c"
               },
               {
@@ -44,6 +47,9 @@
               },
               {
                 "path": "../Src/dma.c"
+              },
+              {
+                "path": "../Src/filter.c"
               },
               {
                 "path": "../Src/flow_decode.c"
