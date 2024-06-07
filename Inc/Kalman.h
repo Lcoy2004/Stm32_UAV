@@ -15,6 +15,13 @@ typedef struct
 
 }K_Filter;
 
+typedef struct {  
+    double state;       // 状态估计  
+    double error_cov;   // 估计误差协方差  
+    double process_cov; // 过程噪声协方差（Q）  
+    double measurement_cov; // 测量噪声协方差（R）  
+    double kalman_gain; // 卡尔曼增益  
+} AdaptiveKalmanFilter;  
 void kalman_filter(K_Filter *kfc, double measure);
 
 #ifdef __cplusplus

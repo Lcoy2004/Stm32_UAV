@@ -22,9 +22,9 @@ static void SensorUartSend(uint8_t *p_data, uint32_t uiSize);
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
 static void Delayms(uint16_t ucMs);
 
-static K_Filter K_height={0,0.05f,0.5f,0.012f,0,0};//需要调参
-static K_Filter K_Ratex={0,0.52f,0.5f,0.01f,0,0};//需要调参
-static K_Filter K_Ratey={0,0.52f,1.2f,0.01f,0,0};//需要调参
+static K_Filter K_height={0,0.005f,0.5f,0.012f,0,0};//需要调参
+static K_Filter K_Ratex={0,0.02f,0.15f,0.02f,0,0};//需要调参
+static K_Filter K_Ratey={0,0.02f,0.15f,0.02f,0,0};//需要调参
 /*以下是融合处理后的数，可以直接放入pid*/
  T_Acc Acc;
   T_gyro Gyro;
