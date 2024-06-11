@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
  #include"Data.h"
  #include "Motor.h"
+ #include "State.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,7 +109,7 @@ int main(void)
   extern unsigned char ch;
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
-  HAL_TIM_Base_Start_IT(&htim6);//�??启接收传感器数据
+  HAL_TIM_Base_Start_IT(&htim6);//�??启接收传感器数据
   Motor_init();//电机与电调初始化 （最后）
   /* USER CODE END 2 */
 
@@ -119,6 +120,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    State_loop();
   }
   /* USER CODE END 3 */
 }
