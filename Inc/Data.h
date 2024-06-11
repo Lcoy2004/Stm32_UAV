@@ -56,6 +56,11 @@ int8_t Data_wit_Init();
 int8_t Data_wit_Getimu();
 int8_t Data_upixels_flowget(double dt,double dT);
 int8_t Data_Height_fusion(uint8_t flag);
+void State_modechange();
+void State_stop();
+void State_autofly();
+void State_remotefly();
+void State_monitering();//监视状态，临时改变状态;;
 
 
 

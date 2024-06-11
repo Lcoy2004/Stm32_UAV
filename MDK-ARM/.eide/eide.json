@@ -73,6 +73,12 @@
                 "path": "../Src/pid.c"
               },
               {
+                "path": "../Src/Remote.c"
+              },
+              {
+                "path": "../Src/State.c"
+              },
+              {
                 "path": "../Src/stm32h7xx_hal_msp.c"
               },
               {

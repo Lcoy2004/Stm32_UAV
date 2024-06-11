@@ -60,6 +60,15 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define UAVError 0
 #define  UAVNormal 1
+
+
+#define  UAVstart  0
+#define  UAVremoteoff    1
+#define  UAVlanding      2
+#define  UAVtakeoff      3
+#define  UAVstop          4
+#define  UAVautofly       5
+#define  UAVremotefly     6
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
