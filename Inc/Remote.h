@@ -15,6 +15,9 @@ void Remote_flyreset();
 extern int8_t UAV_Flymode;//uav模式选择，0：自主悬停，1：遥控控制（3.测试模式）
 extern T_angle target_angle;//获取的目标角度
 extern double target_height;//期望高度
+extern double t_height;
+extern double t_coodx;
+extern double t_coody;
 #ifdef __cplusplus
 }
 #endif

@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 #include "stm32h7xx_hal.h"
+extern int8_t current_state;
 int8_t State_loop();
 void State_start();
 

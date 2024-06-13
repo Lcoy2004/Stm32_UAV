@@ -25,6 +25,7 @@
 #include "wit_c_sdk.h"
 #include "Data.h"
 #include "Control.h"
+#include "Remote.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -353,18 +354,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        Data_Height_fusion(2);
      }else if (htim==&htim7)
      {
-         static int8_t k;
-         if(k<8)
-        {
-          Control_attitude_update(0,0.007);//7ms更新姿t态位置环,t_yaw暂且是0
-          k++;
-        } else 
-        {
-          Control_attitude_update(0,0.007);//7ms更新姿t态位置环,t_yaw暂且是0
-          Control_height_update(0,0.056);
-          Control_coordinate_update(0,0,0.056);//56ms更新光流及高度pid
-          k=0;
-        }
+         Control_pid_update(t_height,0.007,target_angle,t_coodx,t_coody);
      }
  }
 /* USER CODE END 1 */

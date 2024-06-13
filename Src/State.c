@@ -5,7 +5,7 @@
 #include "Motor.h"
 #include "Data.h"
 #include "tim.h"
-static int8_t current_state;
+int8_t current_state;
 static int8_t next_state;
 static int8_t previous_state;
 int8_t land_flag;//失联计时标志
@@ -53,24 +53,19 @@ void State_start()
      Motor_setspeed2(Motor_Vmin);
      Motor_setspeed3(Motor_Vmin);
      Motor_setspeed4(Motor_Vmin);
-     if(Remote_connectcheck()==UAVError)
-     {
-      next_state=UAVremoteoff;
-     }else
-     {
+  
         next_state=UAVtakeoff;//预备起飞状态
-     }
 }
 
 void State_landing()
 {
 if((previous_state==UAVremotefly||previous_state==UAVautofly||previous_state==UAVlanding))//在3种情况下进入降落程序
 {
-    if((height-target_height<10)||(target_height-height<10))
+    if((height<50)&&(target_height<50))
     {
-        target_height--;
+        t_height-=0.05;
         next_state=UAVlanding;//循环进入下降程序，直至下降
-    }else if(height<35&&target_height<40)//下降完成
+    }else if(height<35&&t_height<40)//下降完成
     {
        next_state=UAVstart;//等待下次起飞
        HAL_TIM_Base_Stop_IT(&htim7);//关闭pid
@@ -92,17 +87,18 @@ if(previous_state==UAVstart||previous_state==UAVtakeoff)
     if(target_height>50)
     {
          HAL_TIM_Base_Start_IT(&htim7);//开启pid
-         target_height=150;//预定起飞高度定死
+         t_height=150;//预定起飞高度定死
          next_state=UAVtakeoff;
     }
     else if(target_height<50)
     {
+    t_height=0;
     Motor_setspeed1(Motor_Vmin);
      Motor_setspeed2(Motor_Vmin);
     Motor_setspeed3(Motor_Vmin);
      Motor_setspeed4(Motor_Vmin);
      next_state=UAVstart;//进入未启动状态
-    }else if((target_height-height<20)&&(target_height-height>0)&&(height>130))//起飞完毕
+    }else if((t_height-height<20)&&(t_height-height>0)&&(height>130))//起飞完毕
     {
        next_state=UAVautofly;//进入自主悬停状态
     }
@@ -135,12 +131,30 @@ void State_stop()
 }
 void State_autofly()
 {
-
+ t_height=target_height;
+ if(previous_state!=UAVautofly)//记录第一次UAV悬停时的位移
+ {
+ t_coodx=Coor.x;
+ t_coody=Coor.y;
+ }
+ if((height<50)&&(target_height<50))//判断是否降落
+    {
+        next_state=UAVlanding;
+    }else{
+    next_state=UAVautofly;
+    }
+   //默认下次还是进入悬停，若有更改在Controlmonitering里面更改
 }
 void State_remotefly()
 {
-
-
+    t_height=target_height;
+     if((height<50)&&(target_height<50))//判断是否降落
+    {
+        next_state=UAVlanding;
+    }else{
+    next_state=UAVremotefly;
+    }
+    //默认下次还是进入遥控，若有更改在Controlmonitering里面更改
 }
 void State_monitering()//监视状态，临时改变状态;
 {
@@ -151,14 +165,18 @@ if(Angle.pitch>85||Angle.roll>85)
 {
     if(previous_state==UAVremotefly||previous_state==UAVautofly)
     { //这里开启计时7s
-     if(land_flag==1)//计时7秒
-     {
-    current_state=UAVtakeoff;//计时开始降落
-     }
-    else if(land_flag==0)
+      if(land_flag==1)//计时7秒
+        {
+          current_state=UAVtakeoff;//计时开始降落
+        }
+      else if(land_flag==0)
+        {
+          next_state=UAVautofly;//进入悬停
+        } 
+    }else
     {
-    next_state=UAVautofly;//进入悬停
-    } 
+        next_state=previous_state;//起飞和降落时断联先把动作做完
+        
     }
   }
 }

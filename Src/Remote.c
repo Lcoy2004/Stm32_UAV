@@ -4,7 +4,10 @@
 #include "Data.h"
 
 T_angle target_angle;//获取的目标角度
-double target_height;//期望高度
+double target_height;//获取的期望高度
+double t_height;//送入pid的期望高度
+double t_coodx;
+double t_coody;
 /**
  * @brief 从遥控端获得期望模式：悬停/遥控控制
  * 

@@ -2,6 +2,7 @@
 #include "Data.h"
 #include "main.h"
 #include "Control.h"
+#include "State.h"
 //姿态环与位置环的交换量
 static double temp_pitch,temp_roll;
 //得到的相应方向上的转速
@@ -34,12 +35,12 @@ static PID_State PID_State_coordx;
 static PID_State PID_State_coordy;
 
 
- int8_t Control_attitude_update(double t_yaw,double dt)
+ int8_t Control_attitude_update(double t_yaw,double t_roll,double t_pitch,double dt)
  {
 //串级姿态PID实现思路
 //目标姿态角->外环姿态角PID->目标角速度->内环角速度PID->目标PWM
 //对绕x轴的roll角进行PID
-PID_State_roll.target=temp_roll;
+PID_State_roll.target=t_roll;
 PID_State_roll.actual=Angle.roll;
 PID_State_roll.time_delta=dt;
 PID_State_roll=pid_iterate(PID_roll,PID_State_roll);
@@ -50,7 +51,7 @@ PID_State_gyrox.time_delta=dt;
 PID_State_gyrox=pid_iterate(PID_gyrox,PID_State_gyrox);
 Motor_roll=PID_State_gyrox.output;
 //对绕y轴的pitch角进行PID
-PID_State_pitch.target=temp_pitch;
+PID_State_pitch.target=t_pitch;
 PID_State_pitch.actual=Angle.pitch;
 PID_State_pitch.time_delta=dt;
 PID_State_pitch=pid_iterate(PID_pitch,PID_State_pitch);//外环PID结束
@@ -110,5 +111,27 @@ PID_State_height=pid_iterate(PID_height,PID_State_height);
 Motor_height=PID_State_height.output;
 return UAVNormal;
 }
-
+int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double t_coodx,double t_coody)
+{
+   static int8_t k;
+   uint8_t loopk =8;
+  if(current_state==UAVautofly)
+  {
+     if(k<loopk)
+        {
+          Control_attitude_update(target_angle.yaw,temp_roll,temp_pitch,dt);
+          k++;
+    
+        }else{
+           Control_coordinate_update(t_coodx,t_coody, loopk*dt);
+          Control_attitude_update(target_angle.yaw,temp_roll,temp_pitch,dt);
+           k=0;
+        }
+  }else if(current_state==UAVremotefly)
+  {
+     Control_attitude_update(target_angle.yaw,target_angle.roll,target_angle.pitch,dt);
+  }
+   Control_height_update(t_height,dt);
+   return UAVNormal;
+}
 
