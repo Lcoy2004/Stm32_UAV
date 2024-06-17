@@ -25,6 +25,7 @@
 #include "wit_c_sdk.h"
 #include "Data.h"
 #include "Control.h"
+#include "State.h"
 #include "Remote.h"
 /* USER CODE END Includes */
 
@@ -61,6 +62,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim13;
 extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart4_tx;
 extern DMA_HandleTypeDef hdma_usart1_rx;
@@ -294,6 +296,20 @@ void USART2_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+  */
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim13);
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
+}
+
+/**
   * @brief This function handles UART4 global interrupt.
   */
 void UART4_IRQHandler(void)
@@ -355,6 +371,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
      }else if (htim==&htim7)
      {
          Control_pid_update(t_height,0.007,target_angle,t_coodx,t_coody);
+     }
+     else if (htim==&htim13)
+     {
+         land_flag=1;
+        HAL_TIM_Base_Stop_IT(&htim13);
      }
  }
 /* USER CODE END 1 */

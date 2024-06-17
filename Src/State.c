@@ -165,12 +165,19 @@ if(Angle.pitch>85||Angle.roll>85)
 {
     if(previous_state==UAVremotefly||previous_state==UAVautofly)
     { //这里开启计时7s
+    HAL_TIM_Base_Start_IT(&htim13);
       if(land_flag==1)//计时7秒
         {
           current_state=UAVtakeoff;//计时开始降落
         }
       else if(land_flag==0)
         {
+            static int8_t i=0;
+            if(i<1)
+            {
+            HAL_TIM_Base_Start_IT(&htim13);
+            i++;
+            }
           next_state=UAVautofly;//进入悬停
         } 
     }else
