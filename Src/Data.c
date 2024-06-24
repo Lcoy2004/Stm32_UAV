@@ -17,6 +17,7 @@
 #include "usart.h"
 #include "Kalman.h"
 #include "CalculateFlow.h"
+#include "BMP280.h"
 static volatile char s_cDataUpdate = 0, s_cCmd = 0xff;
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize);
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
@@ -99,9 +100,11 @@ int8_t Data_upixels_flowget(double dt,double dT)
           Rate.vx=K_Ratex.output;
          kalman_filter(&K_Ratey,flow_Rate.vy);
          Rate.vy=K_Ratex.output;
-         printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
+         //printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
     if(valid==245)		  
 	{
+      Coor.x+=Rate.vx*dt;
+      Coor.y+=Rate.vy*dt;
 		return UAVNormal;
 	}
 	else
@@ -114,6 +117,16 @@ int8_t Data_Height_fusion(uint8_t flag)
 //输入单位均是mm，输出是cm
 {
 	double temp_height;
+   static double Rh;
+   static int8_t i=0;
+   if(i<20)
+   {
+      Rh+=BMP280_calculate_altitude()/20;
+      i++;
+   }else{
+   baro_height = 100*(BMP280_calculate_altitude()-Rh);
+    //printf("Bmpheight:%f\n",baro_height);
+   }
     if(flag==1)
    {
 	double confi=(double)tof_confidence/100;

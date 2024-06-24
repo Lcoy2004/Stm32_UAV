@@ -29,6 +29,7 @@
  #include"Data.h"
  #include "Motor.h"
  #include "State.h"
+ #include "BMP280.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,12 +106,15 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C2_Init();
   MX_TIM13_Init();
+  MX_USART3_UART_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   extern unsigned char ucTemp;
   extern unsigned char ch;
+  Bmp_Init();
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
-  HAL_TIM_Base_Start_IT(&htim6);//�???启接收传感器数据
+  HAL_TIM_Base_Start_IT(&htim6);//�????启接收传感器数据
   Motor_init();//电机与电调初始化 （最后）
   /* USER CODE END 2 */
 

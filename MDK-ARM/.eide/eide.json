@@ -2,9 +2,7 @@
   "name": "UAV",
   "type": "ARM",
   "dependenceList": [],
-  "srcDirs": [
-    ".eide/deps"
-  ],
+  "srcDirs": [],
   "virtualFolder": {
     "name": "<virtual_root>",
     "files": [],
@@ -349,17 +347,16 @@
       "custom_dep": {
         "name": "default",
         "incList": [
+          ".",
           "../Inc",
           "../Drivers/STM32H7xx_HAL_Driver/Inc",
           "../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy",
           "../Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "../Drivers/CMSIS/Include",
           ".cmsis/include",
-          "RTE/_UAV",
-          ".eide/deps"
+          "RTE/_UAV"
         ],
         "libList": [],
-        "sourceDirList": [],
         "defineList": [
           "USE_HAL_DRIVER",
           "STM32H750xx"
@@ -367,5 +364,5 @@
       }
     }
   },
-  "version": "3.3"
+  "version": "3.4"
 }
