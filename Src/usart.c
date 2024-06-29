@@ -24,9 +24,11 @@
 #include "wit_c_sdk.h"
 #include "flow_decode.h"
 #include "CalculateFlow.h"
+#include "Remote.h"
 #include <stdio.h>
 unsigned char ucTemp;
 unsigned char ch;
+unsigned char rch;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart4;
@@ -696,6 +698,13 @@ if(huart->Instance == USART1)
         }
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
 
+}else if(huart->Instance == USART3)
+{
+  static signed char sch;
+  HAL_UART_Receive_DMA(&huart3, &rch, 1);
+  sch=(signed char)rch;
+  Remote_Updata(sch);
+   sch=-1;
 }
 
 }
@@ -711,7 +720,11 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     __HAL_UART_CLEAR_OREFLAG(huart);
 	HAL_UART_Receive_DMA(&huart4, &ch, 1);
 
-  }
+  }else if(huart->Instance	==	USART3)
+  {
+    __HAL_UART_CLEAR_OREFLAG(huart);
+	HAL_UART_Receive_DMA(&huart3, &rch, 1);
+}
 }
 
 

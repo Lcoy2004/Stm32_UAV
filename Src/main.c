@@ -111,10 +111,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
   extern unsigned char ucTemp;
   extern unsigned char ch;
+  extern unsigned char rch;
   Bmp_Init();
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
-  HAL_TIM_Base_Start_IT(&htim6);//�????启接收传感器数据
+  HAL_TIM_Base_Start_IT(&htim6);//�????启接收传感器数据
+   HAL_UART_Receive_DMA(&huart3, &rch, 1);
   Motor_init();//电机与电调初始化 （最后）
   /* USER CODE END 2 */
 

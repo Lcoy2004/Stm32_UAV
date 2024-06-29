@@ -161,7 +161,7 @@ void State_monitering()//监视状态，临时改变状态;
 if(Angle.pitch>85||Angle.roll>85)
 {
     current_state=UAVstop;//俯仰角过大，判定炸机
-}else if(Remote_connectcheck()==UAVError)
+}else if(Remote_connectcheck==UAVError)
 {
     if(previous_state==UAVremotefly||previous_state==UAVautofly)
     { //这里开启计时7s
