@@ -87,7 +87,7 @@ int8_t Data_wit_Getimu()
            Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];
 			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
 			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
-        //printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
+        printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
 			return UAVNormal;
 		}
 
@@ -125,7 +125,7 @@ int8_t Data_Height_fusion(uint8_t flag)
       i++;
    }else{
    baro_height = 100*(BMP280_calculate_altitude()-Rh);
-    printf("Bmpheight:%f\n",baro_height);
+    //printf("Bmpheight:%f\n",baro_height);
    }
     if(flag==1)
    {

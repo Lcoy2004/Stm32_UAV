@@ -32,12 +32,18 @@ case 0:qw=Remote_flag(ch);//标志位判断函数（包括-1判断）
    w++;
   break;
 case 1:/* kix */
+   if( Remote_connectcheck==1)
+    {
     (*Num)=100*ch*qw;
     w++;
+    }
   break;
   case 2:/*kid */
-  (*Num)=ch*qw;
-  w=0;
+  if(Remote_connectcheck==1)
+    {
+     (*Num)=ch*qw;
+       w=0;
+    }
   break;
  default:
      w=0;
@@ -53,7 +59,9 @@ switch (ch)
 case -1:Remote_connectcheck=0;
   /* code */
   break;
-case 0x73: UAV_Flymode=!UAV_Flymode;//模式切换
+  case 0x73://空指令
+    return 1;
+   case 0x00:UAV_Flymode=!UAV_Flymode;//模式切换
 return 1;
 break;
 case 0x6d://左旋
@@ -84,7 +92,6 @@ case 0x64 :
 case 0x75 ://高度
 Num=&target_height;
 return 1;
-
 break;
 default:
 return 1;

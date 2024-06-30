@@ -31,20 +31,22 @@ return UAVNormal;
 
 int8_t Motor_init(void)
 {
+HAL_TIM_Base_Start_IT(&htim2);
 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3); 
 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4); 
+HAL_Delay(20);
 Motor_setspeed1(Motor_Vmax);
 Motor_setspeed2(Motor_Vmax);
 Motor_setspeed3(Motor_Vmax);
 Motor_setspeed4(Motor_Vmax);
-HAL_Delay(3000);
+HAL_Delay(2000);
 Motor_setspeed1(Motor_Vmin);
 Motor_setspeed2(Motor_Vmin);
 Motor_setspeed3(Motor_Vmin);
 Motor_setspeed4(Motor_Vmin);
-HAL_Delay(1000);
+HAL_Delay(2000);
 Motor_setspeed1(Motor_Vmin);
 Motor_setspeed2(Motor_Vmin);
 Motor_setspeed3(Motor_Vmin);
