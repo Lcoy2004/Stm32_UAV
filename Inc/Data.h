@@ -61,7 +61,7 @@ void State_stop();
 void State_autofly();
 void State_remotefly();
 void State_monitering();//监视状态，临时改变状态;;
-
+double Data_limit(double data, double toplimit, double lowerlimit);
 
 
 #ifdef __cplusplus

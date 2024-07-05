@@ -1,14 +1,12 @@
-
 #define _GLOBAL_BMP_
  
 #include "bmp280.h"
-#include "stm32h7xx_hal.h"
-#include "stdio.h"
+ 
 //复位寄存器写入值
 uint8_t BMP280_RESET_VALUE=0xB6;		
  
 BMP280 bmp280;
-   uint8_t id;
+ 
 void BMP280_Set_Standby_FILTER(BMP_CONFIG * BMP_Config);
 void BMP280_Set_TemOversamp(BMP_OVERSAMPLE_MODE * Oversample_Mode);
  
@@ -17,15 +15,17 @@ uint8_t BMP280_ReadID(void)
 {
   uint8_t temp;
   HAL_I2C_Mem_Read(&hi2c2,BMP280_ADDRESS_R,BMP280_CHIPID_REG,I2C_MEMADD_SIZE_8BIT,&temp,sizeof(temp),0xff);
+  
   return temp;
 }
  
 //这个全局结构体变量用来保存存在芯片内ROM补偿参数 0:成功；1-失败
 uint8_t Bmp_Init(void)
 {
- id=BMP280_ReadID();
   uint8_t Lsb,Msb;
   /********************接下来读出矫正参数*********************/
+  //if(BMP280_ReadID() != 0x58)
+    //return 1;
   //温度传感器的矫正值
   HAL_I2C_Mem_Read(&hi2c2,BMP280_ADDRESS_R,BMP280_DIG_T1_LSB_REG,I2C_MEMADD_SIZE_8BIT,&Lsb,sizeof(Lsb),0xff);
   HAL_I2C_Mem_Read(&hi2c2,BMP280_ADDRESS_R,BMP280_DIG_T1_MSB_REG,I2C_MEMADD_SIZE_8BIT,&Msb,sizeof(Msb),0xff);
@@ -69,8 +69,8 @@ uint8_t Bmp_Init(void)
   HAL_I2C_Mem_Write(&hi2c2,BMP280_ADDRESS_W,BMP280_RESET_REG,I2C_MEMADD_SIZE_8BIT,&BMP280_RESET_VALUE,sizeof(BMP280_RESET_VALUE),0xff);
   //往复位寄存器写入给定值
   BMP_OVERSAMPLE_MODE BMP_OVERSAMPLE_MODEStructure;
-  BMP_OVERSAMPLE_MODEStructure.P_Osample = BMP280_P_MODE_4;
-  BMP_OVERSAMPLE_MODEStructure.T_Osample = BMP280_T_MODE_4;
+  BMP_OVERSAMPLE_MODEStructure.P_Osample = BMP280_P_MODE_3;
+  BMP_OVERSAMPLE_MODEStructure.T_Osample = BMP280_T_MODE_1;
   BMP_OVERSAMPLE_MODEStructure.WORKMODE  = BMP280_NORMAL_MODE;
   BMP280_Set_TemOversamp(&BMP_OVERSAMPLE_MODEStructure);
   BMP_CONFIG BMP_CONFIGStructure;
@@ -217,6 +217,7 @@ double BMP280_Get_Temperature(void)
   temperature = bmp280_compensate_T_double(Bit32);
   return temperature;
 }
+
  double BMP280_calculate_altitude(void) 
  {
     double altitude = 44330.0 * (1.0 - pow(BMP280_Get_Pressure() / 101325.0, 0.190294957)); 

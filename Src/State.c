@@ -61,7 +61,7 @@ void State_landing()
 {
 if((previous_state==UAVremotefly||previous_state==UAVautofly||previous_state==UAVlanding))//在3种情况下进入降落程序
 {
-    if((height<50)&&(target_height<50))
+    if((height<Landing_Max_Height)&&(target_height<Landing_Max_Height))
     {
         t_height-=0.05;
         next_state=UAVlanding;//循环进入下降程序，直至下降
@@ -84,13 +84,13 @@ void State_takeoff()
 {
 if(previous_state==UAVstart||previous_state==UAVtakeoff)
 {
-    if(target_height>50)
+    if(target_height>Takingoff_Min_Hegiht)
     {
          HAL_TIM_Base_Start_IT(&htim7);//开启pid
          t_height=150;//预定起飞高度定死
          next_state=UAVtakeoff;
     }
-    else if(target_height<50)
+    else if(target_height<Takingoff_Min_Hegiht)
     {
     t_height=0;
     Motor_setspeed1(Motor_Vmin);
@@ -137,7 +137,7 @@ void State_autofly()
  t_coodx=Coor.x;
  t_coody=Coor.y;
  }
- if((height<50)&&(target_height<50))//判断是否降落
+ if((height<Landing_Max_Height)&&(target_height<Landing_Max_Height))//判断是否降落
     {
         next_state=UAVlanding;
     }else{
@@ -148,7 +148,7 @@ void State_autofly()
 void State_remotefly()
 {
     t_height=target_height;
-     if((height<50)&&(target_height<50))//判断是否降落
+     if((height<Landing_Max_Height)&&(target_height<Landing_Max_Height))//判断是否降落
     {
         next_state=UAVlanding;
     }else{

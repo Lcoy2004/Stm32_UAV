@@ -1,4 +1,3 @@
-
 #ifndef _BMP_H
 #define _BMP_H
  
@@ -156,7 +155,6 @@ typedef struct
 EXT_BMP BMP280_DATA Bmp280_Data;
  
 uint8_t Bmp_Init(void);
+void BMP280_Read(void);
 double BMP280_calculate_altitude(void);
-double BMP280_Get_Temperature(void);
-double BMP280_Get_Pressure(void);
 #endif

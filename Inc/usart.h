@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#define BUFFER_SIZE 128
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;

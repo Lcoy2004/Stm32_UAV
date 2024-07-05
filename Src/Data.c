@@ -87,7 +87,7 @@ int8_t Data_wit_Getimu()
            Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];
 			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
 			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
-        printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
+        //printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
 			return UAVNormal;
 		}
 
@@ -193,4 +193,10 @@ static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum)
         }
 		uiReg++;
     }
+}
+double Data_limit(double data, double toplimit, double lowerlimit)
+{
+  if(data > toplimit)  data = toplimit;
+  else if(data < lowerlimit) data = lowerlimit;
+    return data;
 }

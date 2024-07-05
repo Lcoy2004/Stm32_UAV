@@ -28,7 +28,10 @@
 #include <stdio.h>
 unsigned char ucTemp;
 unsigned char ch;
-unsigned char rch;
+
+
+uint8_t rxBuffer[BUFFER_SIZE];
+uint8_t rxIndex = 0;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart4;
@@ -187,7 +190,7 @@ void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 9600;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -493,7 +496,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart3_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_usart3_rx.Init.Mode = DMA_NORMAL;
-    hdma_usart3_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart3_rx.Init.Priority = DMA_PRIORITY_MEDIUM;
     hdma_usart3_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart3_rx) != HAL_OK)
     {
@@ -511,7 +514,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_usart3_tx.Init.Mode = DMA_NORMAL;
-    hdma_usart3_tx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart3_tx.Init.Priority = DMA_PRIORITY_MEDIUM;
     hdma_usart3_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart3_tx) != HAL_OK)
     {
@@ -521,7 +524,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart3_tx);
 
     /* USART3 interrupt Init */
-    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART3_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
 
@@ -701,10 +704,19 @@ if(huart->Instance == USART1)
 }else if(huart->Instance == USART3)
 {
   static signed char sch;
-  HAL_UART_Receive_DMA(&huart3, &rch, 1);
-  sch=(signed char)rch;
-  Remote_Updata(sch);
-   sch=-1;
+  sch=-1;
+  sch=(signed char)rxBuffer[rxIndex];
+	   Remote_Updata(sch);
+          // 处理接收到的数据
+        //printf("%02X\n", rxBuffer[rxIndex]);
+        Remote_Updata(sch);
+        // 更新索引
+        rxIndex++;
+        if (rxIndex >= BUFFER_SIZE) {
+            rxIndex = 0;
+        }
+        // 重新启动DMA接收
+        HAL_UART_Receive_DMA(&huart3, &rxBuffer[rxIndex], 1);
 }
 
 }
@@ -723,7 +735,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
   }else if(huart->Instance	==	USART3)
   {
     __HAL_UART_CLEAR_OREFLAG(huart);
-	HAL_UART_Receive_DMA(&huart3, &rch, 1);
+	HAL_UART_Receive_DMA(&huart3, &rxBuffer[rxIndex], 1);
 }
 }
 
@@ -731,9 +743,9 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 
   /**
   * 函数功能: 重定向c库函数printf到DEBUG_USARTx
-  * 输入参数: �???
-  * �??? �??? �???: �???
-  * �???    明：�???
+  * 输入参数: �???????
+  * �??????? �??????? �???????: �???????
+  * �???????    明：�???????
   */
 int fputc(int ch, FILE *f)
 {
@@ -743,9 +755,9 @@ int fputc(int ch, FILE *f)
  
 /**
   * 函数功能: 重定向c库函数getchar,scanf到DEBUG_USARTx
-  * 输入参数: �???
-  * �??? �??? �???: �???
-  * �???    明：�???
+  * 输入参数: �???????
+  * �??????? �??????? �???????: �???????
+  * �???????    明：�???????
   */
 int fgetc(FILE *f)
 {

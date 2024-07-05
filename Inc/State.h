@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 #include "stm32h7xx_hal.h"
+#define Landing_Max_Height 50
+#define Takingoff_Min_Hegiht 50
+
 extern int8_t current_state;
 int8_t State_loop();
 void State_start();
