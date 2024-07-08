@@ -9,6 +9,7 @@ extern "C" {
 #define Takingoff_Min_Hegiht 50
 
 extern int8_t current_state;
+extern uint8_t UAV_stop_flag;
 int8_t State_loop();
 void State_start();
 

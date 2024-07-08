@@ -1,3 +1,13 @@
+/**
+ * @file Motor.c
+ * @author Lcoy (lcoy2004@qq.com)
+ * @brief 实现电机控制
+ * @version 1.0
+ * @date 2024-07-08
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "Motor.h"
 #include "Control.h"
 #include "main.h"
@@ -41,7 +51,7 @@ Motor_setspeed1(Motor_Vmax);
 Motor_setspeed2(Motor_Vmax);
 Motor_setspeed3(Motor_Vmax);
 Motor_setspeed4(Motor_Vmax);
-HAL_Delay(2000);
+HAL_Delay(1000);
 Motor_setspeed1(Motor_Vmin);
 Motor_setspeed2(Motor_Vmin);
 Motor_setspeed3(Motor_Vmin);

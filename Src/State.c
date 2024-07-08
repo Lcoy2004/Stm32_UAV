@@ -1,3 +1,13 @@
+/**
+ * @file State.c
+ * @author Lcoy (lcoy2004@qq.com)
+ * @brief 状态机
+ * @version 1.0
+ * @date 2024-07-08
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "State.h"
 #include "stm32h7xx_hal.h"
 #include "Remote.h"
@@ -5,10 +15,12 @@
 #include "Motor.h"
 #include "Data.h"
 #include "tim.h"
+#include "stdio.h"
 int8_t current_state;
 static int8_t next_state;
 static int8_t previous_state;
 int8_t land_flag;//失联计时标志
+uint8_t UAV_stop_flag;//急停标志
 int8_t State_loop()
 {
     State_monitering();
@@ -38,6 +50,7 @@ default:
     break;
     
 }
+printf("currentstate:%d,%d,%lf,%lf\n",current_state,previous_state,target_height,height);
 if(next_state!=current_state)
 {
 previous_state=current_state;//为避免重复，上一个状态记到不重复的状态为止
@@ -88,7 +101,13 @@ if(previous_state==UAVstart||previous_state==UAVtakeoff)
     {
          HAL_TIM_Base_Start_IT(&htim7);//开启pid
          t_height=150;//预定起飞高度定死
-         next_state=UAVtakeoff;
+      if((t_height-height<20)||(height-t_height<20)&&(height>130))//起飞完毕
+    {
+       next_state=UAVautofly;//进入自主悬停状态
+    }else{
+        next_state=UAVtakeoff;
+    }
+
     }
     else if(target_height<Takingoff_Min_Hegiht)
     {
@@ -97,10 +116,7 @@ if(previous_state==UAVstart||previous_state==UAVtakeoff)
      Motor_setspeed2(Motor_Vmin);
     Motor_setspeed3(Motor_Vmin);
      Motor_setspeed4(Motor_Vmin);
-     next_state=UAVstart;//进入未启动状态
-    }else if((t_height-height<20)&&(t_height-height>0)&&(height>130))//起飞完毕
-    {
-       next_state=UAVautofly;//进入自主悬停状态
+     next_state=UAVtakeoff;//进入未启动状态
     }
 else 
 {
@@ -132,11 +148,9 @@ void State_stop()
 void State_autofly()
 {
  t_height=target_height;
- if(previous_state!=UAVautofly)//记录第一次UAV悬停时的位移
- {
- t_coodx=Coor.x;
- t_coody=Coor.y;
- }
+ t_coodx=0;
+ t_coody=0;
+ 
  if((height<Landing_Max_Height)&&(target_height<Landing_Max_Height))//判断是否降落
     {
         next_state=UAVlanding;
@@ -158,7 +172,7 @@ void State_remotefly()
 }
 void State_monitering()//监视状态，临时改变状态;
 {
-if(Angle.pitch>85||Angle.roll>85)
+if(Angle.pitch>85||Angle.roll>85||UAV_stop_flag)
 {
     current_state=UAVstop;//俯仰角过大，判定炸机
 }else if(Remote_connectcheck==UAVError)

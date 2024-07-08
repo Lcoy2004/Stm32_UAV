@@ -4,6 +4,7 @@
 #include "Data.h"
 #include "usart.h"
 #include "stdio.h"
+#include "State.h"
 T_angle target_angle;//获取的目标角度
 double target_height;//获取的期望高度
 double t_height;//送入pid的期望高度
@@ -75,9 +76,6 @@ case -1:Remote_connectcheck=0;
 case 0x73:w++;//空指令
 Num=NULL;
 target_angle.pitch=0;target_angle.roll=0;
-  return 1;
-   //case 0x00:UAV_Flymode=!UAV_Flymode;//模式切换
-//return 1;
 break;
 case 0x6D:w++;//左旋
 Num = &target_angle.yaw;
@@ -117,6 +115,14 @@ case 0x64 :w++;//高度
 Num = &target_height;
 add_flag=1;
 return -1;
+break;
+case 0x19 :w++;//急停
+Num = NULL;
+UAV_stop_flag=1;
+break;
+case 0x20 :w++;//模式切换
+UAV_Flymode=!UAV_Flymode;
+Num = NULL;
 break;
 default:
 w=0;
