@@ -28,7 +28,7 @@
 #include <stdio.h>
 unsigned char ucTemp;
 unsigned char ch;
-
+unsigned char och;
 
 uint8_t rxBuffer[BUFFER_SIZE];
 uint8_t rxIndex = 0;
@@ -45,6 +45,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
+DMA_HandleTypeDef hdma_usart6_rx;
 
 /* UART4 init function */
 void MX_UART4_Init(void)
@@ -560,6 +561,25 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF7_USART6;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+    /* USART6 DMA Init */
+    /* USART6_RX Init */
+    hdma_usart6_rx.Instance = DMA1_Stream6;
+    hdma_usart6_rx.Init.Request = DMA_REQUEST_USART6_RX;
+    hdma_usart6_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_usart6_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart6_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart6_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart6_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart6_rx.Init.Mode = DMA_NORMAL;
+    hdma_usart6_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart6_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_usart6_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart6_rx);
+
   /* USER CODE BEGIN USART6_MspInit 1 */
 
   /* USER CODE END USART6_MspInit 1 */
@@ -675,6 +695,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6|GPIO_PIN_7);
 
+    /* USART6 DMA DeInit */
+    HAL_DMA_DeInit(uartHandle->hdmarx);
   /* USER CODE BEGIN USART6_MspDeInit 1 */
 
   /* USER CODE END USART6_MspDeInit 1 */
@@ -717,6 +739,10 @@ if(huart->Instance == USART1)
         }
         // 重新启动DMA接收
         HAL_UART_Receive_DMA(&huart3, &rxBuffer[rxIndex], 1);
+}else if(huart->Instance == USART6)
+{
+       Remote_openmv_Updata(och);
+        HAL_UART_Receive_DMA(&huart6, &och, 1);
 }
 
 }
@@ -736,6 +762,11 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
   {
     __HAL_UART_CLEAR_OREFLAG(huart);
 	HAL_UART_Receive_DMA(&huart3, &rxBuffer[rxIndex], 1);
+}else if(huart->Instance	==	USART6)
+  {
+    
+    __HAL_UART_CLEAR_OREFLAG(huart);
+	HAL_UART_Receive_DMA(&huart6, &och, 1);
 }
 }
 
@@ -743,9 +774,9 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 
   /**
   * 函数功能: 重定向c库函数printf到DEBUG_USARTx
-  * 输入参数: �????????
-  * �???????? �???????? �????????: �????????
-  * �????????    明：�????????
+  * 输入参数: �????????
+  * �???????? �???????? �????????: �????????
+  * �????????    明：�????????
   */
 int fputc(int ch, FILE *f)
 {
@@ -755,9 +786,9 @@ int fputc(int ch, FILE *f)
  
 /**
   * 函数功能: 重定向c库函数getchar,scanf到DEBUG_USARTx
-  * 输入参数: �????????
-  * �???????? �???????? �????????: �????????
-  * �????????    明：�????????
+  * 输入参数: �????????
+  * �???????? �???????? �????????: �????????
+  * �????????    明：�????????
   */
 int fgetc(FILE *f)
 {

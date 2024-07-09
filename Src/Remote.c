@@ -5,9 +5,10 @@
 #include "usart.h"
 #include "stdio.h"
 #include "State.h"
+uint8_t   Remote_hover_flag;
 T_angle target_angle;//获取的目标角度
-double target_height;//获取的期望高度
 double t_height;//送入pid的期望高度
+double power;//马力
 double t_coodx;
 double t_coody;
 uint8_t Remote_connectcheck;//0表示断连
@@ -34,7 +35,7 @@ switch (w)
 {
 case 0:qw=Remote_flag(ch);//标志位判断函数（包括-1判断）
 
-//printf("%02X\n",ch);
+//printf("%02X\n",ch);//厉害
   break;
 case 1:/* kix */
    if(Remote_connectcheck==1)
@@ -53,7 +54,7 @@ case 1:/* kix */
     (*Num)+=(0.0001*ch*qw);
     target_angle.pitch=Data_limit(target_angle.pitch,30,-30);
     target_angle.roll=Data_limit(target_angle.roll,30,-30);
-    target_height=Data_limit(target_height,400,0);
+    power=Data_limit(power,400,0);
     w=0;
     }
     
@@ -67,6 +68,7 @@ case 1:/* kix */
 
 int8_t Remote_flag(int8_t ch)
 {
+  Remote_hover_flag=0;
   Remote_connectcheck=1;
 switch (ch)
 {
@@ -74,6 +76,7 @@ case -1:Remote_connectcheck=0;
   /* code */
   break;
 case 0x73:w++;//空指令
+Remote_hover_flag=1;
 Num=NULL;
 target_angle.pitch=0;target_angle.roll=0;
 break;
@@ -108,11 +111,11 @@ add_flag=0;
 return -1;
 break;
 case 0x75 :w++;//高度
-Num = &target_height;
+Num = &power;
 add_flag=1;
 return 1;
 case 0x64 :w++;//高度
-Num = &target_height;
+Num = &power;
 add_flag=1;
 return -1;
 break;
@@ -129,4 +132,49 @@ w=0;
 break;
 }
 return 1;
+}
+uint8_t Remote_openmv_Flag(uint8_t ch,uint8_t *q)
+{
+switch (ch)
+{
+case 0x61:
+(*q)++;
+  return 0;
+  break;
+case 0x62:
+  (*q)++;
+  return 1;
+  break;
+default:
+(*q)=0;
+  break;
+}
+
+}
+void Remote_openmv_Updata(uint8_t ch)
+{
+  static uint8_t q;
+  uint8_t qe;
+  switch (q)
+{
+  case 0:qe=Remote_openmv_Flag(ch,&q);
+    break;
+   case 1:if(qe&&!UAV_Flymode)
+   {
+    target_angle.yaw=(double)ch;
+    q++;
+   }else if(!qe&&!UAV_Flymode)
+   {
+    t_coody=(double)ch;
+    q++;
+   }else
+   {
+    q=0;
+   };
+    case 3:if(ch==0x0A){}else{q=0;}
+    break;
+  default:
+  q=0;
+    break;
+  }
 }
