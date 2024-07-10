@@ -1,18 +1,29 @@
+/**
+ * @file Motor.c
+ * @author Lcoy (lcoy2004@qq.com)
+ * @brief 实现电机控制
+ * @version 1.0
+ * @date 2024-07-08
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "Motor.h"
 #include "Control.h"
 #include "main.h"
 #include "stm32h7xx_hal_tim.h"
 #include "tim.h"
+#include "Remote.h"
 double data_limit1(double data, double toplimit, double lowerlimit);
 
 
 int8_t Motor_update(double Motor_roll,double Motor_pitch,double Motor_height,double Motor_yaw )
 {
 double motor1,motor2,motor3,motor4;
-motor1=(Motor_Vmin+Motor_roll+Motor_pitch+Motor_height-Motor_yaw);
-motor2=(Motor_Vmin+Motor_roll-Motor_pitch+Motor_height+Motor_yaw);
-motor3=(Motor_Vmin-Motor_roll+Motor_pitch+Motor_height+Motor_yaw);
-motor4=(Motor_Vmin-Motor_roll-Motor_pitch+Motor_height-Motor_yaw);
+motor1=(Motor_Vmin+data_limit1(power+Motor_height,750,0)+Motor_roll+Motor_pitch-Motor_yaw);
+motor2=(Motor_Vmin+data_limit1(power+Motor_height,750,0)+Motor_roll-Motor_pitch+Motor_yaw);
+motor3=(Motor_Vmin+data_limit1(power+Motor_height,750,0)-Motor_roll+Motor_pitch+Motor_yaw);
+motor4=(Motor_Vmin+data_limit1(power+Motor_height,750,0)-Motor_roll-Motor_pitch-Motor_yaw);
 //防止超出
 motor1=data_limit1(motor1,Motor_Vmax,Motor_Vmin);
 motor2=data_limit1(motor2,Motor_Vmax,Motor_Vmin);
@@ -41,7 +52,7 @@ Motor_setspeed1(Motor_Vmax);
 Motor_setspeed2(Motor_Vmax);
 Motor_setspeed3(Motor_Vmax);
 Motor_setspeed4(Motor_Vmax);
-HAL_Delay(2000);
+HAL_Delay(1000);
 Motor_setspeed1(Motor_Vmin);
 Motor_setspeed2(Motor_Vmin);
 Motor_setspeed3(Motor_Vmin);

@@ -113,14 +113,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
   extern unsigned char ucTemp;
   extern unsigned char ch;
+    extern unsigned char och;
   extern uint8_t  rxBuffer[BUFFER_SIZE];
   extern uint8_t rxIndex;
   Bmp_Init();
   HAL_UART_Receive_DMA(&huart1,&ucTemp,1);//启动dma接受usart1
   HAL_UART_Receive_DMA(&huart4, &ch, 1);
-  HAL_TIM_Base_Start_IT(&htim6);//�??????????启接收传感器数据
+  HAL_UART_Receive_DMA(&huart6, &och, 1);
+  HAL_TIM_Base_Start_IT(&htim6);//�???????????启接收传感器数据
   HAL_UART_Receive_DMA(&huart3, &rxBuffer[rxIndex], 1);
   Motor_init();//电机与电调初始化 （最后）
+   HAL_TIM_Base_Start_IT(&htim7);//�?启pid
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -130,8 +133,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    printf("targetangle:%lf\n",target_angle.yaw);
-    State_loop();
+    //printf("%d,%lf\n",0,Gyro.Gy);
+    //printf("%d,%lf\n",0,Angle.pitch);
+    current_state=UAVremotefly;
+    //State_loop();
   }
   /* USER CODE END 3 */
 }

@@ -8,12 +8,14 @@
  * See LICENSE for licensing details.
  */
 #include "pid.h"
-
-PID_State pid_iterate(PID_Calibration calibration, PID_State state) {
+#include "Data.h"
+PID_State pid_iterate(PID_Calibration calibration, PID_State state,double Limimax) {
      // 计算期望值和实际值之间的差值 (the error)
     double error = state.target - state.actual;
   // 计算和更新积分
     state.integral += (error * state.time_delta);
+    //积分限幅
+    state.integral =Data_limit(state.integral,Limimax,-Limimax);
     // 计算导数
     double derivative = (error - state.previous_error) / state.time_delta;
     // 根据算法计算输出值ֵ

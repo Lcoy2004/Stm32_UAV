@@ -5,10 +5,11 @@
 extern "C" {
 #endif
 #include "stm32h7xx_hal.h"
-#define Landing_Max_Height 50
-#define Takingoff_Min_Hegiht 50
+#define Landing_Max_Height 500
+#define Takingoff_Min_Power 550
 
 extern int8_t current_state;
+extern uint8_t UAV_stop_flag;
 int8_t State_loop();
 void State_start();
 

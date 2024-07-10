@@ -55,7 +55,7 @@ extern "C"{
 *PID控制器的状态，计算PID控制器的新状态并设置
 *补偿算法定义的任何误差的输出状态
      */
-    PID_State pid_iterate(PID_Calibration calibration, PID_State state);
+    PID_State pid_iterate(PID_Calibration calibration, PID_State state,double Limimax);
 
 
 #ifdef __cplusplus
