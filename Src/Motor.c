@@ -20,10 +20,10 @@ double data_limit1(double data, double toplimit, double lowerlimit);
 int8_t Motor_update(double Motor_roll,double Motor_pitch,double Motor_height,double Motor_yaw )
 {
 double motor1,motor2,motor3,motor4;
-motor1=(Motor_Vmin+data_limit1(power+Motor_height,750,0)+Motor_roll+Motor_pitch-Motor_yaw);
-motor2=(Motor_Vmin+data_limit1(power+Motor_height,750,0)+Motor_roll-Motor_pitch+Motor_yaw);
-motor3=(Motor_Vmin+data_limit1(power+Motor_height,750,0)-Motor_roll+Motor_pitch+Motor_yaw);
-motor4=(Motor_Vmin+data_limit1(power+Motor_height,750,0)-Motor_roll-Motor_pitch-Motor_yaw);
+motor1=(Motor_Vmin+data_limit1(power+Motor_height,900,0)+Motor_roll+Motor_pitch-Motor_yaw);
+motor2=(Motor_Vmin+data_limit1(power+Motor_height,900,0)+Motor_roll-Motor_pitch+Motor_yaw);
+motor3=(Motor_Vmin+data_limit1(power+Motor_height,900,0)-Motor_roll+Motor_pitch+Motor_yaw);
+motor4=(Motor_Vmin+data_limit1(power+Motor_height,900,0)-Motor_roll-Motor_pitch-Motor_yaw);
 //防止超出
 motor1=data_limit1(motor1,Motor_Vmax,Motor_Vmin);
 motor2=data_limit1(motor2,Motor_Vmax,Motor_Vmin);

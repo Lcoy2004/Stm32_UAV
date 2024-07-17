@@ -32,6 +32,7 @@
  #include "BMP280.h"
  #include "Remote.h"
  #include "stdio.h"
+ #include "Control.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -134,9 +135,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     //printf("%d,%lf\n",0,Gyro.Gy);
-    //printf("%d,%lf\n",0,Angle.pitch);
-    current_state=UAVremotefly;
-    //State_loop();
+    printf("%lf,%lf,%lf\n",PID_roll.kp,PID_roll.ki,PID_roll.kd);
+   // current_state=UAVremotefly;
+    State_loop();
   }
   /* USER CODE END 3 */
 }

@@ -17,6 +17,7 @@ extern uint8_t Remote_hover_flag;
 extern double t_height;
 extern double t_coodx;
 extern double t_coody;
+extern double openmv_coody;//openmv发送的数据
 #ifdef __cplusplus
 }
 #endif
