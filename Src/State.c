@@ -62,6 +62,7 @@ return UAVNormal;
 
 void State_start()
 {
+    t_height=0;
      Motor_setspeed1(Motor_Vmin);
      Motor_setspeed2(Motor_Vmin);
      Motor_setspeed3(Motor_Vmin);
@@ -79,6 +80,7 @@ if((previous_state==UAVremotefly||previous_state==UAVautofly||previous_state==UA
         next_state=UAVlanding;//循环进入下降程序，直至下降
     }else if(height<35&&t_height<40)//下降完成
     {
+        t_height=0;
        next_state=UAVstart;//等待下次起飞
        HAL_TIM_Base_Stop_IT(&htim7);//关闭pid
     }else//先下降，预定高度过低
@@ -137,6 +139,7 @@ next_state=UAVremotefly;
 
 void State_stop()
 {
+    t_height=0;
     HAL_TIM_Base_Stop_IT(&htim7);//关闭pid
      Motor_setspeed1(Motor_Vmin);
      Motor_setspeed2(Motor_Vmin);
@@ -183,7 +186,7 @@ void State_remotefly()
 }
 void State_monitering()//监视状态，临时改变状态;
 {
-if(Angle.pitch>85||Angle.roll>85||UAV_stop_flag)
+if(Angle.pitch>85||Angle.roll>85||UAV_stop_flag||Angle.pitch<-85||Angle.roll<-85)
 {
     current_state=UAVstop;//俯仰角过大，判定炸机
 }else if(Remote_connectcheck==UAVError)

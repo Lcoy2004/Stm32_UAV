@@ -725,10 +725,8 @@ if(huart->Instance == USART1)
 
 }else if(huart->Instance == USART3)
 {
-  static signed char sch;
-  sch=-1;
-  sch=(signed char)rxBuffer[rxIndex];
-	   Remote_Updata(sch);
+  static unsigned char sch;
+  sch=rxBuffer[rxIndex];
           // 处理接收到的数据
         //printf("%02X\n", rxBuffer[rxIndex]);
         Remote_Updata(sch);

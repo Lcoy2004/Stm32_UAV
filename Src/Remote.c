@@ -14,14 +14,8 @@ double t_coodx;
 double t_coody;//预期距离y
 double openmv_coody;//openmv发送的数据
 uint8_t Remote_connectcheck;//0表示断连
-uint8_t PID_Flag;
 double *Num;
 int8_t w;//状态
-/**
- * @brief 从遥控端获得期望模式：悬停/遥控控制
- * 
- * @return int8_t 
- */
 uint8_t UAV_Flymode=1;//uav模式选择，0：自主悬停，1：遥控控制（3.测试模式）
 
 /**
@@ -32,7 +26,6 @@ uint8_t UAV_Flymode=1;//uav模式选择，0：自主悬停，1：遥控控制（
 void Remote_Updata(int8_t ch)
 {
   static int qe;
-  static uint8_t pn;
   static int8_t qw;//判断正负号
 switch (w)
 {
@@ -42,28 +35,14 @@ qw=Remote_flag(ch);//标志位判断函数（包括-1判断）
 //printf("%02X\n",ch);//厉害
   break;
 case 1:/* kix */ 
- if(PID_Flag)
- {
-  pn=( ch * qw);
- }
- else
-      {
-       (*Num)+=(0.1* ch * qw); 
-      } 
+       (*Num)+=(1000* ch * qw); 
        w++;
   break;
   case 2:/*kid */
-     if(PID_Flag)
-    {
-      (*Num)=(0.01* ch * qw)+pn;
-    }
- else
-      {
-    (*Num)+=(0.001*ch*qw);
-    target_angle.pitch=Data_limit(target_angle.pitch,15,-15);
-    target_angle.roll=Data_limit(target_angle.roll,15,-15);
-    power=Data_limit(power,750,0);
-      }
+    (*Num)+=(10*ch*qw);
+    target_angle.pitch=Data_limit(target_angle.pitch,7,-7);
+    target_angle.roll=Data_limit(target_angle.roll,7,-7);
+    power=Data_limit(power,850,0);
     w=0;
   break;
  default:
@@ -72,17 +51,13 @@ case 1:/* kix */
 }
 }
 
-int8_t Remote_flag(int8_t ch)
+int8_t Remote_flag(uint8_t ch)
 {
   static uint8_t k;
   Remote_hover_flag=0;
   Remote_connectcheck=1;
-  PID_Flag=0;
 switch (ch)
 {
-case -1:Remote_connectcheck=0;
-  /* code */
-  break;
 case 0x73:w++;//空指令
 if(k==0)
 {
@@ -139,76 +114,149 @@ case 0x14 :w++;//模式切换
 UAV_Flymode=!UAV_Flymode;
 Num = NULL;
 break;
-case 0x01 :w++;
-Num = &PID_roll.kp;
-PID_Flag=1;
+case 0xC9 :w++;
+PID_roll.kp+=0.05;
+Num = NULL;
 break;
-case 0x02 :w++;
-Num = &PID_roll.ki;
-PID_Flag=1;
+case 0xCA :w++;
+PID_roll.ki+=0.01;
+Num = NULL;
 break;
-case 0x03 :w++;
-Num = &PID_roll.kd;
-PID_Flag=1;
+case 0xCB :w++;
+PID_roll.kd+=0.01;
+Num = NULL;
 break;
-case 0x04 :w++;
-Num = &PID_gyrox.kp;
-PID_Flag=1;
+case 0xCC :w++;
+PID_gyrox.kp+=0.05;
+Num = NULL;
 break;
-case 0x05 :w++;
-Num = &PID_gyrox.ki;
-PID_Flag=1;
+case 0xCD :w++;
+PID_gyrox.ki+=0.01;
+Num = NULL;
 break;
-case 0x06 :w++;
-Num = &PID_gyrox.kd;
-PID_Flag=1;
+case 0xCE :w++;
+PID_gyrox.kd+=0.01;
+Num = NULL;
 break;
-case 0x07 :w++;
-Num = &PID_pitch.kp;
-PID_Flag=1;
+case 0xCF :w++;
+PID_pitch.kp+=0.05;
+Num = NULL;
 break;
-case 0x08 :w++;
-Num = &PID_pitch.ki;
-PID_Flag=1;
+case 0xD0 :w++;
+PID_pitch.ki+=0.01;
+Num = NULL;
 break;
-case 0x09 :w++;
-Num = &PID_pitch.kd;
-PID_Flag=1;
+case 0xD1 :w++;
+PID_pitch.kd+=0.01;
+Num = NULL;
 break;
-case 0x0A :w++;
-Num = &PID_gyroy.kp;
-PID_Flag=1;
+case 0xD2 :w++;
+PID_gyroy.kp+=0.05;
+Num = NULL;
 break;
-case 0x0B :w++;
-Num = &PID_gyroy.ki;
-PID_Flag=1;
+case 0xD3 :w++;
+PID_gyroy.ki+=0.01;
+Num = NULL;
 break;
-case 0x0C :w++;
-Num = &PID_gyroy.kd;
-PID_Flag=1;
+case 0xD4 :w++;
+PID_gyroy.kd+=0.01;
+Num = NULL;
 break;
-case 0x0D :w++;
-Num = &PID_yaw.kp;
-PID_Flag=1;
-case 0x0E :w++;
-Num = &PID_yaw.ki;
-PID_Flag=1;
+case 0xD5 :w++;
+PID_yaw.kp+=0.001;
+Num = NULL;
 break;
-case 0x0F :w++;
-Num = &PID_yaw.kd;
-PID_Flag=1;
+case 0xD6 :w++;
+PID_yaw.ki+=0.001;
+Num = NULL;
 break;
-case 0x10 :w++;
-Num = &PID_gyroz.kp;
-PID_Flag=1;
+case 0xD7 :w++;
+PID_yaw.kd+=0.001;
+Num = NULL;
 break;
-case 0x11 :w++;
-Num = &PID_gyroz.ki;
-PID_Flag=1;
+case 0xD8 :w++;
+PID_gyroz.kp+=0.001;
+Num = NULL;
 break;
-case 0x12 :w++;
-Num = &PID_gyroz.kd;
-PID_Flag=1;
+case 0xD9 :w++;
+PID_gyroz.ki+=0.001;
+Num = NULL;
+break;
+case 0xDA :w++;
+PID_gyroz.kd+=0.001;
+Num = NULL;
+break;
+case 0xDB :w++;
+PID_roll.kp-=0.05;
+Num = NULL;
+break;
+case 0xDC :w++;
+PID_roll.ki-=0.01;
+Num = NULL;
+break;
+case 0xDD :w++;
+PID_roll.kd-=0.01;
+Num = NULL;
+break;
+case 0xDE :w++;
+PID_gyrox.kp-=0.05;
+Num = NULL;
+break;
+case 0xDF :w++;
+PID_gyrox.ki-=0.01;
+Num = NULL;
+break;
+case 0xE0 :w++;
+PID_gyrox.kd-=0.01;
+Num = NULL;
+break;
+case 0xE1 :w++;
+PID_pitch.kp-=0.05;
+Num = NULL;
+break;
+case 0xE2 :w++;
+PID_pitch.ki-=0.01;
+Num = NULL;
+break;
+case 0xE3 :w++;
+PID_pitch.kd-=0.01;
+Num = NULL;
+break;
+case 0xE4 :w++;
+PID_gyroy.kp-=0.05;
+Num = NULL;
+break;
+case 0xE5 :w++;
+PID_gyroy.ki-=0.01;
+Num = NULL;
+break;
+case 0xE6 :w++;
+PID_gyroy.kd-=0.01;
+Num = NULL;
+break;
+case 0xE7 :w++;
+PID_yaw.kp-=0.001;
+Num = NULL;
+break;
+case 0xE8 :w++;
+PID_yaw.ki-=0.001;
+Num = NULL;
+break;
+case 0xE9 :w++;
+PID_yaw.kd-=0.001;
+Num = NULL;
+break;
+case 0xEA :w++;
+PID_gyroz.kp-=0.001;
+Num = NULL;
+break;
+case 0xEB :w++;
+PID_gyroz.ki-=0.001;
+Num = NULL;
+break;
+case 0xEC :w++;
+PID_gyroz.kd-=0.001;
+Num = NULL;
 break;
 default:
 w=0;
@@ -216,6 +264,8 @@ break;
 }
 return 1;
 }
+
+
 uint8_t Remote_openmv_Flag(uint8_t ch,uint8_t *q)
 {
 switch (ch)
