@@ -8,18 +8,18 @@
 static double temp_pitch,temp_roll;
 //得到的相应方向上的转速
 double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
-#define Gyro_pid_interg_limit 200
-#define Angle_pid_interg_limit 200
-#define Height_pid_interg_limit 200
-#define Coor_pid_interg_limit 200
-#define Rate_pid_interg_limit 200
+#define Gyro_pid_interg_limit 75
+#define Angle_pid_interg_limit 75
+#define Height_pid_interg_limit 75
+#define Coor_pid_interg_limit 75
+#define Rate_pid_interg_limit 75
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
 PID_Calibration PID_yaw={0,0,0};//{3,0.05,0.025};
-PID_Calibration PID_pitch={3.50,0.01,0.01}; //3.2,0.025,0.02
-PID_Calibration PID_roll={3.65,0.05,0.03};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={2.25,0.05,0.10};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_gyroy={1.50,0.15,0.03};// {1.95,0.025,0.025
+PID_Calibration PID_pitch={4.00,0.37,0.02}; //3.2,0.025,0.02
+PID_Calibration PID_roll={2.65,0.00,0.01};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={2.00,0.01,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_gyroy={1.50,0.02,0.02};// {1.95,0.025,0.025
 PID_Calibration PID_gyroz={0,0,0};//{0.117,0.025,0.035}; 
 PID_Calibration PID_ratex={0,0,0};
 PID_Calibration PID_ratey={0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
@@ -128,7 +128,7 @@ return UAVNormal;
 int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double t_coodx,double t_coody)
 {
    static int8_t k;
-   uint8_t loopk =8;
+   uint8_t loopk =3;
   if(current_state==UAVautofly)
   {
      if(k<loopk)
@@ -146,7 +146,13 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
   {
      Control_attitude_update(target_angle.yaw,target_angle.roll,target_angle.pitch,dt);
   }
+  if(Remote_hover_flag)
+  {
    Control_height_update(t_height,dt);
+  }else
+  {
+   Motor_height=0;
+  }
    return UAVNormal;
 }
 
