@@ -16,10 +16,10 @@ double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
 PID_Calibration PID_yaw={0,0,0};//{3,0.05,0.025};
-PID_Calibration PID_pitch={4.00,0.37,0.02}; //3.2,0.025,0.02
-PID_Calibration PID_roll={2.65,0.00,0.01};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={2.00,0.01,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_gyroy={1.50,0.02,0.02};// {1.95,0.025,0.025
+PID_Calibration PID_pitch={3.60,0.13,0.04}; //3.2,0.025,0.02
+PID_Calibration PID_roll={3.25,0.07,0.02};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={1.94,0.01,0.03};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_gyroy={1.55,0.02,0.03};// {1.95,0.025,0.025
 PID_Calibration PID_gyroz={0,0,0};//{0.117,0.025,0.035}; 
 PID_Calibration PID_ratex={0,0,0};
 PID_Calibration PID_ratey={0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10

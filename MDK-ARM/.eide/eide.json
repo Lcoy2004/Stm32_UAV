@@ -90,6 +90,9 @@
               },
               {
                 "path": "../Src/wit_c_sdk.c"
+              },
+              {
+                "path": "../Src/memorymap.c"
               }
             ],
             "folders": []

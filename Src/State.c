@@ -102,7 +102,7 @@ if(previous_state==UAVstart||previous_state==UAVtakeoff)
     {
          HAL_TIM_Base_Start_IT(&htim7);//开启pid
          t_height=150;//预定起飞高度定死
-      if((t_height-height<20)||(height-t_height<20)&&(height>130))//起飞完毕
+      if(height>130)//起飞完毕
     {
        next_state=UAVremotefly;//进入遥控状态
     }else{

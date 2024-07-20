@@ -99,7 +99,7 @@ int8_t Data_upixels_flowget(double dt,double dT)
            kalman_filter(&K_Ratex,flow_Rate.vx);
           Rate.vx=K_Ratex.output;
          kalman_filter(&K_Ratey,flow_Rate.vy);
-         Rate.vy=K_Ratex.output;
+         Rate.vy=K_Ratey.output;
          //printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
     if(valid==245)		  
 	{

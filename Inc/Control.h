@@ -16,6 +16,7 @@ extern PID_Calibration PID_gyrox;
 extern PID_Calibration PID_gyroy;
 extern PID_Calibration PID_gyroz;
 extern PID_Calibration PID_ratey;
+extern PID_Calibration PID_ratex;
 extern PID_Calibration PID_coordx;
 extern PID_Calibration PID_coordy;
 
