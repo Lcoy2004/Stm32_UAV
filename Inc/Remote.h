@@ -1,12 +1,11 @@
 #ifndef __REMOTE_H__
 #define __REMOTE_H__
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "stm32h7xx_hal.h"
 #include "Data.h"
-int8_t Remote_flag(int8_t ch);
+int8_t Remote_flag(uint8_t ch);
 void Remote_Updata(int8_t ch);
 void Remote_openmv_Updata(uint8_t ch);
 extern uint8_t Remote_connectcheck;
@@ -17,6 +16,7 @@ extern uint8_t Remote_hover_flag;
 extern double t_height;
 extern double t_coodx;
 extern double t_coody;
+extern double openmv_coody;//openmv发送的数据
 #ifdef __cplusplus
 }
 #endif

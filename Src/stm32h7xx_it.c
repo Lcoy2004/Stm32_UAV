@@ -432,8 +432,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       
      }else if (htim==&htim7)
      {
-         Control_pid_update(t_height,0.021,target_angle,t_coodx,t_coody);
-         Motor_update(Motor_roll,Motor_pitch,Motor_height,Motor_yaw );//pid¸³Öµ
+         Control_pid_update(t_height,0.007,target_angle,t_coodx,t_coody);
+         Motor_update(Motor_roll,Motor_pitch,Motor_height,Motor_yaw);//pid¸³Öµ
      }
      else if (htim==&htim13)
      {

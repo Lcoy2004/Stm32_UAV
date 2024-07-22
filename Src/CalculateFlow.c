@@ -33,12 +33,12 @@ double flow_gyrox,flow_gyroy;
      //printf("imuandflow:%lf,%lf\n",gyrox_imufilter,flow_gyrox);//测定相位是否一致
      //printf("imuandflow:%lf,%lf\n",gyroy_imufilter,flow_gyroy);//测定相位是否一致
       //融合补偿
-     filter_gyrox=flow_gyrox+18*Filter_limit((gyrox_imufilter/57.3),1.0,-1.0);//低通滤波后gyro有衰减，所以乘以固定值18
-     filter_gyroy=flow_gyroy+18*Filter_limit((gyroy_imufilter/57.3),1.0,-1.0);
+     filter_gyrox=flow_gyrox-Filter_limit((gyrox_imufilter/57.3),1.0,-1.0);//低通滤波后gyro有衰减
+     filter_gyroy=flow_gyroy+Filter_limit((gyroy_imufilter/57.3),1.0,-1.0);
    //printf("flowgyro:%lf,%lf,%lf\n",flow_gyrox,gyrox_imufilter,filter_gyrox);
    //printf("flowgyro:%lf,%lf,%lf\n",flow_gyroy,gyroy_imufilter,filter_gyroy);
    flow_Rate.vx=(filter_gyroy)*height;//cm/s
-   flow_Rate.vy=-(filter_gyrox)*height;//cm/s
+   flow_Rate.vy=(filter_gyrox)*height;//cm/s
    //printf("Rate:%lf,%lf\n", flow_Rate.vx,flow_Rate.vy);
 
 }

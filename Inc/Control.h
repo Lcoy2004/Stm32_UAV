@@ -8,17 +8,17 @@ extern "C" {
 #include "Data.h"
 #include "stm32h7xx_hal.h"
 /*参数调*/
-static PID_Calibration PID_yaw;
-static PID_Calibration PID_pitch; 
-static PID_Calibration PID_roll;
-static PID_Calibration PID_height;
-static PID_Calibration PID_gyrox;
-static PID_Calibration PID_gyroy;
-static PID_Calibration PID_gyroz;
-static PID_Calibration PID_ratex;
-static PID_Calibration PID_ratey;
-static PID_Calibration PID_coordx;
-static PID_Calibration PID_coordy;
+extern  PID_Calibration PID_yaw;
+extern PID_Calibration PID_pitch; 
+extern PID_Calibration PID_roll;
+extern PID_Calibration PID_height;
+extern PID_Calibration PID_gyrox;
+extern PID_Calibration PID_gyroy;
+extern PID_Calibration PID_gyroz;
+extern PID_Calibration PID_ratey;
+extern PID_Calibration PID_ratex;
+extern PID_Calibration PID_coordx;
+extern PID_Calibration PID_coordy;
 
 extern double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 
