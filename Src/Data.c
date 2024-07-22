@@ -105,6 +105,10 @@ int8_t Data_upixels_flowget(double dt,double dT)
 	{
       Coor.x+=Rate.vx*dt;
       Coor.y+=Rate.vy*dt;
+      if(Coor.x>100||Coor.y>100||Coor.x<-100||Coor.y<-100)
+      {
+         Coor.x=Coor.y=0;
+      }
 		return UAVNormal;
 	}
 	else

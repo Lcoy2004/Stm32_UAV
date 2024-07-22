@@ -54,7 +54,7 @@ case 1:/* kix */
 int8_t Remote_flag(uint8_t ch)
 {
   static uint8_t k;
-  Remote_hover_flag=0;
+  
   Remote_connectcheck=1;
 switch (ch)
 {
@@ -62,52 +62,64 @@ case 0x73:w++;//空指令
 if(k==0)
 {
 Remote_hover_flag=1;
+Coor.x=0;Coor.y=0;
+t_height=height;
 k++;
 }
 Num=NULL;
-target_angle.pitch=-2;target_angle.roll=0;
+target_angle.pitch=0;target_angle.roll=-2;
+
 break;
 case 0x6D:w++;//左旋
 Num = &target_angle.yaw;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return 1;//正数
 break;
 case 0x6E:w++;//右旋
 Num = &target_angle.yaw;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return -1;//负数
 break;
 case 0x6C :w++;//向左
 Num = &target_angle.pitch;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return -1;
 break;
 case 0x72 :w++;//向右
 Num = &target_angle.pitch;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return 1;
 break;
 case 0x66 :w++;//向前
+Remote_hover_flag=0;
 Num = &target_angle.roll;
 k=0;//等待下次遥杆回正记录预期高度
 return 1;
 break;
 case 0x62 :w++;//向后
+Remote_hover_flag=0;
 Num = &target_angle.roll;
 k=0;//等待下次遥杆回正记录预期高度
 return -1;
 break;
 case 0x75 :w++;//高度
 Num = &power;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return 1;
 case 0x64 :w++;//高度
 Num = &power;
+Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
 return -1;
 break;
 case 0x13 :w++;//急停
 Num = NULL;
+k=0;
 UAV_stop_flag=1;
 break;
 case 0x14 :w++;//模式切换

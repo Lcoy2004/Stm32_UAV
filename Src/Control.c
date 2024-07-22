@@ -4,6 +4,7 @@
 #include "Control.h"
 #include "State.h"
 #include "Remote.h"
+#include "stdio.h"
 //姿态环与位置环的交换量
 static double temp_pitch,temp_roll;
 //得到的相应方向上的转速
@@ -16,16 +17,16 @@ double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
 PID_Calibration PID_yaw={0,0,0};//{3,0.05,0.025};
-PID_Calibration PID_pitch={3.60,0.13,0.04}; //3.2,0.025,0.02
-PID_Calibration PID_roll={3.25,0.07,0.02};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={1.94,0.01,0.03};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_pitch={3.60,0.13,0.01}; //3.2,0.025,0.02
+PID_Calibration PID_roll={3.00,0.07,0.01};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={1.40,0.01,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
 PID_Calibration PID_gyroy={1.55,0.02,0.03};// {1.95,0.025,0.025
 PID_Calibration PID_gyroz={0,0,0};//{0.117,0.025,0.035}; 
-PID_Calibration PID_ratex={0,0,0};
-PID_Calibration PID_ratey={0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_coordx={0,0,0};// {1.15,0.05,0.17}
-PID_Calibration PID_coordy={0,0,0};//{1.10,0.1,0.13}; 
-PID_Calibration PID_height={0,0,0};//{7.45,0,0};
+PID_Calibration PID_ratex={0.00,0,0};
+PID_Calibration PID_ratey={0.00,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_coordx={0.00,0.00,0.00};// {1.15,0.05,0.17}
+PID_Calibration PID_coordy={0.00,0.00,0.00};//{1.10,0.1,0.13}; 
+PID_Calibration PID_height={0.00,0.00,0};//{7.45,0,0};
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
 static PID_State PID_State_roll;
@@ -90,7 +91,7 @@ PID_State_ratex.target=PID_State_coordx.output;//内环PID
 PID_State_ratex.actual=Rate.vx;
 PID_State_ratex.time_delta=dt;
 PID_State_ratex=pid_iterate(PID_ratex,PID_State_ratex,Rate_pid_interg_limit);
-temp_pitch=PID_State_ratex.output;//x轴速度环对应的是y轴的角度环！
+temp_pitch=-PID_State_ratex.output;//x轴速度环对应的是y轴的角度环！
 double pid_y;
 if (openmv_coody==0)
 {
@@ -108,7 +109,7 @@ PID_State_ratey.target=PID_State_coordy.output;//内环PID
 PID_State_ratey.actual=Rate.vy;
 PID_State_ratey.time_delta=dt;
 PID_State_ratey=pid_iterate(PID_ratey,PID_State_ratey,Rate_pid_interg_limit);
-temp_roll=PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
+temp_roll=-PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
 return UAVNormal;
 }
 
@@ -129,8 +130,9 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
 {
    static int8_t k;
    uint8_t loopk =3;
-  if(current_state==UAVautofly)
-  {
+  if(Remote_hover_flag)
+  { 
+   Control_height_update(t_height,dt); 
      if(k<loopk)
         {
 
@@ -138,6 +140,7 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
           k++;
     
         }else{
+         printf("%lf,%lf,%lf,%lf,%lf\n",Coor.x,Coor.y,temp_pitch,temp_roll,power);
            Control_coordinate_update(t_coodx,t_coody, loopk*dt);
           Control_attitude_update(target_angle.yaw,temp_roll,temp_pitch,dt);
            k=0;
@@ -146,13 +149,8 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
   {
      Control_attitude_update(target_angle.yaw,target_angle.roll,target_angle.pitch,dt);
   }
-  if(Remote_hover_flag)
-  {
-   Control_height_update(t_height,dt);
-  }else
-  {
-   Motor_height=0;
-  }
+
+   
    return UAVNormal;
 }
 

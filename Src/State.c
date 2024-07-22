@@ -78,7 +78,7 @@ if((previous_state==UAVremotefly||previous_state==UAVautofly||previous_state==UA
     {
         t_height-=0.05;
         next_state=UAVlanding;//循环进入下降程序，直至下降
-    }else if(height<35&&t_height<40)//下降完成
+    }else if((height<35&&t_height<40)||power<Takingoff_Min_Power)//下降完成
     {
         t_height=0;
        next_state=UAVstart;//等待下次起飞
@@ -113,6 +113,7 @@ if(previous_state==UAVstart||previous_state==UAVtakeoff)
     else if(power<Takingoff_Min_Power)
     {
     t_height=0;
+    HAL_TIM_Base_Stop_IT(&htim7);
     Motor_setspeed1(Motor_Vmin);
      Motor_setspeed2(Motor_Vmin);
     Motor_setspeed3(Motor_Vmin);
@@ -172,10 +173,6 @@ if(openmv_coody!=0)
 }
 void State_remotefly()
 {
-    if(Remote_hover_flag)
-    {
-        t_height=height;
-    }
      if((height<Landing_Max_Height)&&(power<Takingoff_Min_Power))//判断是否降落
     {
         next_state=UAVlanding;
