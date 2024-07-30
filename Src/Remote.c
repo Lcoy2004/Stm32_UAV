@@ -86,13 +86,13 @@ case 0x6C :w++;//向左
 Num = &target_angle.pitch;
 Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
-return -1;
+return 1;
 break;
 case 0x72 :w++;//向右
 Num = &target_angle.pitch;
 Remote_hover_flag=0;
 k=0;//等待下次遥杆回正记录预期高度
-return 1;
+return -1;
 break;
 case 0x66 :w++;//向前
 Remote_hover_flag=0;

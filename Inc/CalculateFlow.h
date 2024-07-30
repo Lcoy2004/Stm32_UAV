@@ -6,7 +6,7 @@ extern "C" {
 #endif
 #include "Data.h"
 
-void CalculateFlow_upixels_Complementary(double dt,double dT,T_gyro gyro);
+void CalculateFlow_upixels_Complementary(double dt,T_gyro gyro);
 
 
 extern T_rate  flow_Rate;//光流融合的速度值

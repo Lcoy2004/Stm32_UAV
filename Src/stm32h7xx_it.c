@@ -420,11 +420,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         static int8_t i;
         if(i<4)
         {
-          Data_wit_Getimu();//5ms更新imu
+          Data_wit_Getimu(0.005);//5ms更新imu
           i++;
         } else 
         {
-          Data_wit_Getimu();//5ms更新imu
+          Data_wit_Getimu(0.005);//5ms更新imu
            Data_upixels_flowget(0.02,0.005);//这里更新光流数据50hz,20ms
             Data_Height_fusion(2);//20ms更新高度
           i=0;

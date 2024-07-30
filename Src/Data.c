@@ -24,8 +24,7 @@ static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
 static void Delayms(uint16_t ucMs);
 
 static K_Filter K_height={0,0.005f,0.5f,0.012f,0,0};//需要调参
-static K_Filter K_Ratex={0,0.02f,0.15f,0.02f,0,0};//需要调参
-static K_Filter K_Ratey={0,0.02f,0.15f,0.02f,0,0};//需要调参
+
 /*以下是融合处理后的数，可以直接放入pid*/
  T_Acc Acc;
   T_gyro Gyro;
@@ -33,7 +32,7 @@ static K_Filter K_Ratey={0,0.02f,0.15f,0.02f,0,0};//需要调参
   T_coor  Coor;//位移
   T_rate  Rate;//速度
   double height;//高度值
-
+T_rate imu_Rate;//加速度积分的速度值
 /*传感器数据*/
  double flow_height;//光流高度值
 
@@ -57,7 +56,7 @@ return UAVNormal;
 }
 
  
-int8_t Data_wit_Getimu()
+int8_t Data_wit_Getimu(double dT)
 {
     float fAcc[3], fGyro[3], fAngle[3];
      int8_t i=0;
@@ -84,37 +83,35 @@ int8_t Data_wit_Getimu()
 			{
 				s_cDataUpdate &= ~MAG_UPDATE;
 			}
-           Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];
+           Acc.Ax=(double)fAcc[0]*9.8*10; Acc.Ay=(double)fAcc[1]*9.8*10;Acc.Az=(double)fAcc[2]*9.8*10;//单位cm/s2
 			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
 			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
         //printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
+        imu_Rate.vx+=Acc.Ax*dT;
+        imu_Rate.vy+=Acc.Ay*dT;
 			return UAVNormal;
 		}
 
 int8_t Data_upixels_flowget(double dt,double dT)
 {           
+
 		   flow_height=ground_distance;//mm
-         CalculateFlow_upixels_Complementary(dt,dT,Gyro);
+         CalculateFlow_upixels_Complementary(dt,Gyro);
        // printf("Rate:%lf,%lf\n", flow_Rate.vx,flow_Rate.vy);
-           kalman_filter(&K_Ratex,flow_Rate.vx);
-          Rate.vx=K_Ratex.output;
-         kalman_filter(&K_Ratey,flow_Rate.vy);
-         Rate.vy=K_Ratey.output;
          //printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
-    if(valid==245)		  
-	{
-      Coor.x+=Rate.vx*dt;
+       Coor.x+=Rate.vx*dt;
       Coor.y+=Rate.vy*dt;
-      if(Coor.x>100||Coor.y>100||Coor.x<-100||Coor.y<-100)
+      if(Coor.x>100||Coor.x<-100)
       {
-         Coor.x=Coor.y=0;
+         Coor.x=0;
       }
+		if(Coor.y>100||Coor.y<-100)
+      {
+         Coor.y=0;
+      }
+    
 		return UAVNormal;
-	}
-	else
-	{
-		return UAVError;
-	}
+	
 }
 //输入参数：置信度;选择使用算法：1：融合；2：纯激光；3：纯气压计
 int8_t Data_Height_fusion(uint8_t flag)

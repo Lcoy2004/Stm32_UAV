@@ -51,9 +51,10 @@ extern T_Acc Acc;
  extern T_coor  Coor;//位移
  extern T_rate  Rate;//速度
  extern double height;//高度值
+ extern T_rate imu_Rate;//加速度积分的速度值
 /*外部调用函数*/
 int8_t Data_wit_Init();
-int8_t Data_wit_Getimu();
+int8_t Data_wit_Getimu(double dT);
 int8_t Data_upixels_flowget(double dt,double dT);
 int8_t Data_Height_fusion(uint8_t flag);
 void State_modechange();
