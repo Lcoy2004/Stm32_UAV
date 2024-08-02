@@ -33,8 +33,8 @@ double Temp_vx,Temp_vy;
 		   //flow_Rate.vy=(double)flow_y_integral/10000*(height)/dt;//cm/s
     double filter_gyrox,filter_gyroy;
       //融合补偿
-     filter_gyrox=flow_gyrox-Filter_limit((Gyro.Gx/57.3),1.0,-1.0);//低通滤波后gyro有衰减
-     filter_gyroy=flow_gyroy+Filter_limit((Gyro.Gy/57.3),1.0,-1.0);
+     filter_gyrox=flow_gyrox-Filter_limit((gyro.Gx/57.3),1.0,-1.0);//低通滤波后gyro有衰减
+     filter_gyroy=flow_gyroy+Filter_limit((gyro.Gy/57.3),1.0,-1.0);
    //printf("flowgyro:%lf,%lf,%lf\n",flow_gyrox,gyrox_imufilter,filter_gyrox);
    //printf("flowgyro:%lf,%lf,%lf\n",flow_gyroy,gyroy_imufilter,filter_gyroy);
    static double f1_b;//f1_b 是融合比例。

@@ -24,8 +24,8 @@ uint8_t Bmp_Init(void)
 {
   uint8_t Lsb,Msb;
   /********************接下来读出矫正参数*********************/
-  //if(BMP280_ReadID() != 0x58)
-    //return 1;
+  if(BMP280_ReadID() != 0x58)
+    return 1;
   //温度传感器的矫正值
   HAL_I2C_Mem_Read(&hi2c2,BMP280_ADDRESS_R,BMP280_DIG_T1_LSB_REG,I2C_MEMADD_SIZE_8BIT,&Lsb,sizeof(Lsb),0xff);
   HAL_I2C_Mem_Read(&hi2c2,BMP280_ADDRESS_R,BMP280_DIG_T1_MSB_REG,I2C_MEMADD_SIZE_8BIT,&Msb,sizeof(Msb),0xff);
@@ -217,10 +217,11 @@ double BMP280_Get_Temperature(void)
   temperature = bmp280_compensate_T_double(Bit32);
   return temperature;
 }
-
+ 
+//主程序中定时调用
  double BMP280_calculate_altitude(void) 
  {
-    double altitude = 44330.0 * (1.0 - pow(BMP280_Get_Pressure() / 101325.0, 0.190294957)); 
+    double altitude = 44330.0 * (1.0 - pow(BMP280_Get_Pressure() / 101325.0, 0.190)); 
     //printf("Bmph:%f\n",altitude);
     return altitude;  
 }

@@ -146,15 +146,9 @@ typedef struct{
   BMP280_FILTER_COEFFICIENT FILTER_COEFFICIENT;
   FunctionalState SPI_EN;
 }BMP_CONFIG;
- 
-typedef struct
-{
-  float Internal_Temp;
-  float Atmo_Pressure;
-}BMP280_DATA;
-EXT_BMP BMP280_DATA Bmp280_Data;
- 
+
 uint8_t Bmp_Init(void);
-void BMP280_Read(void);
+double BMP280_Get_Temperature(void);
+double BMP280_Get_Pressure(void);
 double BMP280_calculate_altitude(void);
 #endif
