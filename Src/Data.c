@@ -18,6 +18,8 @@
 #include "Kalman.h"
 #include "CalculateFlow.h"
 #include "BMP280.h"
+#include "math.h"
+#define M_PI 3.14159265358979323846
 static volatile char s_cDataUpdate = 0, s_cCmd = 0xff;
 static void SensorUartSend(uint8_t *p_data, uint32_t uiSize);
 static void SensorDataUpdata(uint32_t uiReg, uint32_t uiRegNum);
@@ -58,7 +60,7 @@ return UAVNormal;
  
 int8_t Data_wit_Getimu(double dT)
 {
-    float fAcc[3], fGyro[3], fAngle[3];
+    double fAcc[3], fGyro[3], fAngle[3];
      int8_t i=0;
 		if(s_cDataUpdate)
 		{
@@ -83,12 +85,21 @@ int8_t Data_wit_Getimu(double dT)
 			{
 				s_cDataUpdate &= ~MAG_UPDATE;
 			}
-           Acc.Ax=(double)fAcc[0]*9.8*10; Acc.Ay=(double)fAcc[1]*9.8*10;Acc.Az=(double)fAcc[2]*9.8*10;//单位cm/s2
+           Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];//单位g/s2
 			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
 			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
         //printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
-        imu_Rate.vx+=Acc.Ax*dT;
-        imu_Rate.vy+=Acc.Ay*dT;
+        //printf("Acc:%lf,%lf,%lf\n",Acc.Ax,Acc.Ay,Acc.Az);
+
+        //imu消除重力,单位m/s2
+        double vec_accx,vec_accy,vec_accz;
+        vec_accy=(Acc.Ay-sin(Angle.roll*M_PI / 180.0)*cos(Angle.pitch*M_PI / 180.0))*9.81;
+        vec_accx=(Acc.Ax+sin(Angle.pitch*M_PI / 180.0))*9.81;
+        vec_accz=(Acc.Az-cos(Angle.pitch*M_PI / 180.0)*cos(Angle.roll*M_PI / 180.0))*9.81;
+      //累加速度，单位cm/s2
+        imu_Rate.vx+=vec_accx*dT*10;
+        imu_Rate.vy+=vec_accy*dT*10;
+        //printf("imuRate:%lf,%lf\n",imu_Rate.vx,imu_Rate.vy);
 			return UAVNormal;
 		}
 
@@ -97,10 +108,10 @@ int8_t Data_upixels_flowget(double dt,double dT)
 
 		   flow_height=ground_distance;//mm
          CalculateFlow_upixels_Complementary(dt,Gyro);
-       // printf("Rate:%lf,%lf\n", flow_Rate.vx,flow_Rate.vy);
+        printf("Coor:%lf,%lf,%d\n", Coor.x, Coor.y,valid);
          //printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
-       Coor.x+=Rate.vx*dt;
-      Coor.y+=Rate.vy*dt;
+       Coor.x=-flow_Coor.x;
+      Coor.y=flow_Coor.y;
       if(Coor.x>100||Coor.x<-100)
       {
          Coor.x=0;
@@ -120,14 +131,14 @@ int8_t Data_Height_fusion(uint8_t flag)
 	double temp_height;
    static double Rh;
    static int8_t i=0;
-   if(i<20)
-   {
-      Rh+=BMP280_calculate_altitude()/20;
-      i++;
-   }else{
-   baro_height = 100*(BMP280_calculate_altitude()-Rh);
+  // if(i<20)
+   //{
+     // Rh+=BMP280_calculate_altitude()/20;
+     // i++;
+  // }else{
+   //baro_height = 100*(BMP280_calculate_altitude()-Rh);
     //printf("Bmpheight:%f\n",baro_height);
-   }
+   //}
     if(flag==1)
    {
 	double confi=(double)tof_confidence/100;

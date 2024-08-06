@@ -18,7 +18,7 @@ uint8_t valid ;
 _filter_1_st f1_fx;
 _filter_1_st f1_fy;
  //dt:光流采样；dT：imu采样
-//优象光流的xy轴与imu不太一致。若对齐x轴，两个y轴相反，因此这里默认imuy轴为飞机y轴，光流的y轴取反
+//优象光流的xy轴与imu不太一致。若对齐x轴，两个y轴相反，因此这里默认imux轴为飞机y轴，光流的y轴取正
 void CalculateFlow_upixels_Complementary(double dt,T_gyro gyro)
 {
 static double speed_err_ix,speed_err_iy;
@@ -29,6 +29,8 @@ double Temp_vx,Temp_vy;
 		   flow_gyrox=(double)flow_y_integral/10000/dt;//rad/s，绕x轴的光流角速度
         flow_Coor.x+=((double)flow_x_integral/10000)*(height);//累加位移cm
 		   flow_Coor.y+=(double)flow_y_integral/10000*(height);//累加位移cm
+      // printf("Flow_coor:%lf,%lf\n", flow_Coor.x,flow_Coor.y);
+
           // flow_Rate.vx=(double)flow_x_integral/10000*(height)/dt;//cm/s
 		   //flow_Rate.vy=(double)flow_y_integral/10000*(height)/dt;//cm/s
     double filter_gyrox,filter_gyroy;
@@ -54,15 +56,20 @@ double Temp_vx,Temp_vy;
 
    flow_Rate.vx=(filter_gyroy)*height;//cm/s
    flow_Rate.vy=(filter_gyrox)*height;//cm/s
-    Filter_1(f1_b,2.5,dt,flow_Rate.vx,&f1_fx);   //flow_data with acc integrated data complementary filtering
-		Filter_1(f1_b,2.5,dt,-flow_Rate.vy,&f1_fy);//注意光流与imuy轴方向相反，就取反，以imu的为正轴
+    Filter_1(f1_b,2.5,dt,-flow_Rate.vx,&f1_fx);   //flow_data with acc integrated data complementary filtering
+		Filter_1(f1_b,2.5,dt,flow_Rate.vy,&f1_fy);//注意光流与imuy轴方向相反，就取反，以imu的为正轴
+    //加速度补偿反而漂，所以就改回来
+
+  f1_fx.out=-imu_Rate.vx;//cm/s
+  f1_fy.out=imu_Rate.vy;//cm/s
+  //上面融合可以就不用
     kalman_filter(&K_Ratex, f1_fx.out);
      Temp_vx=K_Ratex.output;
     kalman_filter(&K_Ratey,f1_fy.out);
-   Temp_vy=K_Ratey.output;
+     Temp_vy=K_Ratey.output;
    //误差补偿
- Rate.vx=Temp_vx+0.1*speed_err_ix;
- Rate.vy=Temp_vy+0.1*speed_err_iy;
+ Rate.vx=Temp_vx;//+0.1*speed_err_ix;
+ Rate.vy=Temp_vy;//+0.1*speed_err_iy;
 
 speed_err_ix+=(Temp_vx-flow_Rate.vx)*dt;
 speed_err_iy+=(Temp_vy-flow_Rate.vy)*dt;

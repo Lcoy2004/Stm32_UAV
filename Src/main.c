@@ -137,7 +137,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     //
-    //printf("%d,%lf\n",0,target_angle.roll);
+    //printf("%d,%lf\n",0,height);
      //printf("%lf,%d\n",power,__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_4));
     //printf("%lf,%lf,%lf\n",PID_roll.kp,PID_ratex.kp,PID_coordx.kp);
    // current_state=UAVremotefly;
