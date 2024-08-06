@@ -60,16 +60,16 @@ double Temp_vx,Temp_vy;
 		Filter_1(f1_b,2.5,dt,flow_Rate.vy,&f1_fy);//注意光流与imuy轴方向相反，就取反，以imu的为正轴
     //加速度补偿反而漂，所以就改回来
 
-  f1_fx.out=-imu_Rate.vx;//cm/s
-  f1_fy.out=imu_Rate.vy;//cm/s
+  f1_fx.out=-flow_Rate.vx;//cm/s
+  f1_fy.out=flow_Rate.vy;//cm/s
   //上面融合可以就不用
     kalman_filter(&K_Ratex, f1_fx.out);
      Temp_vx=K_Ratex.output;
     kalman_filter(&K_Ratey,f1_fy.out);
      Temp_vy=K_Ratey.output;
    //误差补偿
- Rate.vx=Temp_vx;//+0.1*speed_err_ix;
- Rate.vy=Temp_vy;//+0.1*speed_err_iy;
+ Rate.vx=Temp_vx+0.1*speed_err_ix;
+ Rate.vy=Temp_vy+0.1*speed_err_iy;
 
 speed_err_ix+=(Temp_vx-flow_Rate.vx)*dt;
 speed_err_iy+=(Temp_vy-flow_Rate.vy)*dt;

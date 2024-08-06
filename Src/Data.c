@@ -66,9 +66,9 @@ int8_t Data_wit_Getimu(double dT)
 		{
 			for(i = 0; i < 3; i++)
 			{
-				fAcc[i]= sReg[AX+i] / 32768.0f * 16.0f;
-				fGyro[i] = sReg[GX+i] / 32768.0f * 2000.0f;
-				fAngle[i] = sReg[Roll+i] / 32768.0f * 180.0f;
+				fAcc[i]= sReg[AX+i] / 32768.0 * 16.0;
+				fGyro[i] = sReg[GX+i] / 32768.0 * 2000.0;
+				fAngle[i] = sReg[Roll+i] / 32768.0 * 180.0;
 			}
 			if(s_cDataUpdate & ACC_UPDATE)
 				s_cDataUpdate &= ~ACC_UPDATE;
@@ -108,7 +108,7 @@ int8_t Data_upixels_flowget(double dt,double dT)
 
 		   flow_height=ground_distance;//mm
          CalculateFlow_upixels_Complementary(dt,Gyro);
-        printf("Coor:%lf,%lf,%d\n", Coor.x, Coor.y,valid);
+        //printf("Coor:%lf,%lf,%d\n", Coor.x, Coor.y,valid);
          //printf("Rate:%lf,%lf\n", flow_Rate.vx,Rate.vx);
        Coor.x=-flow_Coor.x;
       Coor.y=flow_Coor.y;

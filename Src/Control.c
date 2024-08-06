@@ -16,12 +16,12 @@ double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 #define Rate_pid_interg_limit 75
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
-PID_Calibration PID_yaw={0,0,0};//{3,0.05,0.025};
-PID_Calibration PID_pitch={3.60,0.13,0.01}; //3.2,0.025,0.02
-PID_Calibration PID_roll={3.00,0.07,0.01};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={1.40,0.01,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_gyroy={1.55,0.02,0.03};// {1.95,0.025,0.025
-PID_Calibration PID_gyroz={0,0,0};//{0.117,0.025,0.035}; 
+PID_Calibration PID_yaw={2.04,0.03,0.03};//{3,0.05,0.025};
+PID_Calibration PID_pitch={3.20,0.09,0.02}; //3.2,0.025,0.02
+PID_Calibration PID_roll={3.20,0.29,0.02};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={3.00,0.06,0.03};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_gyroy={2.92,0.01,0.02};// {1.95,0.025,0.025
+PID_Calibration PID_gyroz={2.12,0.03,0.08};//{0.117,0.025,0.035}; 
 PID_Calibration PID_ratex={0.00,0,0};
 PID_Calibration PID_ratey={0.00,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
 PID_Calibration PID_coordx={0.00,0.00,0.00};// {1.15,0.05,0.17}
@@ -140,7 +140,7 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
           k++;
     
         }else{
-         printf("%lf,%lf,%lf,%lf,%lf\n",Coor.x,Coor.y,temp_pitch,temp_roll,power);
+         //printf("%lf,%lf,%lf,%lf,%lf\n",Coor.x,Coor.y,temp_pitch,temp_roll,power);
            Control_coordinate_update(t_coodx,t_coody, loopk*dt);
           Control_attitude_update(target_angle.yaw,temp_roll,temp_pitch,dt);
            k=0;

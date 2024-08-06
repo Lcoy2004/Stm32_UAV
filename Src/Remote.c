@@ -67,8 +67,21 @@ t_height=height;
 k++;
 }
 Num=NULL;
-target_angle.pitch=0;target_angle.roll=-2;
-
+if(target_angle.pitch<0)
+{
+  target_angle.pitch++;
+}else if(target_angle.pitch>0)
+{
+  target_angle.pitch--;
+}
+if(target_angle.roll<0)
+{
+  target_angle.roll++;
+}else if(target_angle.roll>0)
+{
+  target_angle.roll--;
+}
+///target_angle.pitch=0;target_angle.roll=0;
 break;
 case 0x6D:w++;//左旋
 Num = &target_angle.yaw;
@@ -296,26 +309,26 @@ case 0x20 :w++;
 Num = NULL;
 break;
 case 0x21 :w++;
-PID_yaw.kp+=0.001;
+PID_yaw.kp+=0.01;
 Num = NULL;
 break;
 case 0x22 :w++;
-PID_yaw.ki+=0.001;
+PID_yaw.ki+=0.01;
 Num = NULL;
 break;
 case 0x23 :w++;
-PID_yaw.kd+=0.001;
+PID_yaw.kd+=0.01;
 Num = NULL;
 case 0x24 :w++;
-PID_gyroz.kp+=0.001;
+PID_gyroz.kp+=0.01;
 Num = NULL;
 break;
 case 0x25 :w++;
-PID_gyroz.ki+=0.001;
+PID_gyroz.ki+=0.01;
 Num = NULL;
 break;
 case 0x26 :w++;
-PID_gyroz.kd+=0.001;
+PID_gyroz.kd+=0.01;
 Num = NULL;
 break;
 
@@ -368,26 +381,26 @@ case 0x32 :w++;
 Num = NULL;
 break;
 case 0x33 :w++;
-PID_yaw.kp-=0.001;
+PID_yaw.kp-=0.01;
 Num = NULL;
 break;
 case 0x34 :w++;
-PID_yaw.ki-=0.001;
+PID_yaw.ki-=0.01;
 Num = NULL;
 break;
 case 0x35 :w++;
-PID_yaw.kd-=0.001;
+PID_yaw.kd-=0.01;
 Num = NULL;
 case 0x36 :w++;
- PID_gyroz.kp-=0.001;
+ PID_gyroz.kp-=0.01;
 Num = NULL;
 break;
 case 0x37 :w++;
- PID_gyroz.ki-=0.001;
+ PID_gyroz.ki-=0.01;
 Num = NULL;
 break;
 case 0x38 :w++;
- PID_gyroz.kd-=0.001;
+ PID_gyroz.kd-=0.01;
 Num = NULL;
 break;
 default:
