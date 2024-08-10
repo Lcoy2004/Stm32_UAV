@@ -138,12 +138,11 @@ int main(void)
     /* USER CODE BEGIN 3 */
     //
     printf("%lf,%lf\n",Angle.yaw,target_angle.yaw);
-     //printf("%lf,%d\n",power,__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_4));
+     printf("%lf,%d\n",Coor.x,Coor.y);
     //printf("%lf,%lf,%lf,%lf\n",PID_roll.kp,PID_ratex.kp,PID_coordx.kp);
     // printf("%d,%d,%d,%d\n",__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1),
      //__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_2),__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_3),
      //__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_4));
-   // current_state=UAVremotefly;
    
   }
   /* USER CODE END 3 */

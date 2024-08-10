@@ -16,14 +16,14 @@ double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 #define Rate_pid_interg_limit 75
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
-PID_Calibration PID_yaw={2.04,0.03,0.03};//{3,0.05,0.025};
-PID_Calibration PID_pitch={3.20,0.09,0.02}; //3.2,0.025,0.02
-PID_Calibration PID_roll={3.20,0.29,0.02};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={3.00,0.06,0.03};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_gyroy={2.92,0.01,0.02};// {1.95,0.025,0.025
-PID_Calibration PID_gyroz={2.12,0.03,0.08};//{0.117,0.025,0.035}; 
-PID_Calibration PID_ratex={0.00,0,0};
-PID_Calibration PID_ratey={0.00,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_yaw={1.83,0.03,0.02};//1.83,0.03,0.02
+PID_Calibration PID_pitch={1.83,0.06,0.03}; //3.2,0.025,0.02
+PID_Calibration PID_roll={2.35,0.40,0.03};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={2.20,0.03,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_gyroy={1.83,0.03,0.01};// {1.95,0.025,0.025
+PID_Calibration PID_gyroz={1.86,0.01,0.03};//1.86,0.01,0.03
+PID_Calibration PID_ratex={0.0,0,0};
+PID_Calibration PID_ratey={0.0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
 PID_Calibration PID_coordx={0.00,0.00,0.00};// {1.15,0.05,0.17}
 PID_Calibration PID_coordy={0.00,0.00,0.00};//{1.10,0.1,0.13}; 
 PID_Calibration PID_height={0.00,0.00,0};//{7.45,0,0};
@@ -92,16 +92,8 @@ PID_State_ratex.actual=Rate.vx;
 PID_State_ratex.time_delta=dt;
 PID_State_ratex=pid_iterate(PID_ratex,PID_State_ratex,Rate_pid_interg_limit);
 temp_pitch=-PID_State_ratex.output;//x轴速度环对应的是y轴的角度环！
-double pid_y;
-if (openmv_coody==0)
-{
-   pid_y=Coor.y;
-}else
-{
-  pid_y=-openmv_coody;
-}
 PID_State_coordy.target=t_coody;
-PID_State_coordy.actual=pid_y;
+PID_State_coordy.actual=Coor.y;
 PID_State_coordy.time_delta=dt;
 PID_State_coordy=pid_iterate(PID_coordy,PID_State_coordy,Coor_pid_interg_limit);
 //外环PID结束
@@ -109,7 +101,7 @@ PID_State_ratey.target=PID_State_coordy.output;//内环PID
 PID_State_ratey.actual=Rate.vy;
 PID_State_ratey.time_delta=dt;
 PID_State_ratey=pid_iterate(PID_ratey,PID_State_ratey,Rate_pid_interg_limit);
-temp_roll=-PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
+temp_roll=PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
 return UAVNormal;
 }
 
