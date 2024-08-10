@@ -17,6 +17,7 @@
 "uav\gpio.o"
 "uav\dma.o"
 "uav\i2c.o"
+"uav\memorymap.o"
 "uav\tim.o"
 "uav\usart.o"
 "uav\stm32h7xx_it.o"

@@ -40,7 +40,7 @@ T_rate imu_Rate;//加速度积分的速度值
 
 double baro_height;//气压计输出高度
 
- 
+ uint8_t Data_clearcoor;
   /**
    * @brief witmiu数据获取初始化
    * 
@@ -61,6 +61,8 @@ return UAVNormal;
 int8_t Data_wit_Getimu(double dT)
 {
     double fAcc[3], fGyro[3], fAngle[3];
+	static double R_pitch,R_roll;
+	static uint8_t q;
      int8_t i=0;
 		if(s_cDataUpdate)
 		{
@@ -85,12 +87,21 @@ int8_t Data_wit_Getimu(double dT)
 			{
 				s_cDataUpdate &= ~MAG_UPDATE;
 			}
-           Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];//单位g/s2
-			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
-			Angle.roll=(double)fAngle[0];Angle.pitch=(double)fAngle[1];Angle.yaw=(double)fAngle[2];
+          
         //printf("imugyroandangle:%lf,%lf,%lf\n",Angle.roll,Angle.pitch,Angle.yaw);
         //printf("Acc:%lf,%lf,%lf\n",Acc.Ax,Acc.Ay,Acc.Az);
-
+		   if(q<20)
+		   {
+			  R_pitch+= (double)fAngle[1]/20;
+			  R_roll+= (double)fAngle[0]/20;
+			q++;  
+		   }
+		   else
+		   {
+			Acc.Ax=(double)fAcc[0]; Acc.Ay=(double)fAcc[1];Acc.Az=(double)fAcc[2];//单位g/s2
+			Gyro.Gx=(double)fGyro[0];Gyro.Gy=(double)fGyro[1];Gyro.Gz=(double)fGyro[2];
+			Angle.roll=(double)fAngle[0]-R_roll;Angle.pitch=(double)fAngle[1]-R_pitch;Angle.yaw=(double)fAngle[2]; 
+		   }
         //imu消除重力,单位m/s2
         double vec_accx,vec_accy,vec_accz;
         vec_accy=(Acc.Ay-sin(Angle.roll*M_PI / 180.0)*cos(Angle.pitch*M_PI / 180.0))*9.81;
@@ -114,13 +125,12 @@ int8_t Data_upixels_flowget(double dt,double dT)
       Coor.y=flow_Coor.y;
       if(Coor.x>100||Coor.x<-100)
       {
-         Coor.x=0;
+         flow_Coor.x=0;
       }
 		if(Coor.y>100||Coor.y<-100)
       {
-         Coor.y=0;
+         flow_Coor.y=0;
       }
-    
 		return UAVNormal;
 	
 }

@@ -22,11 +22,11 @@ PID_Calibration PID_roll={2.35,0.40,0.03};//{2.51,0.04,0.01   3.95,0.17,0.03
 PID_Calibration PID_gyrox={2.20,0.03,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
 PID_Calibration PID_gyroy={1.83,0.03,0.01};// {1.95,0.025,0.025
 PID_Calibration PID_gyroz={1.86,0.01,0.03};//1.86,0.01,0.03
-PID_Calibration PID_ratex={0.0,0,0};
-PID_Calibration PID_ratey={0.0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_coordx={0.00,0.00,0.00};// {1.15,0.05,0.17}
-PID_Calibration PID_coordy={0.00,0.00,0.00};//{1.10,0.1,0.13}; 
-PID_Calibration PID_height={0.00,0.00,0};//{7.45,0,0};
+PID_Calibration PID_ratex={0.10,0,0};
+PID_Calibration PID_ratey={0.14,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_coordx={0.79,0.00,0.00};// {1.15,0.05,0.17}
+PID_Calibration PID_coordy={3.98,0.00,0.00};//{1.10,0.1,0.13}; 
+PID_Calibration PID_height={2.86,0.00,0.46};//{7.45,0,0};
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
 static PID_State PID_State_roll;
@@ -91,7 +91,7 @@ PID_State_ratex.target=PID_State_coordx.output;//内环PID
 PID_State_ratex.actual=Rate.vx;
 PID_State_ratex.time_delta=dt;
 PID_State_ratex=pid_iterate(PID_ratex,PID_State_ratex,Rate_pid_interg_limit);
-temp_pitch=-PID_State_ratex.output;//x轴速度环对应的是y轴的角度环！
+temp_pitch=PID_State_ratex.output;//x轴速度环对应的是y轴的角度环！
 PID_State_coordy.target=t_coody;
 PID_State_coordy.actual=Coor.y;
 PID_State_coordy.time_delta=dt;
@@ -101,7 +101,7 @@ PID_State_ratey.target=PID_State_coordy.output;//内环PID
 PID_State_ratey.actual=Rate.vy;
 PID_State_ratey.time_delta=dt;
 PID_State_ratey=pid_iterate(PID_ratey,PID_State_ratey,Rate_pid_interg_limit);
-temp_roll=PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
+temp_roll=-PID_State_ratey.output;//y轴速度环对应的是x轴的角度环！
 return UAVNormal;
 }
 
@@ -124,7 +124,7 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
    uint8_t loopk =3;
   if(Remote_hover_flag)
   { 
-   Control_height_update(t_height,dt); 
+    
      if(k<loopk)
         {
 
@@ -132,14 +132,16 @@ int8_t Control_pid_update(double t_height,double dt,T_angle target_angle,double 
           k++;
     
         }else{
-         //printf("%lf,%lf,%lf,%lf,%lf\n",Coor.x,Coor.y,temp_pitch,temp_roll,power);
+        // printf("%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",Coor.x,Coor.y,temp_pitch,temp_roll,power,Angle.roll,Angle.pitch);
            Control_coordinate_update(t_coodx,t_coody, loopk*dt);
           Control_attitude_update(target_angle.yaw,temp_roll,temp_pitch,dt);
+          Control_height_update(t_height,loopk*dt);
            k=0;
         }
   }else 
   {
      Control_attitude_update(target_angle.yaw,target_angle.roll,target_angle.pitch,dt);
+      Motor_height=0;
   }
 
    

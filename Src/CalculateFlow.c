@@ -73,6 +73,11 @@ double Temp_vx,Temp_vy;
 
 speed_err_ix+=(Temp_vx-flow_Rate.vx)*dt;
 speed_err_iy+=(Temp_vy-flow_Rate.vy)*dt;
+if(Data_clearcoor)
+    {
+      flow_Coor.x=flow_Coor.y=0;
+       Data_clearcoor=!Data_clearcoor;
+    }
    //printf("Rate:%lf,%lf\n", flow_Rate.vx,flow_Rate.vy);
 
 }
