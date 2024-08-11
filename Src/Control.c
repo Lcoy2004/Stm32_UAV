@@ -17,16 +17,16 @@ double Motor_roll,Motor_pitch,Motor_yaw,Motor_height;
 //参数调试区
 //绕X轴旋转角度为roll，绕Y轴旋转角度为pitch，绕Z轴旋转角度为yaw
 PID_Calibration PID_yaw={1.83,0.03,0.02};//1.83,0.03,0.02
-PID_Calibration PID_pitch={1.83,0.06,0.03}; //3.2,0.025,0.02
-PID_Calibration PID_roll={2.35,0.40,0.03};//{2.51,0.04,0.01   3.95,0.17,0.03
-PID_Calibration PID_gyrox={2.20,0.03,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_pitch={1.83,0.01,0.03}; //3.2,0.025,0.02
+PID_Calibration PID_roll={2.35,0.01,0.03};//{2.51,0.04,0.01   3.95,0.17,0.03
+PID_Calibration PID_gyrox={1.97,0.03,0.02};// {1.05,0.07,0.24}1.27,0.37,0.10
 PID_Calibration PID_gyroy={1.83,0.03,0.01};// {1.95,0.025,0.025
 PID_Calibration PID_gyroz={1.86,0.01,0.03};//1.86,0.01,0.03
-PID_Calibration PID_ratex={0.10,0,0};
-PID_Calibration PID_ratey={0.14,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
-PID_Calibration PID_coordx={0.79,0.00,0.00};// {1.15,0.05,0.17}
-PID_Calibration PID_coordy={3.98,0.00,0.00};//{1.10,0.1,0.13}; 
-PID_Calibration PID_height={2.86,0.00,0.46};//{7.45,0,0};
+PID_Calibration PID_ratex={0.0,0,0};
+PID_Calibration PID_ratey={0.0,0,0};// {1.05,0.07,0.24}1.27,0.37,0.10
+PID_Calibration PID_coordx={0.00,0.00,0.00};// {1.15,0.05,0.17}
+PID_Calibration PID_coordy={0.0,0.00,0.00};//{1.10,0.1,0.13}; 
+PID_Calibration PID_height={0,0.0,0.0};//2.6,0.1,0.0
 static PID_State PID_State_yaw;
 static PID_State PID_State_pitch;
 static PID_State PID_State_roll;

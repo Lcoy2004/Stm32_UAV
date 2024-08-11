@@ -139,11 +139,11 @@ int main(void)
     //
    // printf("%lf,%lf\n",height,t_height);
     //printf("%lf,%lf,%lf\n",Coor.x,Coor.y,power);
-    printf("coorxpid:%lf,%lf,%lf\n",PID_coordx.kp,PID_coordx.ki,PID_coordx.kd);
-     printf("coorypid:%lf,%lf,%lf\n",PID_coordy.kp,PID_coordy.ki,PID_coordy.kd);
-       printf("Ratexpid:%lf,%lf,%lf\n",PID_ratex.kp,PID_ratex.ki,PID_ratex.kd);
-       printf("Rateypid:%lf,%lf,%lf\n",PID_ratey.kp,PID_ratey.ki,PID_ratey.kd);
-      printf("heightpid:%lf,%lf,%lf\n",PID_height.kp,PID_height.ki,PID_height.kd);
+    //printf("coorxpid:%lf,%lf,%lf\n",PID_coordx.kp,PID_coordx.ki,PID_coordx.kd);
+    //("coorypid:%lf,%lf,%lf\n",PID_coordy.kp,PID_coordy.ki,PID_coordy.kd);
+      // printf("Ratexpid:%lf,%lf,%lf\n",PID_ratex.kp,PID_ratex.ki,PID_ratex.kd);
+       //printf("Rateypid:%lf,%lf,%lf\n",PID_ratey.kp,PID_ratey.ki,PID_ratey.kd);
+     // printf("heightpid:%lf,%lf,%lf\n",PID_height.kp,PID_height.ki,PID_height.kd);
     
 	  // printf("%d,%d,%d,%d\n",__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1),
      //__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_2),__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_3),
