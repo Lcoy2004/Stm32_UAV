@@ -17,7 +17,6 @@ uint8_t Remote_connectcheck;//0表示断连
 double *Num;
 int8_t w;//状态
 uint8_t UAV_Flymode=1;//uav模式选择，0：自主悬停，1：遥控控制（3.测试模式）
-
 /**
  * @brief 获取期望目标
  * 
@@ -53,73 +52,81 @@ case 1:/* kix */
 
 int8_t Remote_flag(uint8_t ch)
 {
-  static uint8_t k;
-  
   Remote_connectcheck=1;
 switch (ch)
 {
 case 0x73:w++;//空指令
-if(k==0)
+if(!Remote_hover_flag)
 {
 Remote_hover_flag=1;
-Coor.x=0;Coor.y=0;
+Data_clearcoor=1;
 t_height=height;
-k++;
 }
 Num=NULL;
-target_angle.pitch=0;target_angle.roll=-2;
-
+if(target_angle.pitch<0)
+{
+  target_angle.pitch++;
+}else if(target_angle.pitch>0)
+{
+  target_angle.pitch--;
+}
+if(target_angle.roll<0)
+{
+  target_angle.roll++;
+}else if(target_angle.roll>0)
+{
+  target_angle.roll--;
+}
+///target_angle.pitch=0;target_angle.roll=0;
 break;
 case 0x6D:w++;//左旋
 Num = &target_angle.yaw;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
+//等待下次遥杆回正记录预期高度
 return 1;//正数
 break;
 case 0x6E:w++;//右旋
 Num = &target_angle.yaw;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
+
 return -1;//负数
 break;
 case 0x6C :w++;//向左
 Num = &target_angle.pitch;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
-return -1;
+
+return 1;
 break;
 case 0x72 :w++;//向右
 Num = &target_angle.pitch;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
-return 1;
+
+return -1;
 break;
 case 0x66 :w++;//向前
 Remote_hover_flag=0;
 Num = &target_angle.roll;
-k=0;//等待下次遥杆回正记录预期高度
 return 1;
 break;
 case 0x62 :w++;//向后
 Remote_hover_flag=0;
 Num = &target_angle.roll;
-k=0;//等待下次遥杆回正记录预期高度
+
 return -1;
 break;
 case 0x75 :w++;//高度
 Num = &power;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
+
 return 1;
 case 0x64 :w++;//高度
 Num = &power;
 Remote_hover_flag=0;
-k=0;//等待下次遥杆回正记录预期高度
 return -1;
 break;
 case 0x13 :w++;//急停
 Num = NULL;
-k=0;
+
 UAV_stop_flag=1;
 break;
 case 0x14 :w++;//模式切换
@@ -296,26 +303,26 @@ case 0x20 :w++;
 Num = NULL;
 break;
 case 0x21 :w++;
-PID_yaw.kp+=0.001;
+PID_yaw.kp+=0.01;
 Num = NULL;
 break;
 case 0x22 :w++;
-PID_yaw.ki+=0.001;
+PID_yaw.ki+=0.01;
 Num = NULL;
 break;
 case 0x23 :w++;
-PID_yaw.kd+=0.001;
+PID_yaw.kd+=0.01;
 Num = NULL;
 case 0x24 :w++;
-PID_gyroz.kp+=0.001;
+PID_gyroz.kp+=0.01;
 Num = NULL;
 break;
 case 0x25 :w++;
-PID_gyroz.ki+=0.001;
+PID_gyroz.ki+=0.01;
 Num = NULL;
 break;
 case 0x26 :w++;
-PID_gyroz.kd+=0.001;
+PID_gyroz.kd+=0.01;
 Num = NULL;
 break;
 
@@ -368,26 +375,26 @@ case 0x32 :w++;
 Num = NULL;
 break;
 case 0x33 :w++;
-PID_yaw.kp-=0.001;
+PID_yaw.kp-=0.01;
 Num = NULL;
 break;
 case 0x34 :w++;
-PID_yaw.ki-=0.001;
+PID_yaw.ki-=0.01;
 Num = NULL;
 break;
 case 0x35 :w++;
-PID_yaw.kd-=0.001;
+PID_yaw.kd-=0.01;
 Num = NULL;
 case 0x36 :w++;
- PID_gyroz.kp-=0.001;
+ PID_gyroz.kp-=0.01;
 Num = NULL;
 break;
 case 0x37 :w++;
- PID_gyroz.ki-=0.001;
+ PID_gyroz.ki-=0.01;
 Num = NULL;
 break;
 case 0x38 :w++;
- PID_gyroz.kd-=0.001;
+ PID_gyroz.kd-=0.01;
 Num = NULL;
 break;
 default:
